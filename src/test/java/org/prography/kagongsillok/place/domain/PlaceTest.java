@@ -15,7 +15,7 @@ class PlaceTest {
         final Place place = Place.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
-                .location(new Location(123.123, 123.123))
+                .location(new Location(90.0, 123.123))
                 .imageIds("1,2,3")
                 .phone("010-1111-1111")
                 .links(Links.of(List.of(
@@ -37,7 +37,7 @@ class PlaceTest {
         assertAll(
                 () -> assertThat(place.getName()).isEqualTo("테스트 카페"),
                 () -> assertThat(place.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
-                () -> assertThat(place.getLocation()).isEqualTo(new Location(123.123, 123.123)),
+                () -> assertThat(place.getLocation()).isEqualTo(new Location(90.0, 123.123)),
                 () -> assertThat(place.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
                 () -> assertThat(place.getPhone()).isEqualTo("010-1111-1111"),
                 () -> assertThat(place.getLinks().getValues()).extracting("linkType")
