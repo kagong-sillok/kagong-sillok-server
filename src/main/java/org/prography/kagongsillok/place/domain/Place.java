@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.place.domain;
 
-import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
 @Getter
 @Entity
@@ -43,19 +44,20 @@ public class Place {
     public Place(
             final String name,
             final String address,
-            final Location location,
-            final String imageIds,
+            final Double latitude,
+            final Double longitude,
+            final List<Long> imageIds,
             final String phone,
-            final Links links,
-            final BusinessHours businessHours
+            final List<Link> links,
+            final List<BusinessHour> businessHours
     ) {
         this.name = name;
         this.address = address;
-        this.location = location;
-        this.imageIds = imageIds;
+        this.location = Location.of(latitude, longitude);
+        this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.phone = phone;
-        this.links = links;
-        this.businessHours = businessHours;
+        this.links = Links.of(links);
+        this.businessHours = BusinessHours.of(businessHours);
     }
 
     public void delete() {
@@ -63,8 +65,14 @@ public class Place {
     }
 
     public List<Long> getImageIds() {
-        return Arrays.stream(imageIds.split(","))
-                .map(Long::valueOf)
-                .toList();
+        return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
+    }
+
+    public Double getLatitude() {
+        return location.getLatitude();
+    }
+
+    public Double getLongitude() {
+        return location.getLongitude();
     }
 }

@@ -15,23 +15,24 @@ class PlaceTest {
         final Place place = Place.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
-                .location(Location.of(90.0, 123.123))
-                .imageIds("1,2,3")
+                .latitude(90.0)
+                .longitude(123.123)
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("010-1111-1111")
-                .links(Links.of(List.of(
-                        new Link(LinkType.INSTAGRAM, "testInstagramUrl"),
-                        new Link(LinkType.BLOG, "testBlogUrl"),
-                        new Link(LinkType.WEB, "testWebUrl")
-                )))
-                .businessHours(BusinessHours.of(List.of(
-                        new BusinessHour(DayOfWeek.MONDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.TUESDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.WEDNESDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.THURSDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.FRIDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.SATURDAY, LocalTime.of(12, 0), LocalTime.of(23, 59)),
-                        new BusinessHour(DayOfWeek.SUNDAY, LocalTime.of(12, 0), LocalTime.of(23, 59))
-                )))
+                .links(List.of(
+                        new Link(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
+                        new Link(LinkType.BLOG.name(), "testBlogUrl"),
+                        new Link(LinkType.WEB.name(), "testWebUrl")
+                ))
+                .businessHours(List.of(
+                        new BusinessHour(DayOfWeek.MONDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.TUESDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.WEDNESDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.THURSDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.FRIDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.SATURDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59)),
+                        new BusinessHour(DayOfWeek.SUNDAY.name(), LocalTime.of(12, 0), LocalTime.of(23, 59))
+                ))
                 .build();
 
         assertAll(

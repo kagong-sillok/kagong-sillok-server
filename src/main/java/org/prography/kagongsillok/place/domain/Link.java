@@ -25,8 +25,8 @@ public class Link {
     private LinkType linkType;
     private String url;
 
-    public Link(final LinkType linkType, final String url) {
-        this.linkType = linkType;
+    public Link(final String linkType, final String url) {
+        this.linkType = LinkType.valueOf(linkType);
         this.url = url;
     }
 }

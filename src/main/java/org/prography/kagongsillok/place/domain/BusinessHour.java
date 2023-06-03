@@ -27,8 +27,8 @@ public class BusinessHour {
     private LocalTime open;
     private LocalTime close;
 
-    public BusinessHour(final DayOfWeek dayOfWeek, final LocalTime open, final LocalTime close) {
-        this.dayOfWeek = dayOfWeek;
+    public BusinessHour(final String dayOfWeek, final LocalTime open, final LocalTime close) {
+        this.dayOfWeek = DayOfWeek.valueOf(dayOfWeek);
         this.open = open;
         this.close = close;
     }
