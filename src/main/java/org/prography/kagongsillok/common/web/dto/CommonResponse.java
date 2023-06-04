@@ -1,0 +1,21 @@
+package org.prography.kagongsillok.common.web.dto;
+
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public class CommonResponse<T> {
+
+    private static final String SUCCESS_MESSAGE = "SUCCESS";
+
+    private String result;
+    private String message;
+    private T data;
+
+    public static <T> ResponseEntity<CommonResponse<T>> success(final T data) {
+        return ResponseEntity.ok(new CommonResponse<>(SUCCESS_MESSAGE, null, data));
+    }
+}

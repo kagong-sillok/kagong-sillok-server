@@ -38,14 +38,14 @@ public record PlaceDto(
                 .build();
     }
 
-    record LinkDto(Long id, String linkType, String url) {
+    public record LinkDto(Long id, String linkType, String url) {
 
         public static LinkDto from(final Link link) {
             return new LinkDto(link.getId(), link.getLinkType().name(), link.getUrl());
         }
     }
 
-    record BusinessHourDto(Long id, String dayOfWeek, LocalTime open, LocalTime close) {
+    public record BusinessHourDto(Long id, String dayOfWeek, LocalTime open, LocalTime close) {
 
         public static BusinessHourDto from(final BusinessHour businessHour) {
             return new BusinessHourDto(

@@ -9,18 +9,21 @@ import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Place;
 
-@Builder
 @Getter
-public record PlaceCreateDto(
+public record PlaceCreateCommand(
         String name,
         String address,
         Double latitude,
         Double longitude,
         List<Long> imageIds,
         String phone,
-        List<LinkCreateDto> links,
-        List<BusinessHourCreateDto> businessHours
+        List<LinkCreateCommand> links,
+        List<BusinessHourCreateCommand> businessHours
 ) {
+
+    @Builder
+    public PlaceCreateCommand {
+    }
 
     public Place toEntity() {
         return Place.builder()
@@ -30,13 +33,13 @@ public record PlaceCreateDto(
                 .longitude(longitude)
                 .imageIds(imageIds)
                 .phone(phone)
-                .links(CustomListUtils.mapTo(links, LinkCreateDto::toEntity))
-                .businessHours(CustomListUtils.mapTo(businessHours, BusinessHourCreateDto::toEntity))
+                .links(CustomListUtils.mapTo(links, LinkCreateCommand::toEntity))
+                .businessHours(CustomListUtils.mapTo(businessHours, BusinessHourCreateCommand::toEntity))
                 .build();
     }
 
     @Getter
-    record LinkCreateDto(String linkType, String url) {
+    public record LinkCreateCommand(String linkType, String url) {
 
         public Link toEntity() {
             return new Link(linkType, url);
@@ -44,7 +47,7 @@ public record PlaceCreateDto(
     }
 
     @Getter
-    record BusinessHourCreateDto(String dayOfWeek, LocalTime open, LocalTime close) {
+    public record BusinessHourCreateCommand(String dayOfWeek, LocalTime open, LocalTime close) {
 
         public BusinessHour toEntity() {
             return new BusinessHour(dayOfWeek, open, close);

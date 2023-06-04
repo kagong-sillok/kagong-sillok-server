@@ -1,7 +1,7 @@
 package org.prography.kagongsillok.place.application;
 
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.place.application.dto.PlaceCreateDto;
+import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
@@ -16,8 +16,8 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     @Transactional
-    public PlaceDto createPlace(final PlaceCreateDto placeCreateDto) {
-        final Place savedPlace = placeRepository.save(placeCreateDto.toEntity());
+    public PlaceDto createPlace(final PlaceCreateCommand placeCreateCommand) {
+        final Place savedPlace = placeRepository.save(placeCreateCommand.toEntity());
         return PlaceDto.from(savedPlace);
     }
 }
