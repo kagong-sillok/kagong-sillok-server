@@ -8,6 +8,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,5 +44,11 @@ public class PlaceV1AdminController {
     ) {
         final PlaceDto createdPlace = placeService.updatePlace(placeUpdateRequest.getId(), placeUpdateRequest.toCommand());
         return CommonResponse.success(PlaceResponse.from(createdPlace));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlace(@PathVariable("id") final Long id) {
+        placeService.deletePlace(id);
+        return ResponseEntity.ok().build();
     }
 }

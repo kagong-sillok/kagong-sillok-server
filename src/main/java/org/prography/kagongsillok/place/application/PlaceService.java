@@ -41,4 +41,12 @@ public class PlaceService {
 
         return PlaceDto.from(place);
     }
+
+    @Transactional
+    public void deletePlace(final Long id) {
+        final Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundPlaceException(id));
+
+        place.delete();
+    }
 }
