@@ -32,4 +32,9 @@ public class BusinessHours {
 
         return new BusinessHours(businessHours);
     }
+
+    public void update(final BusinessHours newBusinessHours) {
+        values.clear();
+        values.addAll(newBusinessHours.getValues());
+    }
 }

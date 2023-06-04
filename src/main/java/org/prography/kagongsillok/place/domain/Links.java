@@ -31,4 +31,9 @@ public class Links {
         }
         return new Links(links);
     }
+
+    public void update(final Links newLinks) {
+        values.clear();
+        values.addAll(newLinks.getValues());
+    }
 }

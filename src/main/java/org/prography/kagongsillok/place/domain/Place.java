@@ -60,6 +60,16 @@ public class Place {
         this.businessHours = BusinessHours.of(businessHours);
     }
 
+    public void update(final Place target) {
+        this.name = target.name;
+        this.address = target.address;
+        this.location = target.location;
+        this.imageIds = target.imageIds;
+        this.phone = target.phone;
+        this.links.update(target.links);
+        this.businessHours.update(target.businessHours);
+    }
+
     public void delete() {
         this.isDeleted = true;
     }
