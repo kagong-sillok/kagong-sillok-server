@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 public class CommonResponse<T> {
 
     private static final String SUCCESS_MESSAGE = "SUCCESS";
+    private static final String ERROR_MESSAGE = "ERROR";
 
     private String result;
     private String message;
@@ -17,5 +18,9 @@ public class CommonResponse<T> {
 
     public static <T> ResponseEntity<CommonResponse<T>> success(final T data) {
         return ResponseEntity.ok(new CommonResponse<>(SUCCESS_MESSAGE, null, data));
+    }
+
+    public static CommonResponse<Void> error(final String message) {
+        return new CommonResponse<>(ERROR_MESSAGE, message, null);
     }
 }
