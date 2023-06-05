@@ -1,6 +1,8 @@
 package org.prography.kagongsillok.image.application;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.image.application.dto.ImageCreateCommand;
 import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
@@ -21,5 +23,11 @@ public class ImageService {
         final Image savedImage = imageRepository.save(image);
 
         return ImageDto.from(savedImage);
+    }
+
+    public List<ImageDto> getImages(final List<Long> imageIds) {
+        final List<Image> images = imageRepository.findByIdIn(imageIds);
+
+        return CustomListUtils.mapTo(images, ImageDto::from);
     }
 }
