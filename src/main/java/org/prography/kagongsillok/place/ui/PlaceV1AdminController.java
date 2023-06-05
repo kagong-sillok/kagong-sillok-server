@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.place.ui;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.place.application.PlaceService;
@@ -33,6 +34,7 @@ public class PlaceV1AdminController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "장소 단건 조회 API", description = "장소 id로 쿠폰을 조회합니다.")
     public ResponseEntity<CommonResponse<PlaceResponse>> getPlace(@PathVariable("id") final Long id) {
         final PlaceDto placeDto = placeService.getPlace(id);
         return CommonResponse.success(PlaceResponse.from(placeDto));
