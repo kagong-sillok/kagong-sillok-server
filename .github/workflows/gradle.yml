@@ -12,7 +12,12 @@ on:
     branches: 
       - develop
       - master
-
+      
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+  
 jobs:
   build:
 
