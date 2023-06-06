@@ -27,6 +27,9 @@ public class PlaceService {
     public PlaceDto getPlace(final Long id) {
         final Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundPlaceException(id));
+        if (place.getIsDeleted()) {
+            throw new NotFoundPlaceException(id);
+        }
 
         return PlaceDto.from(place);
     }
