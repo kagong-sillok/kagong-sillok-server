@@ -12,6 +12,7 @@ import org.prography.kagongsillok.image.ui.dto.ImageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class ImageV1Controller {
     private final ImageService imageService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<ImageResponse>> createImage(final ImageCreateRequest imageCreateRequest) {
+    public ResponseEntity<CommonResponse<ImageResponse>> createImage(@RequestBody final ImageCreateRequest imageCreateRequest) {
         final ImageCreateCommand createCommand = imageCreateRequest.toCommand();
         final ImageDto imageDto = imageService.createImage(createCommand);
 

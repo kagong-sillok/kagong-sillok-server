@@ -21,6 +21,7 @@ public record ImageDto(
                 .url(image.getUrl())
                 .width(image.getWidth())
                 .height(image.getHeight())
+                .extension(image.getExtension())
                 .build();
     }
 }

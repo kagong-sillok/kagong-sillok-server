@@ -5,13 +5,16 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.prography.kagongsillok.image.ui.dto.ImageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@Import(DatabaseCleanerConfig.class)
 public abstract class AcceptanceTest {
 
     @Autowired
@@ -27,6 +30,12 @@ public abstract class AcceptanceTest {
     @AfterEach
     void tearDown() {
         databaseCleanup.execute();
+    }
+
+    protected <T> T 응답_바디_추출(final ExtractableResponse<Response> response, final Class<T> clazz) {
+        return response.body()
+                .jsonPath()
+                .getObject("data", clazz);
     }
 
     protected ExtractableResponse<Response> post(final String uri, final Object body) {
