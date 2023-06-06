@@ -1,0 +1,45 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: PR 전에 테스트코드 돌려보셨습니까?
+
+on:
+  pull_request:
+    branches: 
+      - develop
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 리포지토리 가져오기
+      uses: actions/checkout@v3
+    
+    - name: 자바 17 셋업
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+        
+    - name: Gradle 명령 실행을 위한 권한을 부여
+      run: chmod +x gradlew
+
+    - name: Gradle build를 수행
+      run: ./gradlew build
+
+    - name: 테스트 결과를 PR에 코멘트로 등록
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: '**/build/test-results/test/TEST-*.xml'
