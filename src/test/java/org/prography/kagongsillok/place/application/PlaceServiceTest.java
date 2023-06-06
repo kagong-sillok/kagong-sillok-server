@@ -74,17 +74,17 @@ class PlaceServiceTest {
         final PlaceDto createdPlace = placeService.createPlace(placeCreateCommand);
 
         assertAll(
-                () -> assertThat(createdPlace.name()).isEqualTo("테스트 카페"),
-                () -> assertThat(createdPlace.address()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
-                () -> assertThat(createdPlace.latitude()).isEqualTo(90.0),
-                () -> assertThat(createdPlace.longitude()).isEqualTo(123.123),
-                () -> assertThat(createdPlace.imageIds()).isEqualTo(List.of(1L, 2L, 3L)),
-                () -> assertThat(createdPlace.phone()).isEqualTo("010-1111-1111"),
-                () -> assertThat(createdPlace.links()).extracting("linkType")
+                () -> assertThat(createdPlace.getName()).isEqualTo("테스트 카페"),
+                () -> assertThat(createdPlace.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
+                () -> assertThat(createdPlace.getLatitude()).isEqualTo(90.0),
+                () -> assertThat(createdPlace.getLongitude()).isEqualTo(123.123),
+                () -> assertThat(createdPlace.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
+                () -> assertThat(createdPlace.getPhone()).isEqualTo("010-1111-1111"),
+                () -> assertThat(createdPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
-                () -> assertThat(createdPlace.links()).extracting("url")
+                () -> assertThat(createdPlace.getLinks()).extracting("url")
                         .containsAll(List.of("testInstagramUrl", "testBlogUrl", "testWebUrl")),
-                () -> assertThat(createdPlace.businessHours()).extracting("dayOfWeek")
+                () -> assertThat(createdPlace.getBusinessHours()).extracting("dayOfWeek")
                         .containsAll(List.of(
                                 DayOfWeek.MONDAY.name(),
                                 DayOfWeek.TUESDAY.name(),
@@ -109,22 +109,22 @@ class PlaceServiceTest {
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
                 .build();
-        final Long createdPlaceId = placeService.createPlace(placeCreateCommand).id();
+        final Long createdPlaceId = placeService.createPlace(placeCreateCommand).getId();
 
         final PlaceDto place = placeService.getPlace(createdPlaceId);
 
         assertAll(
-                () -> assertThat(place.name()).isEqualTo("테스트 카페"),
-                () -> assertThat(place.address()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
-                () -> assertThat(place.latitude()).isEqualTo(90.0),
-                () -> assertThat(place.longitude()).isEqualTo(123.123),
-                () -> assertThat(place.imageIds()).isEqualTo(List.of(1L, 2L, 3L)),
-                () -> assertThat(place.phone()).isEqualTo("010-1111-1111"),
-                () -> assertThat(place.links()).extracting("linkType")
+                () -> assertThat(place.getName()).isEqualTo("테스트 카페"),
+                () -> assertThat(place.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
+                () -> assertThat(place.getLatitude()).isEqualTo(90.0),
+                () -> assertThat(place.getLongitude()).isEqualTo(123.123),
+                () -> assertThat(place.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
+                () -> assertThat(place.getPhone()).isEqualTo("010-1111-1111"),
+                () -> assertThat(place.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
-                () -> assertThat(place.links()).extracting("url")
+                () -> assertThat(place.getLinks()).extracting("url")
                         .containsAll(List.of("testInstagramUrl", "testBlogUrl", "testWebUrl")),
-                () -> assertThat(place.businessHours()).extracting("dayOfWeek")
+                () -> assertThat(place.getBusinessHours()).extracting("dayOfWeek")
                         .containsAll(List.of(
                                 DayOfWeek.MONDAY.name(),
                                 DayOfWeek.TUESDAY.name(),
@@ -149,7 +149,7 @@ class PlaceServiceTest {
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
                 .build();
-        final Long placeId = placeService.createPlace(placeCreateCommand).id();
+        final Long placeId = placeService.createPlace(placeCreateCommand).getId();
         final PlaceUpdateCommand placeUpdateCommand = PlaceUpdateCommand.builder()
                 .name("바뀐 테스트 카페")
                 .address("바뀐 테스트특별시 테스트구 테스트로 1004")
@@ -190,17 +190,17 @@ class PlaceServiceTest {
         final PlaceDto updatedPlace = placeService.updatePlace(placeId, placeUpdateCommand);
 
         assertAll(
-                () -> assertThat(updatedPlace.name()).isEqualTo("바뀐 테스트 카페"),
-                () -> assertThat(updatedPlace.address()).isEqualTo("바뀐 테스트특별시 테스트구 테스트로 1004"),
-                () -> assertThat(updatedPlace.latitude()).isEqualTo(89.0),
-                () -> assertThat(updatedPlace.longitude()).isEqualTo(123.12),
-                () -> assertThat(updatedPlace.imageIds()).isEqualTo(List.of(4L, 5L, 6L)),
-                () -> assertThat(updatedPlace.phone()).isEqualTo("010-2222-2222"),
-                () -> assertThat(updatedPlace.links()).extracting("linkType")
+                () -> assertThat(updatedPlace.getName()).isEqualTo("바뀐 테스트 카페"),
+                () -> assertThat(updatedPlace.getAddress()).isEqualTo("바뀐 테스트특별시 테스트구 테스트로 1004"),
+                () -> assertThat(updatedPlace.getLatitude()).isEqualTo(89.0),
+                () -> assertThat(updatedPlace.getLongitude()).isEqualTo(123.12),
+                () -> assertThat(updatedPlace.getImageIds()).isEqualTo(List.of(4L, 5L, 6L)),
+                () -> assertThat(updatedPlace.getPhone()).isEqualTo("010-2222-2222"),
+                () -> assertThat(updatedPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
-                () -> assertThat(updatedPlace.links()).extracting("url")
+                () -> assertThat(updatedPlace.getLinks()).extracting("url")
                         .containsAll(List.of("updateTestInstagramUrl", "updateTestBlogUrl", "updateTestWebUrl")),
-                () -> assertThat(updatedPlace.businessHours()).extracting("dayOfWeek")
+                () -> assertThat(updatedPlace.getBusinessHours()).extracting("dayOfWeek")
                         .containsAll(List.of(
                                 DayOfWeek.MONDAY.name(),
                                 DayOfWeek.TUESDAY.name(),
@@ -210,7 +210,7 @@ class PlaceServiceTest {
                                 DayOfWeek.SATURDAY.name(),
                                 DayOfWeek.SUNDAY.name()
                         )),
-                () -> assertThat(updatedPlace.businessHours()).extracting("open")
+                () -> assertThat(updatedPlace.getBusinessHours()).extracting("open")
                         .containsAll(List.of(
                                 LocalTime.of(13, 0),
                                 LocalTime.of(13, 0),
@@ -235,7 +235,7 @@ class PlaceServiceTest {
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
                 .build();
-        final Long placeId = placeService.createPlace(placeCreateCommand).id();
+        final Long placeId = placeService.createPlace(placeCreateCommand).getId();
 
         placeService.deletePlace(placeId);
 

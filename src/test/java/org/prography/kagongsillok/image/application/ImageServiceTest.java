@@ -31,10 +31,10 @@ class ImageServiceTest {
         final ImageDto imageDto = imageService.createImage(imageCreateCommand);
 
         assertAll(
-                () -> assertThat(imageDto.url()).isEqualTo("testImageUrl"),
-                () -> assertThat(imageDto.height()).isEqualTo(100),
-                () -> assertThat(imageDto.width()).isEqualTo(100),
-                () -> assertThat(imageDto.extension()).isEqualTo("jpeg")
+                () -> assertThat(imageDto.getUrl()).isEqualTo("testImageUrl"),
+                () -> assertThat(imageDto.getHeight()).isEqualTo(100),
+                () -> assertThat(imageDto.getWidth()).isEqualTo(100),
+                () -> assertThat(imageDto.getExtension()).isEqualTo("jpeg")
         );
     }
 
@@ -43,9 +43,9 @@ class ImageServiceTest {
         final ImageCreateCommand imageCreateCommand1 = squareSize100jpegImageCreateCommand("testImageUrl1");
         final ImageCreateCommand imageCreateCommand2 = squareSize100jpegImageCreateCommand("testImageUrl2");
         final ImageCreateCommand imageCreateCommand3 = squareSize100jpegImageCreateCommand("testImageUrl3");
-        final Long image1Id = imageService.createImage(imageCreateCommand1).id();
-        final Long image2Id = imageService.createImage(imageCreateCommand2).id();
-        final Long image3Id = imageService.createImage(imageCreateCommand3).id();
+        final Long image1Id = imageService.createImage(imageCreateCommand1).getId();
+        final Long image2Id = imageService.createImage(imageCreateCommand2).getId();
+        final Long image3Id = imageService.createImage(imageCreateCommand3).getId();
 
         final List<ImageDto> imageDtos = imageService.getImages(List.of(image1Id, image2Id, image3Id));
 
@@ -61,9 +61,9 @@ class ImageServiceTest {
         final ImageCreateCommand imageCreateCommand1 = squareSize100jpegImageCreateCommand("testImageUrl1");
         final ImageCreateCommand imageCreateCommand2 = squareSize100jpegImageCreateCommand("testImageUrl2");
         final ImageCreateCommand imageCreateCommand3 = squareSize100jpegImageCreateCommand("testImageUrl3");
-        final Long image1Id = imageService.createImage(imageCreateCommand1).id();
-        final Long image2Id = imageService.createImage(imageCreateCommand2).id();
-        final Long image3Id = imageService.createImage(imageCreateCommand3).id();
+        final Long image1Id = imageService.createImage(imageCreateCommand1).getId();
+        final Long image2Id = imageService.createImage(imageCreateCommand2).getId();
+        final Long image3Id = imageService.createImage(imageCreateCommand3).getId();
 
         final List<ImageDto> imageDtos = imageService.getImages(
                 List.of(image1Id, image2Id, image3Id, 999999L, 999998L));
