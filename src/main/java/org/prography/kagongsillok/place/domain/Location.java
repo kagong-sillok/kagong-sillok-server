@@ -45,10 +45,16 @@ public class Location {
     }
 
     private static boolean isNotLatitudeBound(final Double latitude) {
+        if (Objects.isNull(latitude)) {
+            return true;
+        }
         return latitude > MAX_LATITUDE || latitude < MIN_LATITUDE;
     }
 
     private static boolean isNotLongitudeBound(final Double longitude) {
+        if (Objects.isNull(longitude)) {
+            return true;
+        }
         return longitude > MAX_LONGITUDE || longitude < MIN_LONGITUDE;
     }
 
