@@ -1,6 +1,6 @@
 package org.prography.kagongsillok.place.infrastructure;
 
-import static org.prography.kagongsillok.place.domain.QPlace.*;
+import static org.prography.kagongsillok.place.domain.QPlace.place;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,10 +25,34 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
             final Double latitudeBound,
             final Double longitudeBound
     ) {
+        if (Objects.isNull(location)) {
+            return List.of();
+        }
+
         return queryFactory.selectFrom(place)
                 .where(latitudeBetween(location, latitudeBound), longitudeBetween(location, longitudeBound))
                 .limit(DEFAULT_SEARCH_RESULT_SIZE)
                 .fetch();
+    }
+
+    @Override
+    public List<Place> findByNameContains(final String name) {
+        if (Objects.isNull(name)) {
+            return List.of();
+        }
+
+        return queryFactory.selectFrom(place)
+                .where(nameContains(name))
+                .limit(DEFAULT_SEARCH_RESULT_SIZE)
+                .fetch();
+    }
+
+    private BooleanExpression nameContains(final String name) {
+        if (Objects.isNull(name)) {
+            return null;
+        }
+
+        return place.name.contains(name);
     }
 
     private BooleanExpression latitudeBetween(final Location location, final Double latitudeBound) {

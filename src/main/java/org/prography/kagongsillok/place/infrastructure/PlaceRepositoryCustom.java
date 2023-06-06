@@ -11,4 +11,6 @@ public interface PlaceRepositoryCustom {
             final Double latitudeBound,
             final Double longitudeBound
     );
+
+    List<Place> findByNameContains(final String name);
 }

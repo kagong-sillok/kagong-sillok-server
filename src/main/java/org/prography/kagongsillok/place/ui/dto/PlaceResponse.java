@@ -51,15 +51,15 @@ public class PlaceResponse {
 
     public static PlaceResponse from(final PlaceDto placeDto) {
         return PlaceResponse.builder()
-                .id(placeDto.id())
-                .name(placeDto.name())
-                .address(placeDto.address())
-                .latitude(placeDto.latitude())
-                .longitude(placeDto.longitude())
-                .imageIds(placeDto.imageIds())
-                .phone(placeDto.phone())
-                .links(CustomListUtils.mapTo(placeDto.links(), LinkResponse::from))
-                .businessHours(CustomListUtils.mapTo(placeDto.businessHours(), BusinessHourResponse::from))
+                .id(placeDto.getId())
+                .name(placeDto.getName())
+                .address(placeDto.getAddress())
+                .latitude(placeDto.getLatitude())
+                .longitude(placeDto.getLongitude())
+                .imageIds(placeDto.getImageIds())
+                .phone(placeDto.getPhone())
+                .links(CustomListUtils.mapTo(placeDto.getLinks(), LinkResponse::from))
+                .businessHours(CustomListUtils.mapTo(placeDto.getBusinessHours(), BusinessHourResponse::from))
                 .build();
     }
 
@@ -73,7 +73,7 @@ public class PlaceResponse {
         private String url;
 
         public static LinkResponse from(final LinkDto linkDto) {
-            return new LinkResponse(linkDto.id(), linkDto.linkType(), linkDto.url());
+            return new LinkResponse(linkDto.getId(), linkDto.getLinkType(), linkDto.getUrl());
         }
     }
 
@@ -89,10 +89,10 @@ public class PlaceResponse {
 
         public static BusinessHourResponse from(final BusinessHourDto businessHourDto) {
             return new BusinessHourResponse(
-                    businessHourDto.id(),
-                    businessHourDto.dayOfWeek(),
-                    businessHourDto.open().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
-                    businessHourDto.close().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+                    businessHourDto.getId(),
+                    businessHourDto.getDayOfWeek(),
+                    businessHourDto.getOpen().format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+                    businessHourDto.getClose().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
             );
         }
     }

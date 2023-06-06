@@ -33,11 +33,11 @@ public class ImageResponse {
 
     public static ImageResponse from(final ImageDto imageDto) {
         return ImageResponse.builder()
-                .id(imageDto.id())
-                .url(imageDto.url())
-                .width(imageDto.width())
-                .height(imageDto.height())
-                .extension(imageDto.extension())
+                .id(imageDto.getId())
+                .url(imageDto.getUrl())
+                .width(imageDto.getWidth())
+                .height(imageDto.getHeight())
+                .extension(imageDto.getExtension())
                 .build();
     }
 }

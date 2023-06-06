@@ -2,26 +2,50 @@ package org.prography.kagongsillok.place.application.dto;
 
 import java.time.LocalTime;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Place;
 
-public record PlaceDto(
-        Long id,
-        String name,
-        String address,
-        Double latitude,
-        Double longitude,
-        List<Long> imageIds,
-        String phone,
-        List<LinkDto> links,
-        List<BusinessHourDto> businessHours
-) {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class PlaceDto {
+
+    private Long id;
+    private String name;
+    private String address;
+    private Double latitude;
+    private Double longitude;
+    private List<Long> imageIds;
+    private String phone;
+    private List<LinkDto> links;
+    private List<BusinessHourDto> businessHours;
 
     @Builder
-    public PlaceDto {
+    public PlaceDto(
+            final Long id,
+            final String name,
+            final String address,
+            final Double latitude,
+            final Double longitude,
+            final List<Long> imageIds,
+            final String phone,
+            final List<LinkDto> links,
+            final List<BusinessHourDto> businessHours
+    ) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.imageIds = imageIds;
+        this.phone = phone;
+        this.links = links;
+        this.businessHours = businessHours;
     }
 
     public static PlaceDto from(final Place place) {
@@ -38,14 +62,40 @@ public record PlaceDto(
                 .build();
     }
 
-    public record LinkDto(Long id, String linkType, String url) {
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class LinkDto {
+
+        private Long id;
+        private String linkType;
+        private String url;
+
+        private LinkDto(final Long id, final String linkType, final String url) {
+            this.id = id;
+            this.linkType = linkType;
+            this.url = url;
+        }
 
         public static LinkDto from(final Link link) {
             return new LinkDto(link.getId(), link.getLinkType().name(), link.getUrl());
         }
     }
 
-    public record BusinessHourDto(Long id, String dayOfWeek, LocalTime open, LocalTime close) {
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class BusinessHourDto {
+
+        private Long id;
+        private String dayOfWeek;
+        private LocalTime open;
+        private LocalTime close;
+
+        private BusinessHourDto(final Long id, final String dayOfWeek, final LocalTime open, final LocalTime close) {
+            this.id = id;
+            this.dayOfWeek = dayOfWeek;
+            this.open = open;
+            this.close = close;
+        }
 
         public static BusinessHourDto from(final BusinessHour businessHour) {
             return new BusinessHourDto(

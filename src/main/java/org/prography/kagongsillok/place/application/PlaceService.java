@@ -1,10 +1,14 @@
 package org.prography.kagongsillok.place.application;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
+import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
+import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,22 @@ public class PlaceService {
         }
 
         return PlaceDto.from(place);
+    }
+
+    public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
+        final List<Place> places = placeRepository.findByLocationAround(
+                Location.of(searchCondition.getLatitude(), searchCondition.getLongitude()),
+                searchCondition.getLatitudeBound(),
+                searchCondition.getLongitudeBound()
+        );
+
+        return CustomListUtils.mapTo(places, PlaceDto::from);
+    }
+
+    public List<PlaceDto> searchPlacesByName(final String name) {
+        final List<Place> places = placeRepository.findByNameContains(name);
+
+        return CustomListUtils.mapTo(places, PlaceDto::from);
     }
 
     @Transactional
