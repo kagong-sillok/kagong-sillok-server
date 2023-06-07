@@ -316,4 +316,64 @@ class PlaceServiceTest {
                 () -> assertThat(searchPlaces3.size()).isEqualTo(0)
         );
     }
+
+    @Test
+    void 장소_이름으로_장소를_검색한다() {
+        final String name1 = "테스트 카페1";
+        final String name2 = "테스트 카페2";
+        final String name3 = "테스트 카페3";
+        final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
+                .name("테스트 카페1")
+                .address("테스트특별시 테스트구 테스트로 1004")
+                .latitude(90.0)
+                .longitude(120.129)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("010-1111-1111")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand2 = PlaceCreateCommand.builder()
+                .name("테스트 카페1")
+                .address("테스트특별시 테스트구 테스트로 1004")
+                .latitude(-80.29)
+                .longitude(-60.298)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("010-1111-1111")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand3 = PlaceCreateCommand.builder()
+                .name("테스트 카페3")
+                .address("테스트특별시 테스트구 테스트로 1004")
+                .latitude(-88.29)
+                .longitude(-67.298)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("010-1111-1111")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        placeService.createPlace(placeCreateCommand1);
+        placeService.createPlace(placeCreateCommand2);
+        placeService.createPlace(placeCreateCommand3);
+
+        List<PlaceDto> searchPlaces1 = placeService.searchPlacesByName(name1);
+        List<PlaceDto> searchPlaces2 = placeService.searchPlacesByName(name2);
+        List<PlaceDto> searchPlaces3 = placeService.searchPlacesByName(name3);
+
+        assertAll(
+                ()-> assertThat(searchPlaces1.size()).isEqualTo(2),
+                ()-> assertThat(searchPlaces1).extracting("latitude")
+                        .containsAll(List.of(90.0, -80.29)),
+                ()-> assertThat(searchPlaces1).extracting("longitude")
+                        .containsAll(List.of(120.129, -60.298)),
+                () -> assertThat(searchPlaces2.size()).isEqualTo(0),
+                () -> assertThat(searchPlaces3.size()).isEqualTo(1),
+                () -> assertThat(searchPlaces3).extracting("latitude")
+                        .containsAll(List.of(-88.29)),
+                () -> assertThat(searchPlaces3).extracting("longitude")
+                        .containsAll(List.of(-67.298))
+        );
+    }
+
+
 }
