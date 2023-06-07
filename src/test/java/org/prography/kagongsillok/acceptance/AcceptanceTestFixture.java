@@ -9,6 +9,9 @@ import org.prography.kagongsillok.place.domain.LinkType;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest.BusinessHourCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest.LinkCreateRequest;
+import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
+import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
+import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -83,6 +86,75 @@ public class AcceptanceTestFixture {
                                 .dayOfWeek(DayOfWeek.SUNDAY.name())
                                 .open("10:00:00")
                                 .close("21:00:00")
+                                .build()
+                ))
+                .build();
+    }
+
+    public static PlaceUpdateRequest 장소_수정_요청_바디(
+            final Long id,
+            final String name,
+            final Double latitude,
+            final Double longitude
+    ) {
+        return PlaceUpdateRequest
+                .builder()
+                .id(id)
+                .name(name)
+                .address("새로운 테스트 특별시")
+                .latitude(latitude)
+                .longitude(longitude)
+                .imageIds(List.of(4L, 5L, 6L))
+                .phone("newTestPhoneNumber")
+                .links(List.of(
+                        LinkUpdateRequest.builder()
+                                .url("newWebUrl")
+                                .linkType(LinkType.WEB.name())
+                                .build(),
+                        LinkUpdateRequest.builder()
+                                .url("newBlogUrl")
+                                .linkType(LinkType.BLOG.name())
+                                .build(),
+                        LinkUpdateRequest.builder()
+                                .url("newInstagramUrl")
+                                .linkType(LinkType.INSTAGRAM.name())
+                                .build()
+                ))
+                .businessHours(List.of(
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.MONDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.TUESDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.WEDNESDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.THURSDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.FRIDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.SATURDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
+                                .build(),
+                        BusinessHourUpdateRequest.builder()
+                                .dayOfWeek(DayOfWeek.SUNDAY.name())
+                                .open("11:00:00")
+                                .close("22:00:00")
                                 .build()
                 ))
                 .build();

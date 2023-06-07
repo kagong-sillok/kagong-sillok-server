@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
@@ -25,6 +26,22 @@ public class PlaceUpdateRequest {
     private List<LinkUpdateRequest> links;
     private List<BusinessHourUpdateRequest> businessHours;
 
+    @Builder
+    public PlaceUpdateRequest(final Long id, final String name, final String address, final Double latitude,
+            final Double longitude, final List<Long> imageIds,
+            final String phone, final List<LinkUpdateRequest> links,
+            final List<BusinessHourUpdateRequest> businessHours) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.imageIds = imageIds;
+        this.phone = phone;
+        this.links = links;
+        this.businessHours = businessHours;
+    }
+
     public PlaceUpdateCommand toCommand() {
         return PlaceUpdateCommand.builder()
                 .name(name)
@@ -42,6 +59,12 @@ public class PlaceUpdateRequest {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class LinkUpdateRequest {
 
+        @Builder
+        public LinkUpdateRequest(final String linkType, final String url) {
+            this.linkType = linkType;
+            this.url = url;
+        }
+
         private String linkType;
         private String url;
 
@@ -53,6 +76,13 @@ public class PlaceUpdateRequest {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class BusinessHourUpdateRequest {
+
+        @Builder
+        public BusinessHourUpdateRequest(final String dayOfWeek, final String open, final String close) {
+            this.dayOfWeek = dayOfWeek;
+            this.open = open;
+            this.close = close;
+        }
 
         private String dayOfWeek;
         private String open;
