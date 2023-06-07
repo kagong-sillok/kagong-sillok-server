@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
@@ -24,6 +25,21 @@ public class PlaceCreateRequest {
     private List<LinkCreateRequest> links;
     private List<BusinessHourCreateRequest> businessHours;
 
+    @Builder
+    public PlaceCreateRequest(final String name, final String address, final Double latitude, final Double longitude,
+            final List<Long> imageIds,
+            final String phone, final List<LinkCreateRequest> links,
+            final List<BusinessHourCreateRequest> businessHours) {
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.imageIds = imageIds;
+        this.phone = phone;
+        this.links = links;
+        this.businessHours = businessHours;
+    }
+
     public PlaceCreateCommand toCommand() {
         return PlaceCreateCommand.builder()
                 .name(name)
@@ -41,6 +57,12 @@ public class PlaceCreateRequest {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class LinkCreateRequest {
 
+        @Builder
+        public LinkCreateRequest(final String linkType, final String url) {
+            this.linkType = linkType;
+            this.url = url;
+        }
+
         private String linkType;
         private String url;
 
@@ -52,6 +74,13 @@ public class PlaceCreateRequest {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class BusinessHourCreateRequest {
+
+        @Builder
+        public BusinessHourCreateRequest(final String dayOfWeek, final String open, final String close) {
+            this.dayOfWeek = dayOfWeek;
+            this.open = open;
+            this.close = close;
+        }
 
         private String dayOfWeek;
         private String open;
