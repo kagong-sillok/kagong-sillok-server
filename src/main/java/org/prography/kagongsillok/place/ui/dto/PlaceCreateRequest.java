@@ -57,7 +57,6 @@ public class PlaceCreateRequest {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class LinkCreateRequest {
 
-        @Builder
         public LinkCreateRequest(final String linkType, final String url) {
             this.linkType = linkType;
             this.url = url;
@@ -75,7 +74,6 @@ public class PlaceCreateRequest {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class BusinessHourCreateRequest {
 
-        @Builder
         public BusinessHourCreateRequest(final String dayOfWeek, final String open, final String close) {
             this.dayOfWeek = dayOfWeek;
             this.open = open;

@@ -1,9 +1,12 @@
 package org.prography.kagongsillok.acceptance;
 
+import java.time.LocalTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.image.ui.dto.ImageCreateRequest;
+import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.BusinessHourCreateCommand;
+import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.LinkCreateCommand;
 import org.prography.kagongsillok.place.domain.DayOfWeek;
 import org.prography.kagongsillok.place.domain.LinkType;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
@@ -38,55 +41,31 @@ public class AcceptanceTestFixture {
                 .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(List.of(
-                        LinkCreateRequest.builder()
-                                .url("WebUrl")
-                                .linkType(LinkType.WEB.name())
-                                .build(),
-                        LinkCreateRequest.builder()
-                                .url("BlogUrl")
-                                .linkType(LinkType.BLOG.name())
-                                .build(),
-                        LinkCreateRequest.builder()
-                                .url("InstagramUrl")
-                                .linkType(LinkType.INSTAGRAM.name())
-                                .build()
-                ))
+                        new LinkCreateRequest(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
+                        new LinkCreateRequest(LinkType.BLOG.name(), "testBlogUrl"),
+                        new LinkCreateRequest(LinkType.WEB.name(), "testWebUrl")))
                 .businessHours(List.of(
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.MONDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.TUESDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.WEDNESDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.THURSDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.FRIDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.SATURDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build(),
-                        BusinessHourCreateRequest.builder()
-                                .dayOfWeek(DayOfWeek.SUNDAY.name())
-                                .open("10:00:00")
-                                .close("21:00:00")
-                                .build()
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.MONDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.TUESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.WEDNESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.THURSDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.FRIDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SATURDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SUNDAY.name(), "10:00:00", "21:00:00"
+                        )
                 ))
                 .build();
     }
@@ -107,55 +86,32 @@ public class AcceptanceTestFixture {
                 .imageIds(List.of(4L, 5L, 6L))
                 .phone("newTestPhoneNumber")
                 .links(List.of(
-                        LinkUpdateRequest.builder()
-                                .url("newWebUrl")
-                                .linkType(LinkType.WEB.name())
-                                .build(),
-                        LinkUpdateRequest.builder()
-                                .url("newBlogUrl")
-                                .linkType(LinkType.BLOG.name())
-                                .build(),
-                        LinkUpdateRequest.builder()
-                                .url("newInstagramUrl")
-                                .linkType(LinkType.INSTAGRAM.name())
-                                .build()
-                ))
+                        new LinkUpdateRequest(LinkType.INSTAGRAM.name(), "newInstagramUrl"),
+                        new LinkUpdateRequest(LinkType.BLOG.name(), "newBlogUrl"),
+                        new LinkUpdateRequest(LinkType.WEB.name(), "newWebUrl"))
+                )
                 .businessHours(List.of(
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.MONDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.TUESDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.WEDNESDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.THURSDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.FRIDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.SATURDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build(),
-                        BusinessHourUpdateRequest.builder()
-                                .dayOfWeek(DayOfWeek.SUNDAY.name())
-                                .open("11:00:00")
-                                .close("22:00:00")
-                                .build()
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.MONDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.TUESDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.WEDNESDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.THURSDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.FRIDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.SATURDAY.name(), "11:00:00", "22:00:00"
+                        ),
+                        new BusinessHourUpdateRequest(
+                                DayOfWeek.SUNDAY.name(), "11:00:00", "22:00:00"
+                        )
                 ))
                 .build();
     }

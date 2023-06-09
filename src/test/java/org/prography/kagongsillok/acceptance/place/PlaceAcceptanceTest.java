@@ -139,19 +139,52 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         final var 장소_이름으로_검색_응답1 = 장소_이름으로_검색_요청("testPlace1");
         final var 장소_이름으로_검색_응답2 = 장소_이름으로_검색_요청("testPlace2");
         final var 장소_이름으로_검색_응답3 = 장소_이름으로_검색_요청("testPlace3");
-        final var 장소_이름으로_검색_응답4 = 장소_이름으로_검색_요청("testPlace4");
 
-        장소_이름으로_검색_검증(장소_이름으로_검색_응답1, 장소_이름으로_검색_응답2, 장소_이름으로_검색_응답3, 장소_이름으로_검색_응답4);
+        장소_이름으로_검색_검증(장소_이름으로_검색_응답1, 장소_이름으로_검색_응답2, 장소_이름으로_검색_응답3);
     }
 
+    @Test
+    void 사용자가_없는_장소_이름으로_검색한다() {
+        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
+        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0);
+        final var 생성된_장소1 = 장소_생성_요청(장소_생성_요청_바디1);
+        final var 생성된_장소2 = 장소_생성_요청(장소_생성_요청_바디2);
+
+        final var 장소_이름으로_검색_응답1 = 장소_이름으로_검색_요청("testPlace3");
+
+        없는_장소_이름으로_검색_검증(장소_이름으로_검색_응답1);
+    }
+
+    private static void 없는_장소_이름으로_검색_검증(final PlaceListResponse 장소_이름으로_검색_응답1) {
+        assertAll(
+                () -> assertThat(장소_이름으로_검색_응답1.getPlaces().size()).isEqualTo(0)
+        );
+    }
 
     private static void 장소_이름으로_검색_검증(final PlaceListResponse 장소_이름으로_검색_응답1, final PlaceListResponse 장소_이름으로_검색_응답2,
-            final PlaceListResponse 장소_이름으로_검색_응답3, final PlaceListResponse 장소_이름으로_검색_응답4) {
+            final PlaceListResponse 장소_이름으로_검색_응답3) {
         assertAll(
                 () -> assertThat(장소_이름으로_검색_응답1.getPlaces().size()).isEqualTo(2),
+                () -> assertThat(장소_이름으로_검색_응답1.getPlaces()).extracting("name")
+                        .containsAll(List.of("testPlace1")),
+                () -> assertThat(장소_이름으로_검색_응답1.getPlaces()).extracting("latitude")
+                        .containsAll(List.of(10.0, 40.0)),
+                () -> assertThat(장소_이름으로_검색_응답1.getPlaces()).extracting("longitude")
+                        .containsAll(List.of(10.0, 50.0)),
                 () -> assertThat(장소_이름으로_검색_응답2.getPlaces().size()).isEqualTo(4),
+                () -> assertThat(장소_이름으로_검색_응답2.getPlaces()).extracting("name")
+                        .containsAll(List.of("testPlace2")),
+                () -> assertThat(장소_이름으로_검색_응답2.getPlaces()).extracting("latitude")
+                        .containsAll(List.of(-50.0, -70.0, -40.0, -50.0)),
+                () -> assertThat(장소_이름으로_검색_응답2.getPlaces()).extracting("longitude")
+                        .containsAll(List.of(-50.0, 100.0, 130.0, -9.0)),
                 () -> assertThat(장소_이름으로_검색_응답3.getPlaces().size()).isEqualTo(1),
-                () -> assertThat(장소_이름으로_검색_응답4.getPlaces().size()).isEqualTo(0)
+                () -> assertThat(장소_이름으로_검색_응답3.getPlaces()).extracting("name")
+                        .containsAll(List.of("testPlace3")),
+                () -> assertThat(장소_이름으로_검색_응답3.getPlaces()).extracting("latitude")
+                        .containsAll(List.of(20.0)),
+                () -> assertThat(장소_이름으로_검색_응답3.getPlaces()).extracting("longitude")
+                        .containsAll(List.of(28.0))
         );
     }
 
