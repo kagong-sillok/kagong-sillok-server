@@ -41,9 +41,9 @@ public class AcceptanceTestFixture {
                 .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(List.of(
-                        new LinkCreateRequest(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
-                        new LinkCreateRequest(LinkType.BLOG.name(), "testBlogUrl"),
-                        new LinkCreateRequest(LinkType.WEB.name(), "testWebUrl")))
+                        new LinkCreateRequest(LinkType.INSTAGRAM.name(), "InstagramUrl"),
+                        new LinkCreateRequest(LinkType.BLOG.name(), "BlogUrl"),
+                        new LinkCreateRequest(LinkType.WEB.name(), "WebUrl")))
                 .businessHours(List.of(
                         new BusinessHourCreateRequest(
                                 DayOfWeek.MONDAY.name(), "10:00:00", "21:00:00"
