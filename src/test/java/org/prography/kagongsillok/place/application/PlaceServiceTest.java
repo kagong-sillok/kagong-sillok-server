@@ -325,7 +325,7 @@ class PlaceServiceTest {
         List<PlaceDto> searchPlaces1 = placeService.searchPlacesLocationAround(placeLocationAroundSearchCondition1);
 
         assertAll(
-                ()-> assertThat(searchPlaces1.size()).isEqualTo(0)
+                () -> assertThat(searchPlaces1.size()).isEqualTo(0)
         );
     }
 
@@ -369,13 +369,11 @@ class PlaceServiceTest {
         List<PlaceDto> searchPlaces1 = placeService.searchPlacesByName(name1);
 
         assertAll(
-                ()-> assertThat(searchPlaces1.size()).isEqualTo(2),
-                ()-> assertThat(searchPlaces1).extracting("latitude")
+                () -> assertThat(searchPlaces1.size()).isEqualTo(2),
+                () -> assertThat(searchPlaces1).extracting("latitude")
                         .containsAll(List.of(90.0, -80.29)),
-                ()-> assertThat(searchPlaces1).extracting("longitude")
+                () -> assertThat(searchPlaces1).extracting("longitude")
                         .containsAll(List.of(120.129, -60.298))
         );
     }
-
-
 }
