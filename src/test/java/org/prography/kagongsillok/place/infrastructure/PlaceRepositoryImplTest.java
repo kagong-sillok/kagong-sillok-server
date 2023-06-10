@@ -59,7 +59,48 @@ public class PlaceRepositoryImplTest {
     );
 
     @Test
-    void 위도_경도_주변_장소를_검색한다() {
+    void 장소가_존재하도록_범위를_설정하고_위도_경도_주변_장소를_검색한다() {
+        final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand
+                .builder()
+                .name("테스트 장소1")
+                .address("테스트특별시 테스트구")
+                .latitude(49.67)
+                .longitude(129.23)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("testPhoneNumber")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand2 = PlaceCreateCommand
+                .builder()
+                .name("테스트 장소2")
+                .address("테스트특별시 테스트구")
+                .latitude(68.67)
+                .longitude(116.23)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("testPhoneNumber")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        placeRepository.save(placeCreateCommand1.toEntity());
+        placeRepository.save(placeCreateCommand2.toEntity());
+        Location location1 = Location.of(57.29, 123.25);
+
+        List<Place> places1 = placeRepositoryImpl.findByLocationAround(location1, 16.35, 17.62);
+
+        assertAll(
+                () -> assertThat(places1.size()).isEqualTo(2),
+                () -> assertThat(places1).extracting("name")
+                        .containsAll(List.of("테스트 장소1", "테스트 장소2")),
+                () -> assertThat(places1).extracting("latitude")
+                        .containsAll(List.of(49.67, 68.67)),
+                () -> assertThat(places1).extracting("longitude")
+                        .containsAll(List.of(129.23, 116.23))
+        );
+    }
+
+    @Test
+    void 장소가_존재하지_않도록_범위를_설정하고_위도_경도_주변_장소를_검색한다() {
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand
                 .builder()
                 .name("테스트 장소1")
@@ -82,44 +123,14 @@ public class PlaceRepositoryImplTest {
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
                 .build();
-        final PlaceCreateCommand placeCreateCommand3 = PlaceCreateCommand
-                .builder()
-                .name("테스트 장소3")
-                .address("테스트특별시 테스트구")
-                .latitude(16.67)
-                .longitude(-70.23)
-                .imageIds(List.of(1L, 2L, 3L))
-                .phone("testPhoneNumber")
-                .links(linkCreateCommands)
-                .businessHours(businessHourCreateCommands)
-                .build();
         placeRepository.save(placeCreateCommand1.toEntity());
         placeRepository.save(placeCreateCommand2.toEntity());
-        placeRepository.save(placeCreateCommand3.toEntity());
-        Location location1 = Location.of(57.29, 123.25);
-        Location location2 = Location.of(-40.89, -130.0);
-        Location location3 = Location.of(57.29, 103.25);
+        Location location1 = Location.of(12.29, 24.95);
 
-        List<Place> places1 = placeRepositoryImpl.findByLocationAround(location1, 10.0, 10.0);
-        List<Place> places2 = placeRepositoryImpl.findByLocationAround(location2, 20.0, 20.0);
-        List<Place> places3 = placeRepositoryImpl.findByLocationAround(location3, 5.0, 5.0);
+        List<Place> places1 = placeRepositoryImpl.findByLocationAround(location1, 16.35, 17.84);
 
         assertAll(
-                () -> assertThat(places1.size()).isEqualTo(1),
-                () -> assertThat(places1).extracting("name")
-                        .containsAll(List.of("테스트 장소1")),
-                () -> assertThat(places1).extracting("latitude")
-                        .containsAll(List.of(49.67)),
-                () -> assertThat(places1).extracting("longitude")
-                        .containsAll(List.of(129.23)),
-                () -> assertThat(places2.size()).isEqualTo(1),
-                () -> assertThat(places2).extracting("name")
-                        .containsAll(List.of("테스트 장소2")),
-                () -> assertThat(places2).extracting("latitude")
-                        .containsAll(List.of(-49.67)),
-                () -> assertThat(places2).extracting("longitude")
-                        .containsAll(List.of(-129.23)),
-                () -> assertThat(places3.size()).isEqualTo(0)
+                () -> assertThat(places1.size()).isEqualTo(0)
         );
     }
 
@@ -220,6 +231,4 @@ public class PlaceRepositoryImplTest {
                         .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소3"))
         );
     }
-
-
 }

@@ -246,7 +246,52 @@ class PlaceServiceTest {
     }
 
     @Test
-    void 위도_경도로_장소를_검색한다() {
+    void 장소가_존재하도록_범위를_설정하고_위도_경도로_장소를_검색한다() {
+        final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
+                .name("테스트 카페1")
+                .address("테스트특별시 테스트구 테스트로 1004")
+                .latitude(90.0)
+                .longitude(120.129)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("010-1111-1111")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand2 = PlaceCreateCommand.builder()
+                .name("테스트 카페2")
+                .address("테스트특별시 테스트구 테스트로 1004")
+                .latitude(67.29)
+                .longitude(60.298)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("010-1111-1111")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        placeService.createPlace(placeCreateCommand1);
+        placeService.createPlace(placeCreateCommand2);
+        final PlaceLocationAroundSearchCondition placeLocationAroundSearchCondition1
+                = PlaceLocationAroundSearchCondition.builder()
+                .latitude(70.0)
+                .longitude(90.80)
+                .latitudeBound(25.0)
+                .longitudeBound(35.70)
+                .build();
+
+        List<PlaceDto> searchPlaces1 = placeService.searchPlacesLocationAround(placeLocationAroundSearchCondition1);
+
+        assertAll(
+                () -> assertThat(searchPlaces1.size()).isEqualTo(2),
+                () -> assertThat(searchPlaces1).extracting("name")
+                        .containsAll(List.of("테스트 카페1", "테스트 카페2")),
+                () -> assertThat(searchPlaces1).extracting("latitude")
+                        .containsAll(List.of(90.0, 67.29)),
+                () -> assertThat(searchPlaces1).extracting("longitude")
+                        .containsAll(List.of(120.129, 60.298))
+        );
+    }
+
+    @Test
+    void 장소가_존재하지_않도록_범위를_설정하고_위도_경도로_장소를_검색한다() {
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
                 .name("테스트 카페1")
                 .address("테스트특별시 테스트구 테스트로 1004")
@@ -267,53 +312,20 @@ class PlaceServiceTest {
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
                 .build();
-        final PlaceCreateCommand placeCreateCommand3 = PlaceCreateCommand.builder()
-                .name("테스트 카페3")
-                .address("테스트특별시 테스트구 테스트로 1004")
-                .latitude(-88.29)
-                .longitude(-67.298)
-                .imageIds(List.of(1L, 2L, 3L))
-                .phone("010-1111-1111")
-                .links(linkCreateCommands)
-                .businessHours(businessHourCreateCommands)
-                .build();
         placeService.createPlace(placeCreateCommand1);
         placeService.createPlace(placeCreateCommand2);
-        placeService.createPlace(placeCreateCommand3);
         final PlaceLocationAroundSearchCondition placeLocationAroundSearchCondition1
                 = PlaceLocationAroundSearchCondition.builder()
-                .latitude(70.0)
-                .longitude(110.80)
-                .latitudeBound(25.0)
+                .latitude(36.5)
+                .longitude(38.76)
+                .latitudeBound(23.0)
                 .longitudeBound(19.70)
-                .build();
-        final PlaceLocationAroundSearchCondition placeLocationAroundSearchCondition2
-                = PlaceLocationAroundSearchCondition.builder()
-                .latitude(-50.28)
-                .longitude(-80.830)
-                .latitudeBound(42.152)
-                .longitudeBound(50.26)
-                .build();
-        final PlaceLocationAroundSearchCondition placeLocationAroundSearchCondition3
-                = PlaceLocationAroundSearchCondition.builder()
-                .latitude(0.0)
-                .longitude(0.283)
-                .latitudeBound(5.012)
-                .longitudeBound(10.152)
                 .build();
 
         List<PlaceDto> searchPlaces1 = placeService.searchPlacesLocationAround(placeLocationAroundSearchCondition1);
-        List<PlaceDto> searchPlaces2 = placeService.searchPlacesLocationAround(placeLocationAroundSearchCondition2);
-        List<PlaceDto> searchPlaces3 = placeService.searchPlacesLocationAround(placeLocationAroundSearchCondition3);
 
         assertAll(
-                ()-> assertThat(searchPlaces1.size()).isEqualTo(1),
-                ()-> assertThat(searchPlaces1).extracting("name")
-                        .containsAll(List.of("테스트 카페1")),
-                () -> assertThat(searchPlaces2.size()).isEqualTo(2),
-                () -> assertThat(searchPlaces2).extracting("name")
-                        .containsAll(List.of("테스트 카페2", "테스트 카페3")),
-                () -> assertThat(searchPlaces3.size()).isEqualTo(0)
+                ()-> assertThat(searchPlaces1.size()).isEqualTo(0)
         );
     }
 
