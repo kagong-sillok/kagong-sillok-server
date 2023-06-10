@@ -66,7 +66,7 @@ public class PlaceRepositoryImplTest {
                 .address("테스트특별시 테스트구")
                 .latitude(49.67)
                 .longitude(129.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -77,7 +77,7 @@ public class PlaceRepositoryImplTest {
                 .address("테스트특별시 테스트구")
                 .latitude(-49.67)
                 .longitude(-129.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -88,7 +88,7 @@ public class PlaceRepositoryImplTest {
                 .address("테스트특별시 테스트구")
                 .latitude(16.67)
                 .longitude(-70.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -124,14 +124,14 @@ public class PlaceRepositoryImplTest {
     }
 
     @Test
-    void 장소_이름으로_장소를_검색한다() {
+    void 정확한_장소_이름으로_장소를_검색한다() {
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand
                 .builder()
                 .name("테스트 장소2")
                 .address("테스트특별시 테스트구")
                 .latitude(49.67)
                 .longitude(129.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -142,7 +142,7 @@ public class PlaceRepositoryImplTest {
                 .address("테스트특별시 테스트구")
                 .latitude(-49.67)
                 .longitude(-129.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -153,7 +153,56 @@ public class PlaceRepositoryImplTest {
                 .address("테스트특별시 테스트구")
                 .latitude(16.67)
                 .longitude(-70.23)
-                .imageIds(List.of(1L,2L,3L))
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("testPhoneNumber")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        placeRepository.save(placeCreateCommand1.toEntity());
+        placeRepository.save(placeCreateCommand2.toEntity());
+        placeRepository.save(placeCreateCommand3.toEntity());
+        final String name1 = "테스트 장소2";
+
+        List<Place> places1 = placeRepositoryImpl.findByNameContains(name1);
+
+        assertAll(
+                () -> assertThat(places1.size()).isEqualTo(3),
+                () -> assertThat(places1).extracting("name")
+                        .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소2"))
+        );
+    }
+
+    @Test
+    void 포함된_장소_이름으로_장소를_검색한다() {
+        final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand
+                .builder()
+                .name("테스트 장소2")
+                .address("테스트특별시 테스트구")
+                .latitude(49.67)
+                .longitude(129.23)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("testPhoneNumber")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand2 = PlaceCreateCommand
+                .builder()
+                .name("테스트 장소2")
+                .address("테스트특별시 테스트구")
+                .latitude(-49.67)
+                .longitude(-129.23)
+                .imageIds(List.of(1L, 2L, 3L))
+                .phone("testPhoneNumber")
+                .links(linkCreateCommands)
+                .businessHours(businessHourCreateCommands)
+                .build();
+        final PlaceCreateCommand placeCreateCommand3 = PlaceCreateCommand
+                .builder()
+                .name("테스트 장소3")
+                .address("테스트특별시 테스트구")
+                .latitude(16.67)
+                .longitude(-70.23)
+                .imageIds(List.of(1L, 2L, 3L))
                 .phone("testPhoneNumber")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -162,32 +211,15 @@ public class PlaceRepositoryImplTest {
         placeRepository.save(placeCreateCommand2.toEntity());
         placeRepository.save(placeCreateCommand3.toEntity());
         final String name1 = "테스트";
-        final String name2 = "테스트 장소1";
-        final String name3 = "테스트 장소2";
-        final String name4 = "테스트 장소3";
-        final String name5 = "장소2";
 
         List<Place> places1 = placeRepositoryImpl.findByNameContains(name1);
-        List<Place> places2 = placeRepositoryImpl.findByNameContains(name2);
-        List<Place> places3 = placeRepositoryImpl.findByNameContains(name3);
-        List<Place> places4 = placeRepositoryImpl.findByNameContains(name4);
-        List<Place> places5 = placeRepositoryImpl.findByNameContains(name5);
 
         assertAll(
                 () -> assertThat(places1.size()).isEqualTo(3),
                 () -> assertThat(places1).extracting("name")
-                        .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소2")),
-                () -> assertThat(places2.size()).isEqualTo(0),
-                () -> assertThat(places3.size()).isEqualTo(3),
-                () -> assertThat(places3).extracting("name")
-                        .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소2")),
-                () -> assertThat(places4.size()).isEqualTo(0),
-                () -> assertThat(places5.size()).isEqualTo(3),
-                () -> assertThat(places5).extracting("name")
-                        .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소2"))
+                        .containsAll(List.of("테스트 장소2", "테스트 장소2", "테스트 장소3"))
         );
     }
-
 
 
 }
