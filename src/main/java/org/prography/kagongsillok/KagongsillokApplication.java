@@ -9,5 +9,5 @@ public class KagongsillokApplication {
     public static void main(String[] args) {
         SpringApplication.run(KagongsillokApplication.class, args);
     }
-
+ 
 }
