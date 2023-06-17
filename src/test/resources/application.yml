@@ -22,6 +22,10 @@ spring:
     hibernate:
       ddl-auto: create
 
+  redis:
+    host: localhost
+    port: 6397
+
 logging:
   level:
     org:
