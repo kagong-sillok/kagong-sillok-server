@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.member.domain.Member;
 
 @Getter
 @Entity
@@ -26,19 +27,19 @@ public class LocalAccount {
     private String encryptedPassword;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authentication_id")
-    private Authentication authentication;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private Boolean isDeleted = Boolean.FALSE;
 
     public LocalAccount(
             final String loginId,
             final String encryptedPassword,
-            final Authentication authentication
+            final Member member
     ) {
         this.loginId = loginId;
         this.encryptedPassword = encryptedPassword;
-        this.authentication = authentication;
+        this.member = member;
     }
 
     public void delete() {

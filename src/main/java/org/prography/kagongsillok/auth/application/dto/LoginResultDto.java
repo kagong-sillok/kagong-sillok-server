@@ -1,5 +1,7 @@
 package org.prography.kagongsillok.auth.application.dto;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,19 +13,19 @@ public class LoginResultDto {
 
     public String accessToken;
     public String refreshToken;
-    public Integer accessTokenExpired;
-    public Integer refreshTokenExpired;
+    public ZonedDateTime accessTokenExpireDateTime;
+    public ZonedDateTime refreshTokenExpireDateTime;
 
     @Builder
     public LoginResultDto(
             final String accessToken,
             final String refreshToken,
-            final Integer accessTokenExpired,
-            final Integer refreshTokenExpired
+            final ZonedDateTime accessTokenExpireDateTime,
+            final ZonedDateTime refreshTokenExpireDateTime
     ) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.accessTokenExpired = accessTokenExpired;
-        this.refreshTokenExpired = refreshTokenExpired;
+        this.accessTokenExpireDateTime = accessTokenExpireDateTime;
+        this.refreshTokenExpireDateTime = refreshTokenExpireDateTime;
     }
 }
