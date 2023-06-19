@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.auth.domain;
+package org.prography.kagongsillok.auth.domain.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,16 +15,15 @@ import org.prography.kagongsillok.member.domain.Member;
 
 @Getter
 @Entity
-@Table(name = "local_account")
+@Table(name = "kakao_account")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocalAccount {
+public class KakaoAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String loginId;
-    private String encryptedPassword;
+    private Long kakaoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -32,13 +31,8 @@ public class LocalAccount {
 
     private Boolean isDeleted = Boolean.FALSE;
 
-    public LocalAccount(
-            final String loginId,
-            final String encryptedPassword,
-            final Member member
-    ) {
-        this.loginId = loginId;
-        this.encryptedPassword = encryptedPassword;
+    public KakaoAccount(final Long kakaoId, final Member member) {
+        this.kakaoId = kakaoId;
         this.member = member;
     }
 

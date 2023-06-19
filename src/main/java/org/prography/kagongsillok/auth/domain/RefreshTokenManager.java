@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.auth.domain.entity.RefreshToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

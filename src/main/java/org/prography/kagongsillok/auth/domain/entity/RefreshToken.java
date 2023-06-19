@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.auth.domain;
+package org.prography.kagongsillok.auth.domain.entity;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

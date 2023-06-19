@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import org.prography.kagongsillok.auth.domain.AuthTokenProvider;
-import org.prography.kagongsillok.auth.domain.LoginMember;
+import org.prography.kagongsillok.auth.domain.dto.LoginMemberResult;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidFormException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidSecretKeyException;
 import org.prography.kagongsillok.auth.infrastructure.exception.TokenInvalidExpiredException;
@@ -74,11 +74,11 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
     }
 
     @Override
-    public LoginMember getLoginUser(final String token) {
+    public LoginMemberResult getLoginMember(final String token) {
         final Claims payload = tokenToJws(token).getBody();
         final Long memberId = payload.get(MEMBER_ID_KEY_NAME, Long.class);
         final String role = payload.get(ROLE_KEY_NAME, String.class);
-        return new LoginMember(memberId, role);
+        return new LoginMemberResult(memberId, role);
     }
 
     @Override

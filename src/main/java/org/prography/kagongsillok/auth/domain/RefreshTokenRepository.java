@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.auth.domain;
 
 import java.util.List;
+import org.prography.kagongsillok.auth.domain.entity.RefreshToken;
 
 public interface RefreshTokenRepository {
 

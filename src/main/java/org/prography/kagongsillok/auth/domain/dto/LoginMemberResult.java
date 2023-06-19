@@ -1,19 +1,15 @@
-package org.prography.kagongsillok.auth.domain;
+package org.prography.kagongsillok.auth.domain.dto;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import org.prography.kagongsillok.member.domain.Role;
 
 @Getter
-@EqualsAndHashCode
-@ToString
-public class LoginMember {
+public class LoginMemberResult {
 
     private final Long memberId;
     private final Role role;
 
-    public LoginMember(final Long memberId, final String role) {
+    public LoginMemberResult(final Long memberId, final String role) {
         this.memberId = memberId;
         this.role = Role.valueOf(role);
     }

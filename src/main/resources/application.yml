@@ -41,3 +41,10 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+oauth:
+  kakao:
+    clientId: ${OAUTH_KAKAO_CLIENT_ID}
+    clientSecret: ${OAUTH_KAKAO_CLENT_SECRET}
+    authorizationServerHost: https://kauth.kakao.com
+    resourceServerHost: https://kapi.kakao.com

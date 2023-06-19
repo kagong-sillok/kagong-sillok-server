@@ -1,20 +1,14 @@
 package org.prography.kagongsillok.auth.application;
 
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.application.dto.LocalJoinCommand;
 import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
 import org.prography.kagongsillok.auth.application.exception.AuthenticationException;
 import org.prography.kagongsillok.auth.application.exception.NotFoundLocalAccountException;
-import org.prography.kagongsillok.auth.domain.AccessTokenManager;
-import org.prography.kagongsillok.auth.domain.KakaoAccountRepository;
-import org.prography.kagongsillok.auth.domain.LocalAccount;
+import org.prography.kagongsillok.auth.domain.entity.LocalAccount;
 import org.prography.kagongsillok.auth.domain.LocalAccountRepository;
+import org.prography.kagongsillok.auth.domain.LoginManager;
 import org.prography.kagongsillok.auth.domain.PasswordEncryptor;
-import org.prography.kagongsillok.auth.domain.RefreshToken;
-import org.prography.kagongsillok.auth.domain.RefreshTokenManager;
-import org.prography.kagongsillok.auth.domain.dto.AccessTokenCreateResult;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.member.domain.MemberRepository;
@@ -24,24 +18,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService {
+public class LocalMemberService {
 
     private final PasswordEncryptor passwordEncryptor;
     private final MemberRepository memberRepository;
     private final LocalAccountRepository localAccountRepository;
-    private final KakaoAccountRepository kakaoAccountRepository;
-    private final AccessTokenManager accessTokenManager;
-    private final RefreshTokenManager refreshTokenManager;
+    private final LoginManager loginManager;
 
     @Transactional
     public MemberDto localJoin(final LocalJoinCommand command) {
-        final Member savedMember = saveMember(command);
+        final Member savedMember = saveLocalMember(command);
         final LocalAccount savedLocalAccount = saveLocalAccount(command, savedMember);
 
         return MemberDto.from(savedMember);
     }
 
-    private Member saveMember(final LocalJoinCommand command) {
+    private Member saveLocalMember(final LocalJoinCommand command) {
         final Member member = command.toMemberEntity();
         return memberRepository.save(member);
     }
@@ -63,24 +55,12 @@ public class AuthService {
         matchPassword(planePassword, localAccount);
 
         final Member member = localAccount.getMember();
-        return loginMember(member);
+        return loginManager.loginMember(member);
     }
 
     private void matchPassword(final String planePassword, final LocalAccount localAccount) {
         if (!passwordEncryptor.matches(planePassword, localAccount.getEncryptedPassword())) {
             throw new AuthenticationException("인증에 실패했습니다.");
         }
-    }
-
-    private LoginResultDto loginMember(final Member member) {
-        final AccessTokenCreateResult accessTokenCreateResult = accessTokenManager.create(member);
-        final RefreshToken refreshToken = refreshTokenManager.create(member.getId());
-
-        return LoginResultDto.builder()
-                .accessToken(accessTokenCreateResult.getAccessToken())
-                .refreshToken(refreshToken.getValue())
-                .accessTokenExpireDateTime(accessTokenCreateResult.getExpire())
-                .refreshTokenExpireDateTime(refreshToken.getExpire())
-                .build();
     }
 }
