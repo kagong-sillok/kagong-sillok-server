@@ -14,12 +14,9 @@ import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class RefreshTokenRedisListRepository implements RefreshTokenRepository {
 
     private final static String MEMBER_REFRESH_TOKEN_KEY_PREFIX = "member::refreshToken::";

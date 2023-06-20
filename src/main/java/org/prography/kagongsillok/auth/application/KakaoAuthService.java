@@ -2,8 +2,11 @@ package org.prography.kagongsillok.auth.application;
 
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.application.dto.KakaoJoinCommand;
+import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
+import org.prography.kagongsillok.auth.application.exception.NotFoundKakaoAccountException;
 import org.prography.kagongsillok.auth.domain.KakaoAccountRepository;
 import org.prography.kagongsillok.auth.domain.KakaoApiCaller;
+import org.prography.kagongsillok.auth.domain.LoginManager;
 import org.prography.kagongsillok.auth.domain.dto.KakaoUserResult;
 import org.prography.kagongsillok.auth.domain.entity.KakaoAccount;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
@@ -17,11 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class KakaoMemberService {
+public class KakaoAuthService {
 
     private final MemberRepository memberRepository;
     private final KakaoAccountRepository kakaoAccountRepository;
     private final KakaoApiCaller kakaoApiCaller;
+    private final LoginManager loginManager;
 
     @Value("${oauth.kakao.clientId:localClientId}")
     private String kakaoOAuthClientId;
@@ -31,21 +35,12 @@ public class KakaoMemberService {
 
     @Transactional
     public MemberDto kakaoJoin(final KakaoJoinCommand command) {
-        final String kakaoAccessToken = getKakaoAccessToken(command);
+        final String kakaoAccessToken = getKakaoAccessToken(command.getAuthorizationCode(), command.getRedirectUri());
         final KakaoUserResult kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
         final Member savedMember = saveKakaoMember(kakaoUser, command.getRole());
         final KakaoAccount savedKakaoAccount = saveKakaoAccount(kakaoUser, savedMember);
 
         return MemberDto.from(savedMember);
-    }
-
-    private String getKakaoAccessToken(final KakaoJoinCommand command) {
-        return kakaoApiCaller.getAccessToken(
-                command.getAuthorizationCode(),
-                command.getRedirectUri(),
-                kakaoOAuthClientId,
-                kakaoOAuthClientSecret
-        );
     }
 
     private Member saveKakaoMember(final KakaoUserResult kakaoUser, final String role) {
@@ -56,5 +51,25 @@ public class KakaoMemberService {
     private KakaoAccount saveKakaoAccount(final KakaoUserResult kakaoUser, final Member savedMember) {
         final KakaoAccount kakaoAccount = new KakaoAccount(kakaoUser.getKakaoId(), savedMember);
         return kakaoAccountRepository.save(kakaoAccount);
+    }
+
+    @Transactional
+    public LoginResultDto kakaoLogin(final String authorizationCode, final String redirectUri) {
+        final String kakaoAccessToken = getKakaoAccessToken(authorizationCode, redirectUri);
+        final KakaoUserResult kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
+        final KakaoAccount kakaoAccount = kakaoAccountRepository.findByKakaoId(kakaoUser.getKakaoId())
+                .orElseThrow(() -> new NotFoundKakaoAccountException(kakaoUser.getKakaoId()));
+
+        final Member member = kakaoAccount.getMember();
+        return loginManager.loginMember(member);
+    }
+
+    private String getKakaoAccessToken(final String authorizationCode, final String redirectUri) {
+        return kakaoApiCaller.getAccessToken(
+                authorizationCode,
+                redirectUri,
+                kakaoOAuthClientId,
+                kakaoOAuthClientSecret
+        );
     }
 }
