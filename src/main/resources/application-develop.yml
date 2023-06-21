@@ -1,7 +1,4 @@
 spring:
-  profiles:
-    active: develop
-
   datasource:
     driver-class-name: org.h2.Driver
     username: sa

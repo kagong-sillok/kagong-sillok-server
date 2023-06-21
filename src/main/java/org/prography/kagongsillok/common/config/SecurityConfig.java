@@ -20,10 +20,11 @@ public class SecurityConfig {
                 .disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/",
                         "/h2-console/**",
                         "/api/**",
-                        "/admin/**"
+                        "/admin/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**"
                 )
                 .permitAll()
                 .anyRequest()

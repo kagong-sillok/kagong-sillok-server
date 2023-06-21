@@ -9,13 +9,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class AccessTokenManager {
 
     private final AuthTokenProvider authTokenProvider;
+    private final long accessTokenExpireMilliseconds;
 
-    @Value("${security.jwt.token.access-token-expire-length}")
-    private long accessTokenExpireMilliseconds;
+    public AccessTokenManager(
+            final AuthTokenProvider authTokenProvider,
+            @Value("${security.jwt.token.access-token-expire-length}") final long accessTokenExpireMilliseconds
+    ) {
+        this.authTokenProvider = authTokenProvider;
+        this.accessTokenExpireMilliseconds = accessTokenExpireMilliseconds;
+    }
 
     public AccessTokenCreateResult create(final Member member) {
         final ZonedDateTime accessTokenExpire = ZonedDateTime.now()

@@ -9,16 +9,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class RefreshTokenManager {
 
     private static final int MAX_REFRESH_TOKEN_COUNT_PER_MEMBER = 3;
 
     private final AuthTokenProvider authTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final long refreshTokenExpireMilliseconds;
 
-    @Value("${security.jwt.token.refresh-token-expire-length}")
-    private long refreshTokenExpireMilliseconds;
+    public RefreshTokenManager(
+            final AuthTokenProvider authTokenProvider,
+            final RefreshTokenRepository refreshTokenRepository,
+            @Value("${security.jwt.token.refresh-token-expire-length}") final long refreshTokenExpireMilliseconds) {
+        this.authTokenProvider = authTokenProvider;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenExpireMilliseconds = refreshTokenExpireMilliseconds;
+    }
 
     public RefreshToken create(final Long memberId) {
         final ZonedDateTime expireDateTime = ZonedDateTime.now()
