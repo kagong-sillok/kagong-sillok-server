@@ -82,4 +82,26 @@ class RefreshTokenRedisListRepositoryTest {
                         .containsOnly(refreshToken3.getId(), refreshToken4.getId())
         );
     }
+
+    @Test
+    void 리프레시_토큰을_삭제한다() {
+        final ZonedDateTime refreshTokenExpire = ZonedDateTime.now().plusDays(30);
+        final RefreshToken refreshToken1 = new RefreshToken("refreshToken1", 1L, refreshTokenExpire);
+        final RefreshToken refreshToken2 = new RefreshToken("refreshToken2", 1L, refreshTokenExpire);
+        final RefreshToken refreshToken3 = new RefreshToken("refreshToken3", 1L, refreshTokenExpire);
+        refreshTokenRedisListRepository.save(refreshToken1);
+        refreshTokenRedisListRepository.save(refreshToken2);
+        refreshTokenRedisListRepository.save(refreshToken3);
+
+        refreshTokenRedisListRepository.removeRefreshToken(1L, refreshToken2);
+
+        final List<RefreshToken> refreshTokens = refreshTokenRedisListRepository.findByMemberId(1L);
+        assertAll(
+                () -> assertThat(refreshTokens).hasSize(2),
+                () -> assertThat(refreshTokens).extracting("id")
+                        .containsOnly(refreshToken1.getId(), refreshToken3.getId()),
+                () -> assertThat(refreshTokens).extracting("value")
+                        .containsOnly(refreshToken1.getValue(), refreshToken3.getValue())
+        );
+    }
 }
