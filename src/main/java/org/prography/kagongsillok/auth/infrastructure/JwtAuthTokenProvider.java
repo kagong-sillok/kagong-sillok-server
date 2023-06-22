@@ -17,7 +17,7 @@ import org.prography.kagongsillok.auth.domain.AuthTokenProvider;
 import org.prography.kagongsillok.auth.domain.dto.LoginMemberResult;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidFormException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidSecretKeyException;
-import org.prography.kagongsillok.auth.infrastructure.exception.TokenInvalidExpiredException;
+import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidExpiredException;
 import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -37,9 +37,9 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
     }
 
     @Override
-    public String createAccessToken(final Long memberId, final Role role, final long accessTokenExpireMilliseconds) {
+    public String createAccessToken(final Long memberId, final Role role, final ZonedDateTime accessTokenExpire) {
         final Date now = new Date();
-        final Date expiration = new Date(now.getTime() + accessTokenExpireMilliseconds);
+        final Date expiration = Date.from(accessTokenExpire.toInstant());
 
         final Claims claims = Jwts.claims(
                 Map.of(
@@ -82,9 +82,9 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
     }
 
     @Override
-    public String getRefreshTokenMemberId(final String refreshTokenValue) {
+    public Long getMemberIdByRefreshToken(final String refreshTokenValue) {
         final Claims payload = tokenToJws(refreshTokenValue).getBody();
-        return payload.get(MEMBER_ID_KEY_NAME, String.class);
+        return payload.get(MEMBER_ID_KEY_NAME, Long.class);
     }
 
     private Jws<Claims> tokenToJws(final String token) {
@@ -98,7 +98,7 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
         } catch (final SignatureException e) {
             throw new JwtInvalidSecretKeyException(token);
         } catch (final ExpiredJwtException e) {
-            throw new TokenInvalidExpiredException();
+            throw new JwtInvalidExpiredException();
         }
     }
 }

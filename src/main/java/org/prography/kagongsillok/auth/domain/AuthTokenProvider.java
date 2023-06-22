@@ -6,11 +6,11 @@ import org.prography.kagongsillok.member.domain.Role;
 
 public interface AuthTokenProvider {
 
-    String createAccessToken(Long memberId, Role role, long accessTokenExpireMilliseconds);
+    String createAccessToken(Long memberId, Role role, ZonedDateTime accessTokenExpire);
 
     String createRefreshToken(Long memberId, ZonedDateTime expireDateTime);
 
     LoginMemberResult getLoginMember(String token);
 
-    String getRefreshTokenMemberId(String token);
+    Long getMemberIdByRefreshToken(String token);
 }

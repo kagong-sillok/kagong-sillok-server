@@ -28,7 +28,7 @@ public class AccessTokenManager {
         final String accessToken = authTokenProvider.createAccessToken(
                 member.getId(),
                 member.getRole(),
-                accessTokenExpireMilliseconds
+                accessTokenExpire
         );
         return new AccessTokenCreateResult(accessToken, accessTokenExpire);
     }
