@@ -40,12 +40,6 @@ public class AuthV1Controller {
         return CommonResponse.success(LoginResultResponse.from(loginResultDto));
     }
 
-    @PostMapping("/kakao/join")
-    public ResponseEntity<CommonResponse<MemberResponse>> kakaoJoin(@RequestBody final KakaoJoinRequest request) {
-        final MemberDto memberDto = kakaoAuthService.kakaoJoin(request.toCommand());
-        return CommonResponse.success(MemberResponse.from(memberDto));
-    }
-
     @PostMapping("/kakao/login")
     public ResponseEntity<CommonResponse<LoginResultResponse>> kakaoLogin(
             @RequestBody final KakaoLoginRequest request

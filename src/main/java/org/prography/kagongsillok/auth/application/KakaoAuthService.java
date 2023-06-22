@@ -3,7 +3,6 @@ package org.prography.kagongsillok.auth.application;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.application.dto.KakaoJoinCommand;
 import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
-import org.prography.kagongsillok.auth.application.exception.NotFoundKakaoAccountException;
 import org.prography.kagongsillok.auth.domain.KakaoAccountRepository;
 import org.prography.kagongsillok.auth.domain.KakaoApiCaller;
 import org.prography.kagongsillok.auth.domain.LoginManager;
@@ -37,14 +36,14 @@ public class KakaoAuthService {
     public MemberDto kakaoJoin(final KakaoJoinCommand command) {
         final String kakaoAccessToken = getKakaoAccessToken(command.getAuthorizationCode(), command.getRedirectUri());
         final KakaoUserResult kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
-        final Member savedMember = saveKakaoMember(kakaoUser, command.getRole());
+        final Member savedMember = saveKakaoMember(kakaoUser, Role.valueOf(command.getRole()));
         final KakaoAccount savedKakaoAccount = saveKakaoAccount(kakaoUser, savedMember);
 
         return MemberDto.from(savedMember);
     }
 
-    private Member saveKakaoMember(final KakaoUserResult kakaoUser, final String role) {
-        final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), Role.valueOf(role));
+    private Member saveKakaoMember(final KakaoUserResult kakaoUser, final Role role) {
+        final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), role);
         return memberRepository.save(member);
     }
 
@@ -57,9 +56,12 @@ public class KakaoAuthService {
     public LoginResultDto kakaoLogin(final String authorizationCode, final String redirectUri) {
         final String kakaoAccessToken = getKakaoAccessToken(authorizationCode, redirectUri);
         final KakaoUserResult kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
-        final KakaoAccount kakaoAccount = kakaoAccountRepository.findByKakaoId(kakaoUser.getKakaoId())
-                .orElseThrow(() -> new NotFoundKakaoAccountException(kakaoUser.getKakaoId()));
 
+        final KakaoAccount kakaoAccount = kakaoAccountRepository.findByKakaoId(kakaoUser.getKakaoId())
+                .orElseGet(() -> {
+                    final Member savedMember = saveKakaoMember(kakaoUser, Role.MEMBER);
+                    return saveKakaoAccount(kakaoUser, savedMember);
+                });
         final Member member = kakaoAccount.getMember();
         return loginManager.loginMember(member);
     }
