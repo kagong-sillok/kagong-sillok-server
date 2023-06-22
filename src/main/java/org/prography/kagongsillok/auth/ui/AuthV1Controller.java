@@ -7,6 +7,7 @@ import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
 import org.prography.kagongsillok.auth.ui.dto.KakaoLoginRequest;
 import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
 import org.prography.kagongsillok.auth.ui.dto.LocalLoginRequest;
+import org.prography.kagongsillok.auth.ui.dto.LoginRefreshRequest;
 import org.prography.kagongsillok.auth.ui.dto.LoginResultResponse;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
@@ -47,6 +48,12 @@ public class AuthV1Controller {
                 request.getAuthorizationCode(),
                 request.getRedirectUri()
         );
+        return CommonResponse.success(LoginResultResponse.from(loginResultDto));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<CommonResponse<LoginResultResponse>> refresh(final LoginRefreshRequest request) {
+        final LoginResultDto loginResultDto = authService.refresh(request.getRefreshToken());
         return CommonResponse.success(LoginResultResponse.from(loginResultDto));
     }
 }
