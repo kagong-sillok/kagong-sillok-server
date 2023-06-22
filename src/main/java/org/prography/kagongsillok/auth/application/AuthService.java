@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class LocalAuthService {
+public class AuthService {
 
     private final PasswordEncryptor passwordEncryptor;
     private final MemberRepository memberRepository;
@@ -62,5 +62,10 @@ public class LocalAuthService {
         if (!passwordEncryptor.matches(planePassword, localAccount.getEncryptedPassword())) {
             throw new AuthenticationException("인증에 실패했습니다.");
         }
+    }
+
+    @Transactional
+    public LoginResultDto refresh(final String refreshTokenValue) {
+        return loginManager.refresh(refreshTokenValue);
     }
 }

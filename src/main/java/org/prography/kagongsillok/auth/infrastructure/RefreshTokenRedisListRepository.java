@@ -50,6 +50,14 @@ public class RefreshTokenRedisListRepository implements RefreshTokenRepository {
         listOperations.rightPop(key);
     }
 
+    @Override
+    public void removeRefreshToken(final Long memberId, final RefreshToken refreshToken) {
+        final ListOperations<String, String> listOperations = redisTemplate.opsForList();
+        final String key = MEMBER_REFRESH_TOKEN_KEY_PREFIX + memberId;
+        final String deletedRefreshToken = serializeRefreshToken(refreshToken);
+        listOperations.remove(key, 1, deletedRefreshToken);
+    }
+
     private String serializeRefreshToken(final RefreshToken refreshToken) {
         try {
             return objectMapper.writeValueAsString(refreshToken);

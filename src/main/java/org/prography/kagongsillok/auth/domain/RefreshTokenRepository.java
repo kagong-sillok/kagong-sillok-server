@@ -9,4 +9,6 @@ public interface RefreshTokenRepository {
     List<RefreshToken> findByMemberId(Long memberId);
 
     void removeOldRefreshToken(Long memberId);
+
+    void removeRefreshToken(Long memberId, RefreshToken refreshToken);
 }

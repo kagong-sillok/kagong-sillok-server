@@ -2,7 +2,6 @@ package org.prography.kagongsillok.auth.domain;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.domain.dto.AccessTokenCreateResult;
 import org.prography.kagongsillok.member.domain.Member;
 import org.springframework.beans.factory.annotation.Value;

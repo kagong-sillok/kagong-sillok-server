@@ -1,10 +1,9 @@
 package org.prography.kagongsillok.auth.ui;
 
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.auth.application.KakaoAuthService;
-import org.prography.kagongsillok.auth.application.LocalAuthService;
+import org.prography.kagongsillok.auth.application.AuthService;
+import org.prography.kagongsillok.auth.application.KakaoLoginService;
 import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
-import org.prography.kagongsillok.auth.ui.dto.KakaoJoinRequest;
 import org.prography.kagongsillok.auth.ui.dto.KakaoLoginRequest;
 import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
 import org.prography.kagongsillok.auth.ui.dto.LocalLoginRequest;
@@ -23,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthV1Controller {
 
-    private final LocalAuthService localAuthService;
-    private final KakaoAuthService kakaoAuthService;
+    private final AuthService authService;
+    private final KakaoLoginService kakaoLoginService;
 
     @PostMapping("/local/join")
     public ResponseEntity<CommonResponse<MemberResponse>> localJoin(@RequestBody final LocalJoinRequest request) {
-        final MemberDto memberDto = localAuthService.localJoin(request.toCommand());
+        final MemberDto memberDto = authService.localJoin(request.toCommand());
         return CommonResponse.success(MemberResponse.from(memberDto));
     }
 
@@ -36,7 +35,7 @@ public class AuthV1Controller {
     public ResponseEntity<CommonResponse<LoginResultResponse>> localLogin(
             @RequestBody final LocalLoginRequest request
     ) {
-        final LoginResultDto loginResultDto = localAuthService.localLogin(request.getLoginId(), request.getPassword());
+        final LoginResultDto loginResultDto = authService.localLogin(request.getLoginId(), request.getPassword());
         return CommonResponse.success(LoginResultResponse.from(loginResultDto));
     }
 
@@ -44,7 +43,7 @@ public class AuthV1Controller {
     public ResponseEntity<CommonResponse<LoginResultResponse>> kakaoLogin(
             @RequestBody final KakaoLoginRequest request
     ) {
-        final LoginResultDto loginResultDto = kakaoAuthService.kakaoLogin(
+        final LoginResultDto loginResultDto = kakaoLoginService.kakaoLogin(
                 request.getAuthorizationCode(),
                 request.getRedirectUri()
         );
