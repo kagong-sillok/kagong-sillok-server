@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "kakaoResourceApiFeignClient", url = "${oauth.kakao.resourceServerHost}")
+@FeignClient(name = "kakaoResourceApiFeignClient", url = "${oauth.kakao.resourceServerHost}", primary = false)
 public interface KakaoResourceApiFeignClient {
 
     @GetMapping("/v2/user/me")

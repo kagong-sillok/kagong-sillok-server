@@ -4,12 +4,12 @@ import lombok.Getter;
 import org.prography.kagongsillok.member.domain.Role;
 
 @Getter
-public class LoginMemberResult {
+public class LoginMemberInfo {
 
     private final Long memberId;
     private final Role role;
 
-    public LoginMemberResult(final Long memberId, final String role) {
+    public LoginMemberInfo(final Long memberId, final String role) {
         this.memberId = memberId;
         this.role = Role.valueOf(role);
     }

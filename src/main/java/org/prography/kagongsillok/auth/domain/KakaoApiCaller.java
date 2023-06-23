@@ -1,6 +1,6 @@
 package org.prography.kagongsillok.auth.domain;
 
-import org.prography.kagongsillok.auth.domain.dto.KakaoUserResult;
+import org.prography.kagongsillok.auth.domain.dto.KakaoUserInfo;
 
 public interface KakaoApiCaller {
 
@@ -11,5 +11,5 @@ public interface KakaoApiCaller {
             String kakaoOAuthClientSecret
     );
 
-    KakaoUserResult getKakaoUser(String kakaoAccessToken);
+    KakaoUserInfo getKakaoUser(String kakaoAccessToken);
 }

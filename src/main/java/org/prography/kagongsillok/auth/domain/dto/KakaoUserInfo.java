@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class KakaoUserResult {
+public class KakaoUserInfo {
 
     private final Long kakaoId;
     private final String email;
     private final String nickname;
+    private final String profileImageUrl;
 }

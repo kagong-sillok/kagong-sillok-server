@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 import javax.crypto.SecretKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.prography.kagongsillok.auth.domain.dto.LoginMemberResult;
+import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidFormException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidSecretKeyException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidExpiredException;
@@ -54,7 +54,7 @@ class JwtAuthTokenProviderTest {
         final String accessToken
                 = jwtAuthTokenProvider.createAccessToken(1L, Role.MEMBER, ZonedDateTime.now().plusSeconds(2));
 
-        final LoginMemberResult loginMember = jwtAuthTokenProvider.getLoginMember(accessToken);
+        final LoginMemberInfo loginMember = jwtAuthTokenProvider.getLoginMember(accessToken);
 
         assertAll(
                 () -> assertThat(loginMember.getMemberId()).isEqualTo(1L),

@@ -1,7 +1,7 @@
 package org.prography.kagongsillok.auth.domain;
 
 import java.time.ZonedDateTime;
-import org.prography.kagongsillok.auth.domain.dto.LoginMemberResult;
+import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
 import org.prography.kagongsillok.member.domain.Role;
 
 public interface AuthTokenProvider {
@@ -10,7 +10,7 @@ public interface AuthTokenProvider {
 
     String createRefreshToken(Long memberId, ZonedDateTime expireDateTime);
 
-    LoginMemberResult getLoginMember(String token);
+    LoginMemberInfo getLoginMember(String token);
 
     Long getMemberIdByRefreshToken(String token);
 }

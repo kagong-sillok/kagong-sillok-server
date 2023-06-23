@@ -4,7 +4,7 @@ import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
 import org.prography.kagongsillok.auth.domain.KakaoAccountRepository;
 import org.prography.kagongsillok.auth.domain.KakaoApiCaller;
 import org.prography.kagongsillok.auth.domain.LoginManager;
-import org.prography.kagongsillok.auth.domain.dto.KakaoUserResult;
+import org.prography.kagongsillok.auth.domain.dto.KakaoUserInfo;
 import org.prography.kagongsillok.auth.domain.entity.KakaoAccount;
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.member.domain.MemberRepository;
@@ -44,7 +44,7 @@ public class KakaoLoginService {
     @Transactional
     public LoginResultDto kakaoLogin(final String authorizationCode, final String redirectUri) {
         final String kakaoAccessToken = getKakaoAccessToken(authorizationCode, redirectUri);
-        final KakaoUserResult kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
+        final KakaoUserInfo kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
 
         final KakaoAccount kakaoAccount = kakaoAccountRepository.findByKakaoId(kakaoUser.getKakaoId())
                 .orElseGet(() -> {
@@ -64,12 +64,12 @@ public class KakaoLoginService {
         );
     }
 
-    private Member saveKakaoMember(final KakaoUserResult kakaoUser, final Role role) {
+    private Member saveKakaoMember(final KakaoUserInfo kakaoUser, final Role role) {
         final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), role);
         return memberRepository.save(member);
     }
 
-    private KakaoAccount saveKakaoAccount(final KakaoUserResult kakaoUser, final Member savedMember) {
+    private KakaoAccount saveKakaoAccount(final KakaoUserInfo kakaoUser, final Member savedMember) {
         final KakaoAccount kakaoAccount = new KakaoAccount(kakaoUser.getKakaoId(), savedMember);
         return kakaoAccountRepository.save(kakaoAccount);
     }

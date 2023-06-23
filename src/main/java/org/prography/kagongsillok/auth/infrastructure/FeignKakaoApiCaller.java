@@ -2,7 +2,7 @@ package org.prography.kagongsillok.auth.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.domain.KakaoApiCaller;
-import org.prography.kagongsillok.auth.domain.dto.KakaoUserResult;
+import org.prography.kagongsillok.auth.domain.dto.KakaoUserInfo;
 import org.prography.kagongsillok.auth.infrastructure.dto.KakaoUserFeignResponse;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class FeignKakaoApiCaller implements KakaoApiCaller {
     }
 
     @Override
-    public KakaoUserResult getKakaoUser(final String kakaoAccessToken) {
+    public KakaoUserInfo getKakaoUser(final String kakaoAccessToken) {
         final String authorizationHeader = "Bearer " + kakaoAccessToken;
         final String contentType = "application/x-www-form-urlencoded;charset=utf-8";
         final String propertyKeys = "[\"kakao_account.profile\", \"kakao_account.name\", \"kakao_account.email\"]";
@@ -41,9 +41,10 @@ public class FeignKakaoApiCaller implements KakaoApiCaller {
                 propertyKeys
         );
 
-        return new KakaoUserResult(
+        return new KakaoUserInfo(
                 kakaoUser.getId(),
                 kakaoUser.getEmail(),
+                kakaoUser.getNickname(),
                 kakaoUser.getProfileImageUrl()
         );
     }

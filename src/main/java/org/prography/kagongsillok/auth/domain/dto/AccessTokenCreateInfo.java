@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AccessTokenCreateResult {
+public class AccessTokenCreateInfo {
 
     private final String accessToken;
     private final ZonedDateTime expire;
