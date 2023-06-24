@@ -57,6 +57,19 @@ class RefreshTokenManagerTest {
     }
 
     @Test
+    void 리프레시_토큰을_한_멤버당_3개_이상_생성하면_오래된_리프레시_토큰을_삭제한다() {
+        final RefreshToken refreshToken1 = refreshTokenManager.create(1L);
+        final RefreshToken refreshToken2 = refreshTokenManager.create(1L);
+        final RefreshToken refreshToken3 = refreshTokenManager.create(1L);
+
+        final RefreshToken refreshToken4 = refreshTokenManager.create(1L);
+
+        final List<RefreshToken> refreshTokens = refreshTokenRepository.findByMemberId(1L);
+        assertThat(refreshTokens).extracting("id")
+                .containsOnly(refreshToken2.getId(), refreshToken3.getId(), refreshToken4.getId());
+    }
+
+    @Test
     void 기존의_리프레시_토큰을_삭제하고_새_리프레시_토큰으로_바꿔준다() {
         final RefreshToken oldRefreshToken = refreshTokenManager.create(1L);
 
