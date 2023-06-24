@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.exception.InvalidParamException;
+import org.prography.kagongsillok.member.domain.exception.InvalidEmailException;
 
 @Getter
 @Embeddable
@@ -29,8 +30,8 @@ public class Email {
     }
 
     private static void validateValue(final String value) {
-        if (isEmailForm(value)) {
-            throw new InvalidParamException(value);
+        if (!isEmailForm(value)) {
+            throw new InvalidEmailException(value);
         }
     }
 
