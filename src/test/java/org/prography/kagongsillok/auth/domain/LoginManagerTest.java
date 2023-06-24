@@ -32,25 +32,6 @@ class LoginManagerTest {
     @Autowired
     private AuthTokenProvider authTokenProvider;
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-    @BeforeEach
-    void setUp() {
-        final Set<String> keys = redisTemplate.keys("*");
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
-    }
-
-    @AfterEach
-    void tearDown() {
-        final Set<String> keys = redisTemplate.keys("*");
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
-    }
-
     @Test
     void 로그인하면_액세스_토큰과_리프레시_토큰을_반환한다() {
         final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);

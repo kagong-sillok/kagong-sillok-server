@@ -26,25 +26,6 @@ class RefreshTokenManagerTest {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
-    @BeforeEach
-    void setUp() {
-        final Set<String> keys = redisTemplate.keys("*");
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
-    }
-
-    @AfterEach
-    void tearDown() {
-        final Set<String> keys = redisTemplate.keys("*");
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
-    }
-
     @Test
     void 리프레시_토큰을_생성한다() {
         final RefreshToken refreshToken = refreshTokenManager.create(1L);
