@@ -54,7 +54,7 @@ class JwtAuthTokenProviderTest {
         final String accessToken
                 = jwtAuthTokenProvider.createAccessToken(1L, Role.MEMBER, ZonedDateTime.now().plusSeconds(2));
 
-        final LoginMemberInfo loginMember = jwtAuthTokenProvider.getLoginMember(accessToken);
+        final LoginMemberInfo loginMember = jwtAuthTokenProvider.getLoginMemberByAccessToken(accessToken);
 
         assertAll(
                 () -> assertThat(loginMember.getMemberId()).isEqualTo(1L),
@@ -70,7 +70,7 @@ class JwtAuthTokenProviderTest {
                 ZonedDateTime.now().plusSeconds(2)
         );
 
-        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMember(invalidAccessToken))
+        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMemberByAccessToken(invalidAccessToken))
                 .isInstanceOf(JwtInvalidSecretKeyException.class);
     }
 
@@ -79,7 +79,7 @@ class JwtAuthTokenProviderTest {
         final String expiredAccessToken
                 = jwtAuthTokenProvider.createAccessToken(1L, Role.MEMBER, ZonedDateTime.now().minusNanos(1L));
 
-        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMember(expiredAccessToken))
+        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMemberByAccessToken(expiredAccessToken))
                 .isInstanceOf(JwtInvalidExpiredException.class);
     }
 
@@ -97,7 +97,7 @@ class JwtAuthTokenProviderTest {
 
     @Test
     void 액세스_토큰으로_파싱이_안되는_문자열이_들어오면_에러가_발생한다() {
-        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMember("파싱이안되는문자열"))
+        assertThatThrownBy(() -> jwtAuthTokenProvider.getLoginMemberByAccessToken("파싱이안되는문자열"))
                 .isInstanceOf(JwtInvalidFormException.class);
     }
 

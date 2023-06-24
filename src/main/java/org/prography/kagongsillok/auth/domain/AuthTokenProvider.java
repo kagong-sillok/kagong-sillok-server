@@ -10,7 +10,7 @@ public interface AuthTokenProvider {
 
     String createRefreshToken(Long memberId, ZonedDateTime expireDateTime);
 
-    LoginMemberInfo getLoginMember(String token);
+    LoginMemberInfo getLoginMemberByAccessToken(String accessToken);
 
-    Long getMemberIdByRefreshToken(String token);
+    Long getMemberIdByRefreshToken(String refreshToken);
 }

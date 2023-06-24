@@ -3,7 +3,6 @@ package org.prography.kagongsillok.auth.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.auth.domain.dto.AccessTokenCreateInfo;
 import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
@@ -32,7 +31,7 @@ class AccessTokenManagerTest {
 
         final AccessTokenCreateInfo accessTokenCreateInfo = accessTokenManager.create(member);
 
-        final LoginMemberInfo loginMember = authTokenProvider.getLoginMember(accessTokenCreateInfo.getAccessToken());
+        final LoginMemberInfo loginMember = authTokenProvider.getLoginMemberByAccessToken(accessTokenCreateInfo.getAccessToken());
         assertAll(
                 () -> assertThat(loginMember.getMemberId()).isEqualTo(savedMember.getId()),
                 () -> assertThat(loginMember.getRole()).isEqualTo(savedMember.getRole())

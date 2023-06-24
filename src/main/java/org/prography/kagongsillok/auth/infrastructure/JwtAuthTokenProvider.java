@@ -74,16 +74,16 @@ public class JwtAuthTokenProvider implements AuthTokenProvider {
     }
 
     @Override
-    public LoginMemberInfo getLoginMember(final String token) {
-        final Claims payload = tokenToJws(token).getBody();
+    public LoginMemberInfo getLoginMemberByAccessToken(final String accessToken) {
+        final Claims payload = tokenToJws(accessToken).getBody();
         final Long memberId = payload.get(MEMBER_ID_KEY_NAME, Long.class);
         final String role = payload.get(ROLE_KEY_NAME, String.class);
         return new LoginMemberInfo(memberId, role);
     }
 
     @Override
-    public Long getMemberIdByRefreshToken(final String refreshTokenValue) {
-        final Claims payload = tokenToJws(refreshTokenValue).getBody();
+    public Long getMemberIdByRefreshToken(final String refreshToken) {
+        final Claims payload = tokenToJws(refreshToken).getBody();
         return payload.get(MEMBER_ID_KEY_NAME, Long.class);
     }
 

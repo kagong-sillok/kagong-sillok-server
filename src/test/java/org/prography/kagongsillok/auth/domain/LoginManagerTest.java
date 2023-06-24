@@ -3,10 +3,6 @@ package org.prography.kagongsillok.auth.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Set;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.MockTestConfig;
 import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
@@ -17,7 +13,6 @@ import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
 @Import(MockTestConfig.class)
@@ -39,7 +34,7 @@ class LoginManagerTest {
 
         final LoginResultDto loginResultDto = loginManager.loginMember(savedMember);
 
-        final LoginMemberInfo loginMember = authTokenProvider.getLoginMember(loginResultDto.getAccessToken());
+        final LoginMemberInfo loginMember = authTokenProvider.getLoginMemberByAccessToken(loginResultDto.getAccessToken());
         final Long memberIdRefreshToken = authTokenProvider.getMemberIdByRefreshToken(loginResultDto.getRefreshToken());
         assertAll(
                 () -> assertThat(loginMember.getRole()).isSameAs(Role.MEMBER),
@@ -57,7 +52,7 @@ class LoginManagerTest {
 
         final LoginResultDto refreshResultDto = loginManager.refresh(loginResultDto.getRefreshToken());
 
-        final LoginMemberInfo loginMember = authTokenProvider.getLoginMember(refreshResultDto.getAccessToken());
+        final LoginMemberInfo loginMember = authTokenProvider.getLoginMemberByAccessToken(refreshResultDto.getAccessToken());
         final Long memberIdRefreshToken
                 = authTokenProvider.getMemberIdByRefreshToken(refreshResultDto.getRefreshToken());
         assertAll(
