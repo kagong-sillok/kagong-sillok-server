@@ -4,16 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.MockTestConfig;
 import org.prography.kagongsillok.auth.domain.dto.KakaoUserInfo;
-import org.prography.kagongsillok.auth.mock.MockKakaoAuthApiFeignClient;
-import org.prography.kagongsillok.auth.mock.MockKakaoResourceApiFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Import;
 
 @SpringBootTest
+@Import(MockTestConfig.class)
 class FeignKakaoApiCallerTest {
 
     @Autowired
@@ -41,21 +39,5 @@ class FeignKakaoApiCallerTest {
                 () -> assertThat(kakaoUser.getNickname()).isEqualTo("testUserNickname"),
                 () -> assertThat(kakaoUser.getProfileImageUrl()).isEqualTo("testProfileImageUrl")
         );
-    }
-
-    @TestConfiguration
-    public static class MockApiClientConfiguration {
-
-        @Bean
-        @Primary
-        public KakaoAuthApiFeignClient kakaoAuthApiFeignClient() {
-            return new MockKakaoAuthApiFeignClient();
-        }
-
-        @Bean
-        @Primary
-        public KakaoResourceApiFeignClient kakaoResourceApiFeignClient() {
-            return new MockKakaoResourceApiFeignClient();
-        }
     }
 }

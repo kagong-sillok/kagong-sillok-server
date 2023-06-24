@@ -5,6 +5,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.prography.kagongsillok.MockTestConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-@Import(DatabaseCleanupConfig.class)
+@Import({DatabaseCleanupConfig.class, MockTestConfig.class})
 public abstract class AcceptanceTest {
 
     @Autowired
