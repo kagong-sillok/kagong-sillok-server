@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 public class RefreshTokenRedisListRepository implements RefreshTokenRepository {
 
     private final static String MEMBER_REFRESH_TOKEN_KEY_PREFIX = "member::refreshToken::";
+
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -51,11 +52,46 @@ public class RefreshTokenRedisListRepository implements RefreshTokenRepository {
     }
 
     @Override
-    public void removeRefreshToken(final Long memberId, final RefreshToken refreshToken) {
+    public void removeRefreshToken(final Long memberId, final String deletedRefreshTokenId) {
         final ListOperations<String, String> listOperations = redisTemplate.opsForList();
         final String key = MEMBER_REFRESH_TOKEN_KEY_PREFIX + memberId;
-        final String deletedRefreshToken = serializeRefreshToken(refreshToken);
-        listOperations.remove(key, 1, deletedRefreshToken);
+        final List<String> serializedRefreshTokens = listOperations.range(key, 0, -1);
+        final List<RefreshToken> refreshTokens = getRemainRefreshTokens(deletedRefreshTokenId, serializedRefreshTokens);
+
+        redisTemplate.delete(key);
+        refreshTokens.forEach(it -> listOperations.leftPush(key, serializeRefreshToken(it)));
+        setExpire(key, refreshTokens);
+    }
+
+    private void setExpire(final String key, final List<RefreshToken> refreshTokens) {
+        refreshTokens.stream()
+                .sorted((o1, o2) -> o2.getExpire().compareTo(o1.getExpire()))
+                .limit(1)
+                .findAny()
+                .map(RefreshToken::getExpire)
+                .ifPresent(it -> {
+                    final long ttlSeconds = Duration.between(ZonedDateTime.now(), it)
+                            .getSeconds();
+                    redisTemplate.expire(key, ttlSeconds, TimeUnit.SECONDS);
+                });
+    }
+
+    private List<RefreshToken> getRemainRefreshTokens(
+            final String deletedRefreshTokenId,
+            final List<String> serializedRefreshTokens
+    ) {
+        return CustomListUtils.mapTo(serializedRefreshTokens, this::deserializeRefreshToken)
+                .stream()
+                .filter(refreshToken -> isValidRefreshToken(deletedRefreshTokenId, refreshToken))
+                .toList();
+    }
+
+    private boolean isValidRefreshToken(final String deletedRefreshTokenId, final RefreshToken refreshToken) {
+        return isNotDeletedRefreshToken(deletedRefreshTokenId, refreshToken) && refreshToken.isNotExpired();
+    }
+
+    private boolean isNotDeletedRefreshToken(final String deletedRefreshTokenId, final RefreshToken refreshToken) {
+        return !refreshToken.getId().equals(deletedRefreshTokenId);
     }
 
     private String serializeRefreshToken(final RefreshToken refreshToken) {

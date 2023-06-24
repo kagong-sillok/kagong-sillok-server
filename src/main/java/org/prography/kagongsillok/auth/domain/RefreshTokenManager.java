@@ -46,7 +46,7 @@ public class RefreshTokenManager {
     public RefreshToken rotation(final String refreshTokenValue) {
         final Long memberId = authTokenProvider.getMemberIdByRefreshToken(refreshTokenValue);
         final RefreshToken refreshToken = findRefreshToken(refreshTokenValue, memberId);
-        refreshTokenRepository.removeRefreshToken(memberId, refreshToken);
+        refreshTokenRepository.removeRefreshToken(memberId, refreshToken.getId());
 
         return createNewRefreshToken(memberId);
     }

@@ -1,11 +1,11 @@
 package org.prography.kagongsillok.member.domain;
 
 import java.util.regex.Pattern;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.common.exception.InvalidParamException;
 import org.prography.kagongsillok.member.domain.exception.InvalidEmailException;
 
 @Getter
@@ -18,6 +18,7 @@ public class Email {
             "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
             "A-Z]{2,7}$";
 
+    @Column(name = "email")
     private String value;
 
     private Email(final String value) {

@@ -93,7 +93,7 @@ class RefreshTokenRedisListRepositoryTest {
         refreshTokenRedisListRepository.save(refreshToken2);
         refreshTokenRedisListRepository.save(refreshToken3);
 
-        refreshTokenRedisListRepository.removeRefreshToken(1L, refreshToken2);
+        refreshTokenRedisListRepository.removeRefreshToken(1L, refreshToken2.getId());
 
         final List<RefreshToken> refreshTokens = refreshTokenRedisListRepository.findByMemberId(1L);
         assertAll(

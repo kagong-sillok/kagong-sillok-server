@@ -23,4 +23,8 @@ public class RefreshToken {
         this.memberId = memberId;
         this.expire = expire;
     }
+
+    public boolean isNotExpired() {
+        return expire.isAfter(ZonedDateTime.now());
+    }
 }

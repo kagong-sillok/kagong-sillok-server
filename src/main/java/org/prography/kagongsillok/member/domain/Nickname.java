@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.member.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class Nickname {
 
     private static final int MAX_NICKNAME_LENGTH = 20;
 
+    @Column(name = "nickname")
     private String value;
 
     private Nickname(final String value) {
