@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginResultDto {
 
-    public String accessToken;
-    public String refreshToken;
-    public ZonedDateTime accessTokenExpireDateTime;
-    public ZonedDateTime refreshTokenExpireDateTime;
+     private String accessToken;
+     private String refreshToken;
+     private ZonedDateTime accessTokenExpireDateTime;
+     private ZonedDateTime refreshTokenExpireDateTime;
 
     @Builder
     public LoginResultDto(

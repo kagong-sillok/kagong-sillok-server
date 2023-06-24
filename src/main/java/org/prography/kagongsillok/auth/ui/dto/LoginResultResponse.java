@@ -33,8 +33,8 @@ public class LoginResultResponse {
         return LoginResultResponse.builder()
                 .accessToken(loginResultDto.getAccessToken())
                 .refreshToken(loginResultDto.getRefreshToken())
-                .accessTokenExpireDateTime(loginResultDto.accessTokenExpireDateTime)
-                .refreshTokenExpireDateTime(loginResultDto.refreshTokenExpireDateTime)
+                .accessTokenExpireDateTime(loginResultDto.getAccessTokenExpireDateTime())
+                .refreshTokenExpireDateTime(loginResultDto.getRefreshTokenExpireDateTime())
                 .build();
     }
 }
