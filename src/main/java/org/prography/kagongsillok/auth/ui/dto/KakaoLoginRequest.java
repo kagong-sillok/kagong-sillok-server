@@ -10,4 +10,9 @@ public class KakaoLoginRequest {
 
     private String authorizationCode;
     private String redirectUri;
+
+    public KakaoLoginRequest(final String authorizationCode, final String redirectUri) {
+        this.authorizationCode = authorizationCode;
+        this.redirectUri = redirectUri;
+    }
 }

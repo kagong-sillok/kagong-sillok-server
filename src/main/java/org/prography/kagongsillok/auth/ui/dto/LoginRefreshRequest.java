@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 public class LoginRefreshRequest {
 
     private String refreshToken;
+
+    public LoginRefreshRequest(final String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

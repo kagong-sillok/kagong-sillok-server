@@ -15,8 +15,10 @@ import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
+@Transactional
 @Import(MockTestConfig.class)
 class KakaoLoginServiceTest {
 

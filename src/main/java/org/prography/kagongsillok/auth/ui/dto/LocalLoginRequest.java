@@ -10,4 +10,9 @@ public class LocalLoginRequest {
 
     private String loginId;
     private String password;
+
+    public LocalLoginRequest(final String loginId, final String password) {
+        this.loginId = loginId;
+        this.password = password;
+    }
 }

@@ -11,10 +11,10 @@ import org.prography.kagongsillok.auth.application.dto.LoginResultDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginResultResponse {
 
-    public String accessToken;
-    public String refreshToken;
-    public ZonedDateTime accessTokenExpireDateTime;
-    public ZonedDateTime refreshTokenExpireDateTime;
+    private String accessToken;
+    private String refreshToken;
+    private ZonedDateTime accessTokenExpireDateTime;
+    private ZonedDateTime refreshTokenExpireDateTime;
 
     @Builder
     public LoginResultResponse(

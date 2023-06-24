@@ -52,7 +52,7 @@ public class AuthV1Controller {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<CommonResponse<LoginResultResponse>> refresh(final LoginRefreshRequest request) {
+    public ResponseEntity<CommonResponse<LoginResultResponse>> refresh(@RequestBody final LoginRefreshRequest request) {
         final LoginResultDto loginResultDto = authService.refresh(request.getRefreshToken());
         return CommonResponse.success(LoginResultResponse.from(loginResultDto));
     }
