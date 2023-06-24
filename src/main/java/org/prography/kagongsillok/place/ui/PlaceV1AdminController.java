@@ -44,7 +44,8 @@ public class PlaceV1AdminController {
     public ResponseEntity<CommonResponse<PlaceResponse>> updatePlace(
             @RequestBody final PlaceUpdateRequest placeUpdateRequest
     ) {
-        final PlaceDto createdPlace = placeService.updatePlace(placeUpdateRequest.getId(), placeUpdateRequest.toCommand());
+        final PlaceDto createdPlace = placeService.updatePlace(placeUpdateRequest.getId(),
+                placeUpdateRequest.toCommand());
         return CommonResponse.success(PlaceResponse.from(createdPlace));
     }
 

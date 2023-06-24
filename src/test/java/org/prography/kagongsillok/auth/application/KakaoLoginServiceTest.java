@@ -1,9 +1,8 @@
 package org.prography.kagongsillok.auth.application;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.MockTestConfig;
 import org.prography.kagongsillok.auth.application.dto.LoginResultDto;

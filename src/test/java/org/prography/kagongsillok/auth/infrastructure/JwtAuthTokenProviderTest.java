@@ -13,9 +13,9 @@ import javax.crypto.SecretKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
+import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidExpiredException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidFormException;
 import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidSecretKeyException;
-import org.prography.kagongsillok.auth.infrastructure.exception.JwtInvalidExpiredException;
 import org.prography.kagongsillok.member.domain.Role;
 
 class JwtAuthTokenProviderTest {

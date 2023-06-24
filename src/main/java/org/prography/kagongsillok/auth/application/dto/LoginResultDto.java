@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.auth.application.dto;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginResultDto {
 
-     private String accessToken;
-     private String refreshToken;
-     private ZonedDateTime accessTokenExpireDateTime;
-     private ZonedDateTime refreshTokenExpireDateTime;
+    private String accessToken;
+    private String refreshToken;
+    private ZonedDateTime accessTokenExpireDateTime;
+    private ZonedDateTime refreshTokenExpireDateTime;
 
     @Builder
     public LoginResultDto(

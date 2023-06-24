@@ -6,6 +6,7 @@ import org.prography.kagongsillok.auth.domain.entity.RefreshToken;
 public interface RefreshTokenRepository {
 
     RefreshToken save(RefreshToken refreshToken);
+
     List<RefreshToken> findByMemberId(Long memberId);
 
     void removeOldRefreshToken(Long memberId);

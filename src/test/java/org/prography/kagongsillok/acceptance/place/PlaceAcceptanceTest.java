@@ -2,7 +2,8 @@ package org.prography.kagongsillok.acceptance.place;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.*;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_세개_링크_두개_장소_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.장소_수정_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;

@@ -31,7 +31,7 @@ public class Member {
     private Boolean isDeleted = Boolean.FALSE;
 
     public Member(final String nickname, final String email, final Role role) {
-        this.nickname =  Nickname.from(nickname);
+        this.nickname = Nickname.from(nickname);
         this.email = Email.from(email);
         this.role = role;
     }

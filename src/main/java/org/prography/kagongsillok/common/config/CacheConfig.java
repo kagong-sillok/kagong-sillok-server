@@ -44,9 +44,8 @@ public class CacheConfig extends CachingConfigurerSupport {
 
     /**
      * 별도의 TTL을 설정하려면 여기에 추가
-     *
-     * ex)
-     * cacheTtlConfiguration.put(key, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(seconds)));
+     * <p>
+     * ex) cacheTtlConfiguration.put(key, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(seconds)));
      */
     private Map<String, RedisCacheConfiguration> cacheTtlConfiguration() {
         final Map<String, RedisCacheConfiguration> cacheTtlConfiguration = new HashMap<>();
