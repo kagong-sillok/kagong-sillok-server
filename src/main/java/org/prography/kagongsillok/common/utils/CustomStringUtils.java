@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class CustomStringUtils {
 
     public static <T> List<T> splitToList(

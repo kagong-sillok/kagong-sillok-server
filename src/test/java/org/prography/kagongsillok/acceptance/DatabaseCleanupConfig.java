@@ -6,13 +6,13 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
-public class DatabaseCleanerConfig {
+public class DatabaseCleanupConfig {
 
     @Autowired
     private EntityManager entityManager;
 
     @Bean
-    public DatabaseCleanup databaseCleaner() {
+    public DatabaseCleanup databaseCleanup() {
         return new DatabaseCleanup(entityManager);
     }
 }

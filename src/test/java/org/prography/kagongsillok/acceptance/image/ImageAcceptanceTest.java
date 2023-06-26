@@ -1,8 +1,8 @@
 package org.prography.kagongsillok.acceptance.image;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.*;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.넓이_100_높이_200_jpeg_이미지_생성_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;

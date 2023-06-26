@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.image.application.dto;
 
-import java.security.PrivilegedExceptionAction;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

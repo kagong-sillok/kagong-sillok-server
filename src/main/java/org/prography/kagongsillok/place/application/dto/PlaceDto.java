@@ -99,10 +99,10 @@ public class PlaceDto {
 
         public static BusinessHourDto from(final BusinessHour businessHour) {
             return new BusinessHourDto(
-                businessHour.getId(),
-                businessHour.getDayOfWeek().name(),
-                businessHour.getOpen(),
-                businessHour.getClose()
+                    businessHour.getId(),
+                    businessHour.getDayOfWeek().name(),
+                    businessHour.getOpen(),
+                    businessHour.getClose()
             );
         }
     }
