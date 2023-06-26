@@ -42,7 +42,7 @@ public class KakaoLoginService {
     }
 
     @Transactional
-    public LoginResultDto kakaoLogin(final String authorizationCode, final String redirectUri) {
+    public LoginResultDto login(final String authorizationCode, final String redirectUri) {
         final String kakaoAccessToken = getKakaoAccessToken(authorizationCode, redirectUri);
         final KakaoUserInfo kakaoUser = kakaoApiCaller.getKakaoUser(kakaoAccessToken);
 
@@ -51,8 +51,7 @@ public class KakaoLoginService {
                     final Member savedMember = saveKakaoMember(kakaoUser, Role.MEMBER);
                     return saveKakaoAccount(kakaoUser, savedMember);
                 });
-        final Member member = kakaoAccount.getMember();
-        return loginManager.loginMember(member);
+        return loginManager.loginMember(kakaoAccount.getMember());
     }
 
     private String getKakaoAccessToken(final String authorizationCode, final String redirectUri) {

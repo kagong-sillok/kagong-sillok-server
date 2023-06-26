@@ -30,17 +30,19 @@ public class RefreshTokenManager {
     public RefreshToken create(final Long memberId) {
         final ZonedDateTime expireDateTime = ZonedDateTime.now()
                 .plus(refreshTokenExpireMilliseconds, ChronoUnit.MILLIS);
-
-        final String refreshTokenValue = authTokenProvider.createRefreshToken(memberId, expireDateTime);
-        final RefreshToken refreshToken = new RefreshToken(refreshTokenValue, memberId, expireDateTime);
+        final RefreshToken refreshToken = createRefreshToken(memberId, expireDateTime);
 
         final List<RefreshToken> refreshTokens = refreshTokenRepository.findByMemberId(memberId);
-        if (refreshTokens.size() >= MAX_REFRESH_TOKEN_COUNT_PER_MEMBER) {
+        if (isMaxLoginCountPerMember(refreshTokens)) {
             refreshTokenRepository.removeOldRefreshToken(memberId);
         }
         refreshTokenRepository.save(refreshToken);
 
         return refreshToken;
+    }
+
+    private boolean isMaxLoginCountPerMember(final List<RefreshToken> refreshTokens) {
+        return refreshTokens.size() >= MAX_REFRESH_TOKEN_COUNT_PER_MEMBER;
     }
 
     public RefreshToken rotation(final String refreshTokenValue) {
@@ -62,9 +64,13 @@ public class RefreshTokenManager {
     private RefreshToken createNewRefreshToken(final Long memberId) {
         final ZonedDateTime expireDateTime = ZonedDateTime.now()
                 .plus(refreshTokenExpireMilliseconds, ChronoUnit.MILLIS);
-        final String newRefreshTokenValue = authTokenProvider.createRefreshToken(memberId, expireDateTime);
-        final RefreshToken newRefreshToken = new RefreshToken(newRefreshTokenValue, memberId, expireDateTime);
+        final RefreshToken newRefreshToken = createRefreshToken(memberId, expireDateTime);
 
         return refreshTokenRepository.save(newRefreshToken);
+    }
+
+    private RefreshToken createRefreshToken(final Long memberId, final ZonedDateTime expireDateTime) {
+        final String refreshTokenValue = authTokenProvider.createRefreshToken(memberId, expireDateTime);
+        return new RefreshToken(refreshTokenValue, memberId, expireDateTime);
     }
 }

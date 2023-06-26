@@ -27,17 +27,11 @@ public class AuthService {
 
     @Transactional
     public MemberDto localJoin(final LocalJoinCommand command) {
-        final Member savedMember = saveLocalMember(command);
+        final Member savedMember = memberRepository.save(command.toMemberEntity());
         final LocalAccount savedLocalAccount = saveLocalAccount(command, savedMember);
 
         return MemberDto.from(savedMember);
     }
-
-    private Member saveLocalMember(final LocalJoinCommand command) {
-        final Member member = command.toMemberEntity();
-        return memberRepository.save(member);
-    }
-
     private LocalAccount saveLocalAccount(final LocalJoinCommand command, final Member member) {
         final LocalAccount localAccount = new LocalAccount(
                 command.getLoginId(),

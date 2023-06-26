@@ -44,7 +44,7 @@ public class AuthV1Controller {
     public ResponseEntity<CommonResponse<LoginResultResponse>> kakaoLogin(
             @RequestBody final KakaoLoginRequest request
     ) {
-        final LoginResultDto loginResultDto = kakaoLoginService.kakaoLogin(
+        final LoginResultDto loginResultDto = kakaoLoginService.login(
                 request.getAuthorizationCode(),
                 request.getRedirectUri()
         );

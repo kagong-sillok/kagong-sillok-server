@@ -32,7 +32,7 @@ class KakaoLoginServiceTest {
 
     @Test
     void 가입했던_적이_없으면_카카오_로그인시_계정이_생성된다() {
-        final LoginResultDto loginResultDto = kakaoLoginService.kakaoLogin("autorizationCode", "redirectUri");
+        final LoginResultDto loginResultDto = kakaoLoginService.login("autorizationCode", "redirectUri");
 
         final LoginMemberInfo loginMemberInfo
                 = authTokenProvider.getLoginMemberByAccessToken(loginResultDto.getAccessToken());
@@ -49,9 +49,9 @@ class KakaoLoginServiceTest {
 
     @Test
     void 가입했던_적이_있으면_카카오_로그인시_기존_계정을_반환한다() {
-        kakaoLoginService.kakaoLogin("autorizationCode", "redirectUri");
+        kakaoLoginService.login("autorizationCode", "redirectUri");
 
-        final LoginResultDto loginResultDto = kakaoLoginService.kakaoLogin("autorizationCode", "redirectUri");
+        final LoginResultDto loginResultDto = kakaoLoginService.login("autorizationCode", "redirectUri");
 
         final LoginMemberInfo loginMemberInfo
                 = authTokenProvider.getLoginMemberByAccessToken(loginResultDto.getAccessToken());
