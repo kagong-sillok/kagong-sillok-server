@@ -23,6 +23,32 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         생성된_리뷰_검증(생성된_리뷰_응답);
     }
 
+    @Test
+    void 리뷰_id로_리뷰를_조회한다() {
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review");
+        final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
+
+        final var 조회된_리뷰 = 리뷰_조회(생성된_리뷰_id);
+
+        조회된_리뷰_검증(조회된_리뷰);
+    }
+
+    private static void 조회된_리뷰_검증(final ReviewResponse 조회된_리뷰) {
+        assertAll(
+                () -> assertThat(조회된_리뷰.getId()).isEqualTo(1L),
+                () -> assertThat(조회된_리뷰.getMemberId()).isEqualTo(2L),
+                () -> assertThat(조회된_리뷰.getRating()).isEqualTo(5),
+                () -> assertThat(조회된_리뷰.getContent()).isEqualTo("test review"),
+                () -> assertThat(조회된_리뷰.getImageUrls()).containsAll(List.of("image1", "image2")),
+                () -> assertThat(조회된_리뷰.getTags()).containsAll(List.of("#tag1", "#tag2")),
+                () -> assertThat(조회된_리뷰.getUserNickName()).isEqualTo("임시 닉네임")
+        );
+    }
+
+    private ReviewResponse 리뷰_조회(final Long 생성된_리뷰_id) {
+        return 응답_바디_추출(get(REVIEW_API_BASE_URL_V1 + "/" + 생성된_리뷰_id), ReviewResponse.class);
+    }
+
     private static void 생성된_리뷰_검증(final ReviewResponse 생성된_리뷰_응답) {
         assertAll(
                 () -> assertThat(생성된_리뷰_응답.getMemberId()).isEqualTo(2L),
