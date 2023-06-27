@@ -46,6 +46,28 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         수정된_리뷰_검증(수정된_리뷰_응답);
     }
 
+    @Test
+    void 리뷰를_삭제한다() {
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review");
+        final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
+
+        final var 리뷰_삭제_응답 = 리뷰_삭제_응답_요청(생성된_리뷰_id);
+        final var 삭제후_조회한_리뷰 = 리뷰_조회(생성된_리뷰_id);
+
+        리뷰_삭제_검증(리뷰_삭제_응답, 삭제후_조회한_리뷰);
+    }
+
+    private static void 리뷰_삭제_검증(final int 리뷰_삭제_응답, final ReviewResponse 삭제후_조회한_리뷰) {
+        assertAll(
+                () -> assertThat(리뷰_삭제_응답).isEqualTo(200),
+                () -> assertThat(삭제후_조회한_리뷰).isEqualTo(null)
+        );
+    }
+
+    private int 리뷰_삭제_응답_요청(final Long 생성된_리뷰_id) {
+        return delete(REVIEW_API_BASE_URL_V1 + "/" + 생성된_리뷰_id).statusCode();
+    }
+
     private static void 수정된_리뷰_검증(final ReviewResponse 수정된_리뷰_응답) {
         assertAll(
                 () -> assertThat(수정된_리뷰_응답.getId()).isEqualTo(1L),
