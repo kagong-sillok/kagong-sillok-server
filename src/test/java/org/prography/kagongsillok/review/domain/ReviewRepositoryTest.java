@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class ReviewRepositoryTest {
         reviewRepository.save(review1);
 
         final Review savedReview = reviewRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new NotFoundReviewException(1L));
 
         assertAll(
                 () -> assertThat(savedReview.getRating()).isEqualTo(5),

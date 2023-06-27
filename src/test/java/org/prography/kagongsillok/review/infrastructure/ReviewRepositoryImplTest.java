@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
+import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ReviewRepositoryImplTest {
         reviewRepository.save(reviewCreateCommand.toEntity());
 
         final Review savedReview = reviewRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new NotFoundReviewException(1L));
 
         assertAll(
                 () -> assertThat(savedReview.getRating()).isEqualTo(3),

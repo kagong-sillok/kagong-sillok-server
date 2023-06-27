@@ -23,7 +23,7 @@ public class ReviewServiceTest {
     ReviewService reviewService;
 
     @Test
-    void 장소를_생성한다() {
+    void 리뷰를_생성한다() {
         final ReviewCreateCommand reviewCreateCommand = ReviewCreateCommand
                 .builder()
                 .memberId(3L)
@@ -34,6 +34,29 @@ public class ReviewServiceTest {
                 .build();
 
         final ReviewDto reviewDto = reviewService.createReview(reviewCreateCommand);
+
+        assertAll(
+                () -> assertThat(reviewDto.getMemberId()).isEqualTo(3L),
+                () -> assertThat(reviewDto.getRating()).isEqualTo(5),
+                () -> assertThat(reviewDto.getContent()).isEqualTo("test review"),
+                () -> assertThat(reviewDto.getImageUrls()).containsAll(List.of("image1", "image2")),
+                () -> assertThat(reviewDto.getTags()).containsAll(List.of("#tag1", "#tag2"))
+        );
+    }
+
+    @Test
+    void 리뷰를_조회한다() {
+        final ReviewCreateCommand reviewCreateCommand = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(5)
+                .content("test review")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
+
+        final ReviewDto reviewDto = reviewService.getReview(createdReviewId);
 
         assertAll(
                 () -> assertThat(reviewDto.getMemberId()).isEqualTo(3L),
