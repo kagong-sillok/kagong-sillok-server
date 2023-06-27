@@ -115,4 +115,45 @@ public class ReviewServiceTest {
                 .isInstanceOf(NotFoundReviewException.class)
                 .hasMessageContaining(String.valueOf(createdReviewId));
     }
+
+    @Test
+    void 멤버_ID로_작성한_리뷰들을_조회한다() {
+        final ReviewCreateCommand reviewCreateCommand1 = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(5)
+                .content("test review1")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        final ReviewCreateCommand reviewCreateCommand2 = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(1)
+                .content("test review2")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        final ReviewCreateCommand reviewCreateCommand3 = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(3)
+                .content("test review3")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        reviewService.createReview(reviewCreateCommand1);
+        reviewService.createReview(reviewCreateCommand2);
+        reviewService.createReview(reviewCreateCommand3);
+
+        final List<ReviewDto> reviewDtos = reviewService.getAllReviews(3L);
+
+        assertAll(
+                () -> assertThat(reviewDtos.size()).isEqualTo(3),
+                () -> assertThat(reviewDtos).extracting("rating")
+                        .containsAll(List.of(5, 1, 3)),
+                () -> assertThat(reviewDtos).extracting("content")
+                        .containsAll(List.of("test review1", "test review2", "test review3"))
+        );
+    }
 }
