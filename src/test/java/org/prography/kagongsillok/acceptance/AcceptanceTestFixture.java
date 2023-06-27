@@ -15,6 +15,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest.LinkCreateRequ
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -113,6 +114,20 @@ public class AcceptanceTestFixture {
                                 DayOfWeek.SUNDAY.name(), "11:00:00", "22:00:00"
                         )
                 ))
+                .build();
+    }
+
+    public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
+            final Long memberId,
+            final String content
+    ) {
+        return ReviewCreateRequest
+                .builder()
+                .rating(5)
+                .memberId(memberId)
+                .content(content)
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
                 .build();
     }
 
