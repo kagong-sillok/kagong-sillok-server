@@ -16,6 +16,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -125,6 +126,22 @@ public class AcceptanceTestFixture {
                 .builder()
                 .rating(5)
                 .memberId(memberId)
+                .content(content)
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+    }
+
+    public static ReviewUpdateRequest 리뷰_수정_요청_바디(
+            final Long id,
+            final int rating,
+            final String content
+    ) {
+        return ReviewUpdateRequest
+                .builder()
+                .id(id)
+                .rating(rating)
+                .memberId(2L)
                 .content(content)
                 .imageUrls(List.of("image1", "image2"))
                 .tags(List.of("#tag1", "#tag2"))
