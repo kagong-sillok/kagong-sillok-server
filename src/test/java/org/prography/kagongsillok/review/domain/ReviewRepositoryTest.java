@@ -3,6 +3,7 @@ package org.prography.kagongsillok.review.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,28 @@ public class ReviewRepositoryTest {
                 () -> assertThat(savedReview.getContent()).isEqualTo("test review"),
                 () -> assertThat(savedReview.getImages().getImages()).containsAll(Set.of("image1", "image2")),
                 () -> assertThat(savedReview.getTags().getTags()).containsAll(Set.of("#tag1", "#tag2"))
+        );
+    }
+
+    @Test
+    void 멤버_ID로_작성한_리뷰들을_조회한다() {
+        final Review review1 = createReviewOfMemberIdAndContent(2L, "test review1");
+        final Review review2 = createReviewOfMemberIdAndContent(2L, "test review2");
+        final Review review3 = createReviewOfMemberIdAndContent(2L, "test review3");
+        final Review review4 = createReviewOfMemberIdAndContent(2L, "test review4");
+        reviewRepository.save(review1);
+        reviewRepository.save(review2);
+        reviewRepository.save(review3);
+        reviewRepository.save(review4);
+
+        final List<Review> reviews = reviewRepository.findAllById(2L);
+
+        assertAll(
+                () -> assertThat(reviews.size()).isEqualTo(4),
+                () -> assertThat(reviews).extracting("rating")
+                        .containsAll(List.of(5, 5, 5, 5)),
+                () -> assertThat(reviews).extracting("content")
+                        .containsAll(List.of("test review1", "test review2", "test review3", "test review4"))
         );
     }
 
