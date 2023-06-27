@@ -1,17 +1,15 @@
 package org.prography.kagongsillok.review.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
-import org.prography.kagongsillok.place.application.dto.PlaceDto;
-import org.prography.kagongsillok.place.domain.DayOfWeek;
-import org.prography.kagongsillok.place.domain.LinkType;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
+import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,5 +96,23 @@ public class ReviewServiceTest {
                 () -> assertThat(reviewDto.getImageUrls()).containsAll(List.of("image1")),
                 () -> assertThat(reviewDto.getTags()).containsAll(List.of("#tag1"))
         );
+    }
+
+    @Test
+    void 리뷰를_삭제한다() {
+        final ReviewCreateCommand reviewCreateCommand = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(5)
+                .content("test review")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
+        reviewService.deleteReview(createdReviewId);
+
+        assertThatThrownBy(() -> reviewService.getReview(createdReviewId))
+                .isInstanceOf(NotFoundReviewException.class)
+                .hasMessageContaining(String.valueOf(createdReviewId));
     }
 }
