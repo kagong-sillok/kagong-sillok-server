@@ -11,6 +11,7 @@ import org.prography.kagongsillok.place.domain.DayOfWeek;
 import org.prography.kagongsillok.place.domain.LinkType;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
+import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,5 +68,35 @@ public class ReviewServiceTest {
         );
     }
 
+    @Test
+    void 리뷰를_수정한다() {
+        final ReviewCreateCommand reviewCreateCommand = ReviewCreateCommand
+                .builder()
+                .memberId(3L)
+                .rating(5)
+                .content("test review")
+                .imageUrls(List.of("image1", "image2"))
+                .tags(List.of("#tag1", "#tag2"))
+                .build();
+        final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
+        final ReviewUpdateCommand reviewUpdateCommand = ReviewUpdateCommand
+                .builder()
+                .id(createdReviewId)
+                .memberId(3L)
+                .rating(4)
+                .content("updated test review")
+                .imageUrls(List.of("image1"))
+                .tags(List.of("#tag1"))
+                .build();
 
+        final ReviewDto reviewDto = reviewService.updateReview(reviewUpdateCommand);
+
+        assertAll(
+                () -> assertThat(reviewDto.getMemberId()).isEqualTo(3L),
+                () -> assertThat(reviewDto.getRating()).isEqualTo(4),
+                () -> assertThat(reviewDto.getContent()).isEqualTo("updated test review"),
+                () -> assertThat(reviewDto.getImageUrls()).containsAll(List.of("image1")),
+                () -> assertThat(reviewDto.getTags()).containsAll(List.of("#tag1"))
+        );
+    }
 }
