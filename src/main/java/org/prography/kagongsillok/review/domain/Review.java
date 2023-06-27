@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.place.domain.Place;
 
 @Getter
 @Entity
@@ -26,12 +27,12 @@ public class Review extends AuditingTimeEntity {
 
     @Builder
     public Review(
-            final Long userId,
+            final Long memberId,
             final int rating,
             final String content,
             final Tags tags,
             final Images images) {
-        this.userId = userId;
+        this.memberId = memberId;
         this.rating = rating;
         this.content = content;
         this.tags = tags;
@@ -42,7 +43,7 @@ public class Review extends AuditingTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private Long memberId;
 
     private int rating;
 
@@ -53,4 +54,17 @@ public class Review extends AuditingTimeEntity {
 
     @Embedded
     private Images images;
+
+    private Boolean isDeleted = false;
+
+    public void update(final Review target) {
+        this.rating = target.rating;
+        this.content = target.content;
+        this.tags = target.tags;
+        this.images = target.images;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
 }

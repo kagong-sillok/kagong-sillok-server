@@ -18,7 +18,7 @@ public class ReviewResponse {
             final String content,
             final List<String> images,
             final List<String> tags,
-            final Long userId,
+            final Long memberId,
             final String userNickName,
             final String createdAt,
             final String updatedAt
@@ -28,7 +28,7 @@ public class ReviewResponse {
         this.content = content;
         this.imageUrls = images;
         this.tags = tags;
-        this.userId = userId;
+        this.memberId = memberId;
         this.userNickName = userNickName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -39,7 +39,7 @@ public class ReviewResponse {
     private String content;
     private List<String> imageUrls;
     private List<String> tags;
-    private Long userId;
+    private Long memberId;
     private String userNickName;
     private String createdAt;
     private String updatedAt;
@@ -50,7 +50,7 @@ public class ReviewResponse {
                 .id(reviewDto.getId())
                 .rating(reviewDto.getRating())
                 .content(reviewDto.getContent())
-                .userId(reviewDto.getUserId())
+                .memberId(reviewDto.getMemberId())
                 .tags(reviewDto.getTags())
                 .images(reviewDto.getImageUrls())
                 .userNickName("임시 닉네임")

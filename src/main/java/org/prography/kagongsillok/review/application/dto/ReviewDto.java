@@ -20,7 +20,7 @@ public class ReviewDto {
     @Builder
     public ReviewDto(
             final Long id,
-            final Long userId,
+            final Long memberId,
             final int rating,
             final String content,
             final List<String> tags,
@@ -29,7 +29,7 @@ public class ReviewDto {
             final String updatedAt
     ) {
         this.id = id;
-        this.userId = userId;
+        this.memberId = memberId;
         this.rating = rating;
         this.content = content;
         this.tags = tags;
@@ -39,7 +39,7 @@ public class ReviewDto {
     }
 
     private Long id;
-    private Long userId;
+    private Long memberId;
     private int rating;
     private String content;
     private List<String> tags;
@@ -51,11 +51,11 @@ public class ReviewDto {
         return ReviewDto
                 .builder()
                 .id(review.getId())
-                .userId(review.getUserId())
+                .memberId(review.getMemberId())
                 .rating(review.getRating())
                 .content(review.getContent())
-                .tags(review.getTags().getTags())
-                .imageUrls(review.getImages().getImages())
+                .tags(review.getTags().getTags().stream().toList())
+                .imageUrls(review.getImages().getImages().stream().toList())
                 .createdAt(
                         CustomTimeFormattingUtils
                                 .LocalDateTimeToYearMonthDate(
