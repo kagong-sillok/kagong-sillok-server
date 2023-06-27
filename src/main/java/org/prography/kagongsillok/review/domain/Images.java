@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.place.domain.exception.InvalidLocationBoundException;
+import org.prography.kagongsillok.review.domain.exception.InvalidNumberOfImagesException;
 
 @Getter
 @Embeddable
@@ -35,7 +37,14 @@ public class Images {
         if (Objects.isNull(images)) {
             return new Images();
         }
+        validateNumberOfImages(images);
         return new Images(images);
+    }
+
+    private static void validateNumberOfImages(final Set<String> images) {
+        if (images.size() > 5) {
+            throw new InvalidNumberOfImagesException(images.size());
+        }
     }
 
 }

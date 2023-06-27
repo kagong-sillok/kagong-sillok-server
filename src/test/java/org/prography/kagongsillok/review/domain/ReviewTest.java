@@ -3,17 +3,8 @@ package org.prography.kagongsillok.review.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.prography.kagongsillok.place.domain.BusinessHour;
-import org.prography.kagongsillok.place.domain.DayOfWeek;
-import org.prography.kagongsillok.place.domain.Link;
-import org.prography.kagongsillok.place.domain.LinkType;
-import org.prography.kagongsillok.place.domain.Location;
-import org.prography.kagongsillok.place.domain.Place;
 
 public class ReviewTest {
 
