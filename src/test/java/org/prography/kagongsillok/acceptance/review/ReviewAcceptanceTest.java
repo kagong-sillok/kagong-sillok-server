@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
 
@@ -55,6 +56,35 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 삭제후_조회한_리뷰 = 리뷰_조회(생성된_리뷰_id);
 
         리뷰_삭제_검증(리뷰_삭제_응답, 삭제후_조회한_리뷰);
+    }
+
+    @Test
+    void 멤버_id로_생성한_리뷰들을_조회한다() {
+        final var memberId = 1L;
+        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(memberId, "test review1");
+        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(memberId, "test review2");
+        final var 리뷰_생성_요청_바디3 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(memberId, "test review3");
+        리뷰_생성_요청(리뷰_생성_요청_바디1);
+        리뷰_생성_요청(리뷰_생성_요청_바디2);
+        리뷰_생성_요청(리뷰_생성_요청_바디3);
+
+        final var 멤버_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(memberId);
+
+        멤버_id로_생성한_리뷰_조회_검증(memberId, 멤버_id로_리뷰_조회_응답);
+    }
+
+    private static void 멤버_id로_생성한_리뷰_조회_검증(final long memberId, final ReviewListResponse 멤버_id로_리뷰_조회_응답) {
+        assertAll(
+                () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews().size()).isEqualTo(3),
+                () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("memberId")
+                        .containsAll(List.of(memberId, memberId, memberId)),
+                () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("content")
+                        .containsAll(List.of("test review1", "test review2", "test review3"))
+        );
+    }
+
+    private ReviewListResponse 멤버_id로_리뷰_조회_요청(final Long memberId) {
+        return 응답_바디_추출(get(REVIEW_API_BASE_URL_V1 + "/member/" + memberId), ReviewListResponse.class);
     }
 
     private static void 리뷰_삭제_검증(final int 리뷰_삭제_응답, final ReviewResponse 삭제후_조회한_리뷰) {
