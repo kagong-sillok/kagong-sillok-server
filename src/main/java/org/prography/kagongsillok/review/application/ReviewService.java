@@ -37,8 +37,8 @@ public class ReviewService {
         return ReviewDto.from(review);
     }
 
-    public List<ReviewDto> getAllReviews(final Long id) {
-        final List<Review> reviews = reviewRepository.findAllById(id);
+    public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
+        final List<Review> reviews = reviewRepository.findAllByMemberId(memberId);
 
         return CustomListUtils.mapTo(reviews, ReviewDto::from);
     }

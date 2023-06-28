@@ -4,6 +4,6 @@ import java.util.List;
 import org.prography.kagongsillok.review.domain.Review;
 
 public interface ReviewRepositoryCustom {
-    List<Review> findAllById(final Long memberId);
+    List<Review> findAllByMemberId(final Long memberId);
 
 }

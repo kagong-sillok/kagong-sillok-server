@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
@@ -47,7 +46,7 @@ public class ReviewRepositoryTest {
         reviewRepository.save(review3);
         reviewRepository.save(review4);
 
-        final List<Review> reviews = reviewRepository.findAllById(2L);
+        final List<Review> reviews = reviewRepository.findAllByMemberId(2L);
 
         assertAll(
                 () -> assertThat(reviews.size()).isEqualTo(4),

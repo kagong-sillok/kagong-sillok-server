@@ -3,13 +3,8 @@ package org.prography.kagongsillok.review.ui;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
-import org.prography.kagongsillok.place.application.PlaceService;
-import org.prography.kagongsillok.place.application.dto.PlaceDto;
-import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
-import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
 import org.prography.kagongsillok.review.application.ReviewService;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
-import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
@@ -51,7 +46,7 @@ public class ReviewV1Controller {
     public ResponseEntity<CommonResponse<ReviewListResponse>> getAllReviews(
             @PathVariable("memberId") Long memberId
     ) {
-        final List<ReviewDto> reviewDtos = reviewService.getAllReviews(memberId);
+        final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByMemberId(memberId);
         return CommonResponse.success(ReviewListResponse.of(reviewDtos));
     }
 

@@ -87,7 +87,7 @@ public class ReviewRepositoryImplTest {
         reviewRepository.save(reviewCreateCommand3.toEntity());
         reviewRepository.save(reviewCreateCommand4.toEntity());
 
-        final List<Review> reviews = reviewRepositoryImpl.findAllById(5L);
+        final List<Review> reviews = reviewRepositoryImpl.findAllByMemberId(5L);
 
         assertAll(
                 () -> assertThat(reviews.size()).isEqualTo(4),

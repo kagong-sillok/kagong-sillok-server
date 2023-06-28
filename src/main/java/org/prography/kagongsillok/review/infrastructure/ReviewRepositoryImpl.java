@@ -17,7 +17,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Review> findAllById(final Long memberId) {
+    public List<Review> findAllByMemberId(final Long memberId) {
         return queryFactory
                 .selectFrom(review)
                 .where(

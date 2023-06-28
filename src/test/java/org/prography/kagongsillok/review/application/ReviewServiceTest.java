@@ -146,7 +146,7 @@ public class ReviewServiceTest {
         reviewService.createReview(reviewCreateCommand2);
         reviewService.createReview(reviewCreateCommand3);
 
-        final List<ReviewDto> reviewDtos = reviewService.getAllReviews(3L);
+        final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByMemberId(3L);
 
         assertAll(
                 () -> assertThat(reviewDtos.size()).isEqualTo(3),
