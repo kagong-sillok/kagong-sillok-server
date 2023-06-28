@@ -15,22 +15,22 @@ public class ReviewCreateRequest {
     private Long memberId;
     private int rating;
     private String content;
-    private List<String> tags;
-    private List<String> imageUrls;
+    private List<Long> imageIds;
+    private List<Long> tagIds;
 
     @Builder
     public ReviewCreateRequest(
             final Long memberId,
             final int rating,
             final String content,
-            final List<String> tags,
-            final List<String> imageUrls
+            final List<Long> imageIds,
+            final List<Long> tagIds
     ) {
         this.memberId = memberId;
         this.rating = rating;
         this.content = content;
-        this.tags = tags;
-        this.imageUrls = imageUrls;
+        this.imageIds = imageIds;
+        this.tagIds = tagIds;
     }
 
     public ReviewCreateCommand toCommand() {
@@ -39,8 +39,8 @@ public class ReviewCreateRequest {
                 .memberId(memberId)
                 .rating(rating)
                 .content(content)
-                .tags(tags)
-                .imageUrls(imageUrls)
+                .tagIds(tagIds)
+                .imageIds(imageIds)
                 .build();
     }
 

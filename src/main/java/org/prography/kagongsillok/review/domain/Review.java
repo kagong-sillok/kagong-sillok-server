@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.place.domain.Place;
 
 @Getter
@@ -37,33 +39,41 @@ public class Review extends AuditingTimeEntity {
 
     private String content;
 
-    @Embedded
-    private Tags tags;
+    private String imageIds;
 
-    @Embedded
-    private Images images;
+    private String tagIds;
 
     private Boolean isDeleted = false;
 
     @Builder
     public Review(
             final Long memberId,
+            final Long placeId,
             final int rating,
             final String content,
-            final Tags tags,
-            final Images images) {
+            final List<Long> imageIds,
+            final List<Long> tagIds) {
         this.memberId = memberId;
+        this.placeId = placeId;
         this.rating = rating;
         this.content = content;
-        this.tags = tags;
-        this.images = images;
+        this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
+        this.tagIds = CustomListUtils.joiningToString(tagIds, ",");
     }
 
     public void update(final Review target) {
         this.rating = target.rating;
         this.content = target.content;
-        this.tags = target.tags;
-        this.images = target.images;
+        this.imageIds = target.imageIds;
+        this.tagIds = target.tagIds;
+    }
+
+    public List<Long> getImageIds() {
+        return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
+    }
+
+    public List<Long> getTagIds() {
+        return CustomStringUtils.splitToList(tagIds, ",", Long::valueOf);
     }
 
     public void delete() {

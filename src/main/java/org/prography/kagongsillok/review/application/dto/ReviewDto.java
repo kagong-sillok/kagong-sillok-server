@@ -1,17 +1,13 @@
 package org.prography.kagongsillok.review.application.dto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomTimeFormattingUtils;
-import org.prography.kagongsillok.place.application.dto.PlaceDto.BusinessHourDto;
-import org.prography.kagongsillok.place.application.dto.PlaceDto.LinkDto;
 import org.prography.kagongsillok.review.domain.Review;
-import org.prography.kagongsillok.review.domain.Tags;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,8 +17,8 @@ public class ReviewDto {
     private Long memberId;
     private int rating;
     private String content;
-    private List<String> tags;
-    private List<String> imageUrls;
+    private List<Long> imageIds;
+    private List<Long> tagIds;
     private String createdAt;
     private String updatedAt;
 
@@ -32,8 +28,8 @@ public class ReviewDto {
             final Long memberId,
             final int rating,
             final String content,
-            final List<String> tags,
-            final List<String> imageUrls,
+            final List<Long> imageIds,
+            final List<Long> tagIds,
             final String createdAt,
             final String updatedAt
     ) {
@@ -41,8 +37,8 @@ public class ReviewDto {
         this.memberId = memberId;
         this.rating = rating;
         this.content = content;
-        this.tags = tags;
-        this.imageUrls = imageUrls;
+        this.imageIds = imageIds;
+        this.tagIds = tagIds;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -54,20 +50,15 @@ public class ReviewDto {
                 .memberId(review.getMemberId())
                 .rating(review.getRating())
                 .content(review.getContent())
-                .tags(review.getTags().getTags().stream().toList())
-                .imageUrls(review.getImages().getImages().stream().toList())
-                .createdAt(
-                        CustomTimeFormattingUtils
-                                .LocalDateTimeToYearMonthDate(
-                                        review.getCreatedAt()
-                                )
-                )
-                .updatedAt(
-                        CustomTimeFormattingUtils
-                                .LocalDateTimeToYearMonthDate(
-                                        review.getUpdatedAt()
-                                )
-                )
+                .imageIds(review.getImageIds())
+                .tagIds(review.getTagIds())
+                .createdAt(dateTimeToString(review.getCreatedAt()))
+                .updatedAt(dateTimeToString(review.getUpdatedAt()))
                 .build();
+    }
+
+    private static String dateTimeToString(LocalDateTime localDateTime) {
+        return CustomTimeFormattingUtils
+                .LocalDateTimeToYearMonthDate(localDateTime);
     }
 }

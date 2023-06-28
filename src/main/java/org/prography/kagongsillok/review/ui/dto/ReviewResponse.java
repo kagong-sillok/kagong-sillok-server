@@ -14,8 +14,8 @@ public class ReviewResponse {
     private Long id;
     private int rating;
     private String content;
-    private List<String> imageUrls;
-    private List<String> tags;
+    private List<Long> imageIds;
+    private List<Long> tagIds;
     private Long memberId;
     private String userNickName;
     private String createdAt;
@@ -26,8 +26,8 @@ public class ReviewResponse {
             final Long id,
             final int rating,
             final String content,
-            final List<String> images,
-            final List<String> tags,
+            final List<Long> imageIds,
+            final List<Long> tagIds,
             final Long memberId,
             final String userNickName,
             final String createdAt,
@@ -36,8 +36,8 @@ public class ReviewResponse {
         this.id = id;
         this.rating = rating;
         this.content = content;
-        this.imageUrls = images;
-        this.tags = tags;
+        this.imageIds = imageIds;
+        this.tagIds = tagIds;
         this.memberId = memberId;
         this.userNickName = userNickName;
         this.createdAt = createdAt;
@@ -51,8 +51,8 @@ public class ReviewResponse {
                 .rating(reviewDto.getRating())
                 .content(reviewDto.getContent())
                 .memberId(reviewDto.getMemberId())
-                .tags(reviewDto.getTags())
-                .images(reviewDto.getImageUrls())
+                .imageIds(reviewDto.getImageIds())
+                .tagIds(reviewDto.getTagIds())
                 .userNickName("임시 닉네임")
                 .createdAt(reviewDto.getCreatedAt())
                 .updatedAt(reviewDto.getUpdatedAt())
