@@ -18,7 +18,7 @@ public class ReviewUpdateRequest {
     private String content;
     private List<String> tags;
     private List<String> imageUrls;
-    
+
     @Builder
     public ReviewUpdateRequest(
             final Long id,

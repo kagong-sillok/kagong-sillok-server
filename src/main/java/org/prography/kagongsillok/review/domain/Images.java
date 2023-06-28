@@ -40,7 +40,7 @@ public class Images {
 
     private static void validateNumberOfImages(final List<Image> images) {
         if (images.size() > MAX_NUMBER_OF_IMAGE) {
-            throw new InvalidNumberOfImagesException(images.size());
+            throw new InvalidNumberOfImagesException(MAX_NUMBER_OF_IMAGE, images.size());
         }
     }
 

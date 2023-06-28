@@ -31,6 +31,8 @@ public class Review extends AuditingTimeEntity {
 
     private Long memberId;
 
+    private Long placeId;
+
     private int rating;
 
     private String content;
