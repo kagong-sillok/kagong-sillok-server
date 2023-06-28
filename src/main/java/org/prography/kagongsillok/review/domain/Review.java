@@ -2,8 +2,10 @@ package org.prography.kagongsillok.review.domain;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -20,12 +22,19 @@ import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.place.domain.Place;
+import org.prography.kagongsillok.review.domain.exception.InvalidContentLengthException;
+import org.prography.kagongsillok.review.domain.exception.InvalidRatingBoundException;
 
 @Getter
 @Entity
 @Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends AuditingTimeEntity {
+
+    private static final int MIN_RATING = 1;
+    private static final int MAX_RATING = 5;
+    private static final int MIN_CONTENT_LENGTH = 1;
+    private static final int MAX_CONTENT_LENGTH = 200;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +55,7 @@ public class Review extends AuditingTimeEntity {
     private Boolean isDeleted = false;
 
     @Builder
-    public Review(
+    private Review(
             final Long memberId,
             final Long placeId,
             final int rating,
@@ -59,6 +68,51 @@ public class Review extends AuditingTimeEntity {
         this.content = content;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.tagIds = CustomListUtils.joiningToString(tagIds, ",");
+    }
+
+    public static Review of(
+            final Long memberId,
+            final Long placeId,
+            final int rating,
+            final String content,
+            final List<Long> imageIds,
+            final List<Long> tagIds
+    ) {
+        validationReview(rating, content);
+        return Review.builder()
+                .memberId(memberId)
+                .placeId(placeId)
+                .rating(rating)
+                .content(content)
+                .imageIds(imageIds)
+                .tagIds(tagIds)
+                .build();
+    }
+
+    private static void validationReview(final int rating, final String content) {
+        if (isNotRatingBound(rating)) {
+            throw new InvalidRatingBoundException(rating);
+        }
+
+        if (isNotContentLengthBound(content)) {
+            throw new InvalidContentLengthException(content);
+        }
+    }
+
+    private static boolean isNotRatingBound(final int rating) {
+        if (Objects.isNull(rating)) {
+            return true;
+        }
+
+        return rating > MAX_RATING || rating < MIN_RATING;
+    }
+
+    private static boolean isNotContentLengthBound(final String content) {
+        if (Objects.isNull(content)) {
+            return true;
+        }
+
+        return content.length() > MAX_CONTENT_LENGTH || content.length() < MIN_CONTENT_LENGTH;
     }
 
     public void update(final Review target) {
