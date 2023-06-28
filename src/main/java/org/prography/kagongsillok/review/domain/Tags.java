@@ -22,7 +22,7 @@ import org.prography.kagongsillok.place.domain.Links;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tags {
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "review_tags",
             joinColumns = @JoinColumn(name = "review_id")

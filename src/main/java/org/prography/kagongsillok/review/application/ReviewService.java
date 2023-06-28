@@ -45,7 +45,7 @@ public class ReviewService {
 
     @Transactional
     public ReviewDto updateReview(final ReviewUpdateCommand reviewUpdateCommand) {
-        Long reviewId = reviewUpdateCommand.getId();
+        final Long reviewId = reviewUpdateCommand.getId();
 
         final Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new NotFoundReviewException(reviewId));

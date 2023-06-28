@@ -6,14 +6,17 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.domain.exception.InvalidLocationBoundException;
 import org.prography.kagongsillok.review.domain.exception.InvalidNumberOfImagesException;
 
@@ -22,18 +25,17 @@ import org.prography.kagongsillok.review.domain.exception.InvalidNumberOfImagesE
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Images {
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "review_images",
-            joinColumns = @JoinColumn(name = "review_id")
-    )
-    private Set<String> images = new LinkedHashSet<>();
+    public static final int MAX_NUMBER_OF_IMAGE = 5;
 
-    private Images(final Set<String> images) {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "image_id", nullable = false)
+    private List<Image> images = new ArrayList<>();
+
+    private Images(final List<Image> images) {
         this.images = images;
     }
 
-    public static Images of(final Set<String> images) {
+    public static Images of(final List<Image> images) {
         if (Objects.isNull(images)) {
             return new Images();
         }
@@ -41,8 +43,8 @@ public class Images {
         return new Images(images);
     }
 
-    private static void validateNumberOfImages(final Set<String> images) {
-        if (images.size() > 5) {
+    private static void validateNumberOfImages(final List<Image> images) {
+        if (images.size() > MAX_NUMBER_OF_IMAGE) {
             throw new InvalidNumberOfImagesException(images.size());
         }
     }
