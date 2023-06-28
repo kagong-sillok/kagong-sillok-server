@@ -14,6 +14,7 @@ public class ReviewUpdateRequest {
 
     private Long id;
     private Long memberId;
+    private Long placeId;
     private int rating;
     private String content;
     private List<Long> imageIds;
@@ -23,6 +24,7 @@ public class ReviewUpdateRequest {
     public ReviewUpdateRequest(
             final Long id,
             final Long memberId,
+            final Long placeId,
             final int rating,
             final String content,
             final List<Long> imageIds,
@@ -30,6 +32,7 @@ public class ReviewUpdateRequest {
     ) {
         this.id = id;
         this.memberId = memberId;
+        this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
@@ -41,6 +44,7 @@ public class ReviewUpdateRequest {
                 .builder()
                 .id(id)
                 .memberId(memberId)
+                .placeId(placeId)
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)

@@ -13,6 +13,7 @@ import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 public class ReviewCreateRequest {
 
     private Long memberId;
+    private Long placeId;
     private int rating;
     private String content;
     private List<Long> imageIds;
@@ -21,12 +22,14 @@ public class ReviewCreateRequest {
     @Builder
     public ReviewCreateRequest(
             final Long memberId,
+            final Long placeId,
             final int rating,
             final String content,
             final List<Long> imageIds,
             final List<Long> tagIds
     ) {
         this.memberId = memberId;
+        this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
@@ -37,6 +40,7 @@ public class ReviewCreateRequest {
         return ReviewCreateCommand
                 .builder()
                 .memberId(memberId)
+                .placeId(placeId)
                 .rating(rating)
                 .content(content)
                 .tagIds(tagIds)

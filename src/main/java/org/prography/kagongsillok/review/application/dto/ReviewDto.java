@@ -15,6 +15,7 @@ public class ReviewDto {
 
     private Long id;
     private Long memberId;
+    private Long placeId;
     private int rating;
     private String content;
     private List<Long> imageIds;
@@ -26,6 +27,7 @@ public class ReviewDto {
     public ReviewDto(
             final Long id,
             final Long memberId,
+            final Long placeId,
             final int rating,
             final String content,
             final List<Long> imageIds,
@@ -35,6 +37,7 @@ public class ReviewDto {
     ) {
         this.id = id;
         this.memberId = memberId;
+        this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
@@ -48,6 +51,7 @@ public class ReviewDto {
                 .builder()
                 .id(review.getId())
                 .memberId(review.getMemberId())
+                .placeId(review.getPlaceId())
                 .rating(review.getRating())
                 .content(review.getContent())
                 .imageIds(review.getImageIds())

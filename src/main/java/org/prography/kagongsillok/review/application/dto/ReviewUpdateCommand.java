@@ -13,6 +13,7 @@ public class ReviewUpdateCommand {
 
     private Long id;
     private Long memberId;
+    private Long placeId;
     private int rating;
     private String content;
     private List<Long> imageIds;
@@ -22,6 +23,7 @@ public class ReviewUpdateCommand {
     public ReviewUpdateCommand(
             final Long id,
             final Long memberId,
+            final Long placeId,
             final int rating,
             final String content,
             final List<Long> imageIds,
@@ -29,6 +31,7 @@ public class ReviewUpdateCommand {
     ) {
         this.id = id;
         this.memberId = memberId;
+        this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
@@ -38,6 +41,7 @@ public class ReviewUpdateCommand {
     public Review toEntity() {
         return Review.builder()
                 .memberId(memberId)
+                .placeId(placeId)
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
