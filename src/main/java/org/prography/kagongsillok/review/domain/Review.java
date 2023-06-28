@@ -25,20 +25,6 @@ import org.prography.kagongsillok.place.domain.Place;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends AuditingTimeEntity {
 
-    @Builder
-    public Review(
-            final Long memberId,
-            final int rating,
-            final String content,
-            final Tags tags,
-            final Images images) {
-        this.memberId = memberId;
-        this.rating = rating;
-        this.content = content;
-        this.tags = tags;
-        this.images = images;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,6 +42,20 @@ public class Review extends AuditingTimeEntity {
     private Images images;
 
     private Boolean isDeleted = false;
+
+    @Builder
+    public Review(
+            final Long memberId,
+            final int rating,
+            final String content,
+            final Tags tags,
+            final Images images) {
+        this.memberId = memberId;
+        this.rating = rating;
+        this.content = content;
+        this.tags = tags;
+        this.images = images;
+    }
 
     public void update(final Review target) {
         this.rating = target.rating;

@@ -17,6 +17,15 @@ import org.prography.kagongsillok.review.domain.Tags;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewDto {
 
+    private Long id;
+    private Long memberId;
+    private int rating;
+    private String content;
+    private List<String> tags;
+    private List<String> imageUrls;
+    private String createdAt;
+    private String updatedAt;
+
     @Builder
     public ReviewDto(
             final Long id,
@@ -38,15 +47,6 @@ public class ReviewDto {
         this.updatedAt = updatedAt;
     }
 
-    private Long id;
-    private Long memberId;
-    private int rating;
-    private String content;
-    private List<String> tags;
-    private List<String> imageUrls;
-    private String createdAt;
-    private String updatedAt;
-
     public static ReviewDto from(Review review) {
         return ReviewDto
                 .builder()
@@ -67,7 +67,6 @@ public class ReviewDto {
                                 .LocalDateTimeToYearMonthDate(
                                         review.getUpdatedAt()
                                 )
-
                 )
                 .build();
     }

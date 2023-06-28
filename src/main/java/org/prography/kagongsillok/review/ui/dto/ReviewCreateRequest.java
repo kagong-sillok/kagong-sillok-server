@@ -12,6 +12,12 @@ import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewCreateRequest {
 
+    private Long memberId;
+    private int rating;
+    private String content;
+    private List<String> tags;
+    private List<String> imageUrls;
+
     @Builder
     public ReviewCreateRequest(
             final Long memberId,
@@ -26,12 +32,6 @@ public class ReviewCreateRequest {
         this.tags = tags;
         this.imageUrls = imageUrls;
     }
-
-    private Long memberId;
-    private int rating;
-    private String content;
-    private List<String> tags;
-    private List<String> imageUrls;
 
     public ReviewCreateCommand toCommand() {
         return ReviewCreateCommand

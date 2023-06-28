@@ -11,6 +11,16 @@ import org.prography.kagongsillok.review.application.dto.ReviewDto;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewResponse {
 
+    private Long id;
+    private int rating;
+    private String content;
+    private List<String> imageUrls;
+    private List<String> tags;
+    private Long memberId;
+    private String userNickName;
+    private String createdAt;
+    private String updatedAt;
+
     @Builder
     public ReviewResponse(
             final Long id,
@@ -33,16 +43,6 @@ public class ReviewResponse {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    private Long id;
-    private int rating;
-    private String content;
-    private List<String> imageUrls;
-    private List<String> tags;
-    private Long memberId;
-    private String userNickName;
-    private String createdAt;
-    private String updatedAt;
 
     public static ReviewResponse from(ReviewDto reviewDto) {
         return ReviewResponse

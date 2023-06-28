@@ -6,13 +6,19 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewUpdateRequest {
 
+    private Long id;
+    private Long memberId;
+    private int rating;
+    private String content;
+    private List<String> tags;
+    private List<String> imageUrls;
+    
     @Builder
     public ReviewUpdateRequest(
             final Long id,
@@ -29,13 +35,6 @@ public class ReviewUpdateRequest {
         this.tags = tags;
         this.imageUrls = imageUrls;
     }
-
-    private Long id;
-    private Long memberId;
-    private int rating;
-    private String content;
-    private List<String> tags;
-    private List<String> imageUrls;
 
     public ReviewUpdateCommand toCommand() {
         return ReviewUpdateCommand
