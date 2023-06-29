@@ -1,20 +1,13 @@
 package org.prography.kagongsillok.review.application.dto;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.common.utils.CustomListUtils;
-import org.prography.kagongsillok.image.domain.Image;
-import org.prography.kagongsillok.review.domain.Images;
 import org.prography.kagongsillok.review.domain.Review;
-import org.prography.kagongsillok.review.domain.Tags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -50,7 +43,7 @@ public class ReviewCreateCommand {
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
-                .tagIds(tagIds)
+                .tags(ReviewTags.of(new ArrayList<>()))
                 .build();
     }
 }

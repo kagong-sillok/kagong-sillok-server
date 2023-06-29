@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.review.domain;
+package org.prography.kagongsillok.ReviewTag.domain;
 
 
 import javax.persistence.Entity;
@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.tag.domain.Tag;
 
 @Getter
@@ -35,10 +36,31 @@ public class ReviewTag {
     }
 
     private void setReview(Review review) {
-        
+        this.review = review;
+
+        review.getTags().getReviewTags().add(this);
     }
 
     private void setTag(Tag tag) {
+        this.tag = tag;
 
+        tag.getReviews().getReviewTags().add(this);
+    }
+
+    public void disconnect() {
+        disconnectReview();
+        disconnectTag();
+    }
+
+    private void disconnectReview() {
+        review.getTags().getReviewTags().remove(this);
+
+        this.review = null;
+    }
+
+    private void disconnectTag() {
+        tag.getReviews().getReviewTags().remove(this);
+
+        this.tag = null;
     }
 }

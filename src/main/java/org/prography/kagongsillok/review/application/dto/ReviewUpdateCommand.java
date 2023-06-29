@@ -1,10 +1,12 @@
 package org.prography.kagongsillok.review.application.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 import org.prography.kagongsillok.review.domain.Review;
 
 @Getter
@@ -39,13 +41,13 @@ public class ReviewUpdateCommand {
     }
 
     public Review toEntity() {
-        return Review.of(
-                memberId,
-                placeId,
-                rating,
-                content,
-                imageIds,
-                tagIds
-        );
+        return Review.builder()
+                .memberId(memberId)
+                .placeId(placeId)
+                .rating(rating)
+                .content(content)
+                .imageIds(imageIds)
+                .tags(ReviewTags.of(new ArrayList<>()))
+                .build();
     }
 }

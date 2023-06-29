@@ -2,28 +2,20 @@ package org.prography.kagongsillok.review.domain;
 
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
-import org.prography.kagongsillok.place.domain.Place;
-import org.prography.kagongsillok.review.domain.exception.InvalidContentLengthException;
-import org.prography.kagongsillok.review.domain.exception.InvalidRatingBoundException;
 
 @Getter
 @Entity
@@ -51,7 +43,7 @@ public class Review extends AuditingTimeEntity {
     private String imageIds;
 
     @Embedded
-    private Tags tags;
+    private ReviewTags tags;
 
     private Boolean isDeleted = false;
 
@@ -62,28 +54,24 @@ public class Review extends AuditingTimeEntity {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final List<Long> tagIds) {
+            final ReviewTags tags) {
         this.memberId = memberId;
         this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
-        this.tagIds = CustomListUtils.joiningToString(tagIds, ",");
+        this.tags = tags;
     }
 
     public void update(final Review target) {
         this.rating = target.rating;
         this.content = target.content;
         this.imageIds = target.imageIds;
-        this.tagIds = target.tagIds;
+        this.tags = target.tags;
     }
 
     public List<Long> getImageIds() {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
-    }
-
-    public List<Long> getTagIds() {
-        return CustomStringUtils.splitToList(tagIds, ",", Long::valueOf);
     }
 
     public void delete() {

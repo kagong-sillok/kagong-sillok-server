@@ -1,11 +1,14 @@
 package org.prography.kagongsillok.review.application.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTag;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 import org.prography.kagongsillok.common.utils.CustomTimeFormattingUtils;
 import org.prography.kagongsillok.review.domain.Review;
 
@@ -55,7 +58,7 @@ public class ReviewDto {
                 .rating(review.getRating())
                 .content(review.getContent())
                 .imageIds(review.getImageIds())
-                .tagIds(review.getTagIds())
+                .tagIds(getTagIds(review.getTags()))
                 .createdAt(dateTimeToString(review.getCreatedAt()))
                 .updatedAt(dateTimeToString(review.getUpdatedAt()))
                 .build();
@@ -64,5 +67,16 @@ public class ReviewDto {
     private static String dateTimeToString(LocalDateTime localDateTime) {
         return CustomTimeFormattingUtils
                 .LocalDateTimeToYearMonthDate(localDateTime);
+    }
+
+    private static List<Long> getTagIds(ReviewTags tags) {
+        List<ReviewTag> reviewTags = tags.getReviewTags();
+        List<Long> tagIds = new ArrayList<>();
+
+        for (ReviewTag reviewTag : reviewTags) {
+            tagIds.add(reviewTag.getTag().getId());
+        }
+
+        return tagIds;
     }
 }
