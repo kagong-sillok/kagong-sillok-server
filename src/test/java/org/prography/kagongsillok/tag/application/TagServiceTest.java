@@ -1,12 +1,14 @@
 package org.prography.kagongsillok.tag.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.tag.application.dto.TagCreateCommand;
 import org.prography.kagongsillok.tag.application.dto.TagDto;
+import org.prography.kagongsillok.tag.application.exception.NotFoundTagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,5 +68,17 @@ public class TagServiceTest {
                 () -> assertThat(tagDtos).extracting("tagContent")
                         .containsAll(List.of("test tag1", "test tag2", "test tag3"))
         );
+    }
+
+    @Test
+    void 태그를_삭제한다() {
+        final TagCreateCommand tagCreateCommand1 = new TagCreateCommand("#tag1", "test tag1");
+        final Long createdTag1_id = tagService.createTag(tagCreateCommand1).getId();
+
+        tagService.deleteTag(createdTag1_id);
+
+        assertThatThrownBy(() -> tagService.getTags(List.of(createdTag1_id)))
+                .isInstanceOf(NotFoundTagException.class)
+                .hasMessageContaining(String.valueOf(createdTag1_id));
     }
 }
