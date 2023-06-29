@@ -3,7 +3,6 @@ package org.prography.kagongsillok.review.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.tag.domain.Tag;
 
