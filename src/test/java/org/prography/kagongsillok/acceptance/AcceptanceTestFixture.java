@@ -15,6 +15,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequ
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
 import org.prography.kagongsillok.tag.domain.Tag;
+import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -148,5 +149,12 @@ public class AcceptanceTestFixture {
                 .imageIds(List.of(1L, 2L))
                 .tagIds(tagIds)
                 .build();
+    }
+
+    public static TagCreateRequest 태그_생성_요청_바디(
+            final String tagName,
+            final String tagContent
+    ) {
+        return new TagCreateRequest(tagName, tagContent);
     }
 }

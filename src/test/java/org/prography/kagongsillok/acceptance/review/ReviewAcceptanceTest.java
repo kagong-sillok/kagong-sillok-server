@@ -15,7 +15,6 @@ import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
 import org.prography.kagongsillok.tag.domain.Tag;
 import org.prography.kagongsillok.tag.domain.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 public class ReviewAcceptanceTest extends AcceptanceTest {
 
