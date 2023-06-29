@@ -118,34 +118,34 @@ public class AcceptanceTestFixture {
                 .build();
     }
 
-    public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
-            final Long memberId,
-            final String content
-    ) {
-        return ReviewCreateRequest
-                .builder()
-                .rating(5)
-                .memberId(memberId)
-                .content(content)
-                .imageUrls(List.of("image1", "image2"))
-                .tags(List.of("#tag1", "#tag2"))
-                .build();
-    }
-
-    public static ReviewUpdateRequest 리뷰_수정_요청_바디(
-            final Long id,
-            final int rating,
-            final String content
-    ) {
-        return ReviewUpdateRequest
-                .builder()
-                .id(id)
-                .rating(rating)
-                .memberId(2L)
-                .content(content)
-                .imageUrls(List.of("image1", "image2"))
-                .tags(List.of("#tag1", "#tag2"))
-                .build();
-    }
+//    public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
+//            final Long memberId,
+//            final String content
+//    ) {
+//        return ReviewCreateRequest
+//                .builder()
+//                .rating(5)
+//                .memberId(memberId)
+//                .content(content)
+//                .imageUrls(List.of("image1", "image2"))
+//                .tags(List.of("#tag1", "#tag2"))
+//                .build();
+//    }
+//
+//    public static ReviewUpdateRequest 리뷰_수정_요청_바디(
+//            final Long id,
+//            final int rating,
+//            final String content
+//    ) {
+//        return ReviewUpdateRequest
+//                .builder()
+//                .id(id)
+//                .rating(rating)
+//                .memberId(2L)
+//                .content(content)
+//                .imageUrls(List.of("image1", "image2"))
+//                .tags(List.of("#tag1", "#tag2"))
+//                .build();
+//    }
 
 }

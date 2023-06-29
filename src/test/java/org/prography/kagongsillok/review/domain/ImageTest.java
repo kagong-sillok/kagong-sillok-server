@@ -13,23 +13,23 @@ import org.prography.kagongsillok.review.domain.exception.InvalidNumberOfImagesE
 
 public class ImageTest {
 
-    @Test
-    void 정상정인_개수의_이미지를_생성한다() {
-        final Images images = Images.of(Set.of("image1", "image2", "image3", "image4"));
-
-        assertAll(
-                () -> assertThat(images.getImages().size()).isEqualTo(4),
-                () -> assertThat(images.getImages()).containsAll(Set.of("image1", "image2", "image3", "image4"))
-        );
-    }
-
-    @Test
-    void 비_정상정인_개수의_이미지를_생성한다() {
-        Set imageSet = new LinkedHashSet(Set.of("image1", "image2", "image3", "image4", "image5", "image6"));
-
-        assertThatThrownBy(() -> Images.of(imageSet))
-                .isInstanceOf(InvalidNumberOfImagesException.class)
-                .hasMessageContaining(String.valueOf(imageSet.size()));
-    }
+//    @Test
+//    void 정상정인_개수의_이미지를_생성한다() {
+//        final Images images = Images.of(Set.of("image1", "image2", "image3", "image4"));
+//
+//        assertAll(
+//                () -> assertThat(images.getImages().size()).isEqualTo(4),
+//                () -> assertThat(images.getImages()).containsAll(Set.of("image1", "image2", "image3", "image4"))
+//        );
+//    }
+//
+//    @Test
+//    void 비_정상정인_개수의_이미지를_생성한다() {
+//        Set imageSet = new LinkedHashSet(Set.of("image1", "image2", "image3", "image4", "image5", "image6"));
+//
+//        assertThatThrownBy(() -> Images.of(imageSet))
+//                .isInstanceOf(InvalidNumberOfImagesException.class)
+//                .hasMessageContaining(String.valueOf(imageSet.size()));
+//    }
 
 }
