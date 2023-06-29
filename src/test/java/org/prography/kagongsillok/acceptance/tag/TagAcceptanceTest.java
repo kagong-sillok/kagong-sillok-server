@@ -113,5 +113,4 @@ public class TagAcceptanceTest extends AcceptanceTest {
     private TagResponse 태그_생성_요청(final TagCreateRequest 태그_생성_요청_바디) {
         return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), TagResponse.class);
     }
-
 }
