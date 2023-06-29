@@ -3,6 +3,11 @@ package org.prography.kagongsillok.acceptance;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.auth.ui.dto.KakaoLoginRequest;
+import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
+import org.prography.kagongsillok.auth.ui.dto.LocalLoginRequest;
+import org.prography.kagongsillok.auth.ui.dto.LoginRefreshRequest;
+import org.prography.kagongsillok.auth.ui.dto.LoginResultResponse;
 import org.prography.kagongsillok.image.ui.dto.ImageCreateRequest;
 import org.prography.kagongsillok.place.domain.DayOfWeek;
 import org.prography.kagongsillok.place.domain.LinkType;
@@ -14,7 +19,6 @@ import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUp
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
-import org.prography.kagongsillok.tag.domain.Tag;
 import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -156,5 +160,35 @@ public class AcceptanceTestFixture {
             final String tagContent
     ) {
         return new TagCreateRequest(tagName, tagContent);
+    }
+
+    public static LocalJoinRequest 기본_아이디_비밀번호_가입_요청_바디(final String nickname, final String email) {
+        return LocalJoinRequest.builder()
+                .loginId("loginId")
+                .password("password")
+                .nickname("닉네임")
+                .email("test@test.com")
+                .build();
+    }
+
+    public static LocalJoinRequest 기본_닉네임_이메일_가입_요청_바디(final String loginId, final String password) {
+        return LocalJoinRequest.builder()
+                .loginId("loginId")
+                .password("password")
+                .nickname("닉네임")
+                .email("test@test.com")
+                .build();
+    }
+
+    public static LocalLoginRequest 로그인_요청_바디(final String loginId, final String password) {
+        return new LocalLoginRequest(loginId, password);
+    }
+
+    public static LoginRefreshRequest 토큰_갱신_바디(final LoginResultResponse loginResultResponse) {
+        return new LoginRefreshRequest(loginResultResponse.getRefreshToken());
+    }
+
+    public static KakaoLoginRequest 카카오_로그인_요청_바디(final String authorizationCode, final String redirectUri) {
+        return new KakaoLoginRequest(authorizationCode, redirectUri);
     }
 }

@@ -22,6 +22,17 @@ spring:
     hibernate:
       ddl-auto: create
 
+  redis:
+    host: localhost
+    port: 6397
+
+security:
+  jwt:
+    token:
+      secret-key: localSecretKeylocalSecretKeylocalSecretKeylocalSecretKeylocalSecretKey
+      access-token-expire-length: 1800000 # 30분
+      refresh-token-expire-length: 5184000000 # 60일
+
 logging:
   level:
     org:
@@ -30,3 +41,10 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+oauth:
+  kakao:
+    clientId: localClientId
+    clientSecret: localClientSecret
+    authorizationServerHost: https://kauth.kakao.com
+    resourceServerHost: https://kapi.kakao.com

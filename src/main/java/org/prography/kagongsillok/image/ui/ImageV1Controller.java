@@ -25,7 +25,8 @@ public class ImageV1Controller {
     private final ImageService imageService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<ImageResponse>> createImage(@RequestBody final ImageCreateRequest imageCreateRequest) {
+    public ResponseEntity<CommonResponse<ImageResponse>> createImage(
+            @RequestBody final ImageCreateRequest imageCreateRequest) {
         final ImageCreateCommand createCommand = imageCreateRequest.toCommand();
         final ImageDto imageDto = imageService.createImage(createCommand);
 

@@ -2,6 +2,8 @@ package org.prography.kagongsillok.common.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.prography.kagongsillok.auth.application.exception.AuthenticationException;
+import org.prography.kagongsillok.common.exception.CommonSecurityException;
 import org.prography.kagongsillok.common.exception.InvalidParamException;
 import org.prography.kagongsillok.common.exception.NotFoundException;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
@@ -14,6 +16,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
+
+    @ExceptionHandler(CommonSecurityException.class)
+    public ResponseEntity<CommonResponse<Void>> handleSecurity(final CommonSecurityException e) {
+        log.error(e.getMessage());
+        return ResponseEntity.badRequest().body(CommonResponse.error(e.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<CommonResponse<Void>> handleAuthentication(final AuthenticationException e) {
+        log.warn(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(CommonResponse.error(e.getMessage()));
+    }
 
     @ExceptionHandler(InvalidParamException.class)
     public ResponseEntity<CommonResponse<Void>> handleInvalidArgument(final InvalidParamException e) {
