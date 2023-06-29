@@ -44,13 +44,13 @@ public class ReviewCreateCommand {
     }
 
     public Review toEntity() {
-        return Review.of(
-                memberId,
-                placeId,
-                rating,
-                content,
-                imageIds,
-                tagIds
-        );
+        return Review.builder()
+                .memberId(memberId)
+                .placeId(placeId)
+                .rating(rating)
+                .content(content)
+                .imageIds(imageIds)
+                .tagIds(tagIds)
+                .build();
     }
 }

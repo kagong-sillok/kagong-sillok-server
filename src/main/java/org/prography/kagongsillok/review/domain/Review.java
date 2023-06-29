@@ -50,12 +50,13 @@ public class Review extends AuditingTimeEntity {
 
     private String imageIds;
 
-    private String tagIds;
+    @Embedded
+    private Tags tags;
 
     private Boolean isDeleted = false;
 
     @Builder
-    private Review(
+    public Review(
             final Long memberId,
             final Long placeId,
             final int rating,
@@ -68,51 +69,6 @@ public class Review extends AuditingTimeEntity {
         this.content = content;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.tagIds = CustomListUtils.joiningToString(tagIds, ",");
-    }
-
-    public static Review of(
-            final Long memberId,
-            final Long placeId,
-            final int rating,
-            final String content,
-            final List<Long> imageIds,
-            final List<Long> tagIds
-    ) {
-        validationReview(rating, content);
-        return Review.builder()
-                .memberId(memberId)
-                .placeId(placeId)
-                .rating(rating)
-                .content(content)
-                .imageIds(imageIds)
-                .tagIds(tagIds)
-                .build();
-    }
-
-    private static void validationReview(final int rating, final String content) {
-        if (isNotRatingBound(rating)) {
-            throw new InvalidRatingBoundException(rating);
-        }
-
-        if (isNotContentLengthBound(content)) {
-            throw new InvalidContentLengthException(content);
-        }
-    }
-
-    private static boolean isNotRatingBound(final int rating) {
-        if (Objects.isNull(rating)) {
-            return true;
-        }
-
-        return rating > MAX_RATING || rating < MIN_RATING;
-    }
-
-    private static boolean isNotContentLengthBound(final String content) {
-        if (Objects.isNull(content)) {
-            return true;
-        }
-
-        return content.length() > MAX_CONTENT_LENGTH || content.length() < MIN_CONTENT_LENGTH;
     }
 
     public void update(final Review target) {
