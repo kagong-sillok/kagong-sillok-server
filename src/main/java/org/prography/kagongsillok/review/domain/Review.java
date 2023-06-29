@@ -67,7 +67,6 @@ public class Review extends AuditingTimeEntity {
         this.rating = target.rating;
         this.content = target.content;
         this.imageIds = target.imageIds;
-        this.tags = target.tags;
     }
 
     public List<Long> getImageIds() {

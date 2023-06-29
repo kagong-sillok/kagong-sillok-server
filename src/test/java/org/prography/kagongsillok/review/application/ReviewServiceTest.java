@@ -21,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewServiceTest {
 
     @Autowired
-    ReviewService reviewService;
+    private ReviewService reviewService;
 
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
     @Test
     void 리뷰를_생성한다() {
@@ -177,7 +177,7 @@ public class ReviewServiceTest {
         );
     }
 
-    private Long saveTagAndGetTagId(String tagName) {
+    private Long saveTagAndGetTagId(final String tagName) {
         final Tag tag1 = new Tag(tagName, "test tag");
         return tagRepository.save(tag1).getId();
     }

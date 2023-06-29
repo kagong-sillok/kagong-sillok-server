@@ -21,6 +21,7 @@ public class ReviewTest {
                 .imageIds(List.of(1L, 2L, 3L))
                 .tags(ReviewTags.of(new ArrayList<>()))
                 .memberId(1L)
+                .placeId(1L)
                 .build();
 
         assertAll(
@@ -43,6 +44,7 @@ public class ReviewTest {
                 .imageIds(List.of(1L, 2L, 3L))
                 .tags(ReviewTags.of(new ArrayList<>()))
                 .memberId(1L)
+                .placeId(1L)
                 .build();
         final ReviewTag reviewTag1 = new ReviewTag(review, tag1);
         final ReviewTag reviewTag2 = new ReviewTag(review, tag2);

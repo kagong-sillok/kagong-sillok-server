@@ -69,12 +69,12 @@ public class ReviewService {
             reviewTagRepository.delete(reviewTag);
         }
 
-        final Review target = reviewUpdateCommand.toEntity();
-
         List<Tag> tags = tagRepository.findByIdIn(reviewUpdateCommand.getTagIds());
         for (Tag tag : tags) {
-            reviewTagRepository.save(new ReviewTag(target, tag));
+            reviewTagRepository.save(new ReviewTag(review, tag));
         }
+
+        final Review target = reviewUpdateCommand.toEntity();
 
         review.update(target);
 

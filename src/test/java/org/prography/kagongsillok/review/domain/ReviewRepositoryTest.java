@@ -62,6 +62,7 @@ public class ReviewRepositoryTest {
         return Review.builder()
                 .rating(5)
                 .memberId(memberId)
+                .placeId(1L)
                 .content(content)
                 .imageIds(List.of(1L, 2L, 3L))
                 .tags(ReviewTags.of(new ArrayList<>()))

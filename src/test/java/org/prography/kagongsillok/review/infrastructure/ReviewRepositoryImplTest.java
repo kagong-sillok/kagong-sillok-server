@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewRepositoryImplTest {
 
     @Autowired
-    ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     @Autowired
-    ReviewRepositoryImpl reviewRepositoryImpl;
+    private ReviewRepositoryImpl reviewRepositoryImpl;
 
     @Test
     void 리뷰_ID로_리뷰를_조회한다() {
@@ -29,6 +29,7 @@ public class ReviewRepositoryImplTest {
                 .builder()
                 .rating(3)
                 .memberId(3L)
+                .placeId(1L)
                 .content("test review1")
                 .imageIds(List.of(1L, 2L, 3L))
                 .tagIds(List.of(1L, 2L, 3L))
@@ -53,6 +54,7 @@ public class ReviewRepositoryImplTest {
                 .builder()
                 .rating(4)
                 .memberId(5L)
+                .placeId(1L)
                 .content("test review1")
                 .imageIds(List.of(1L, 2L))
                 .tagIds(List.of(1L, 2L))
@@ -61,6 +63,7 @@ public class ReviewRepositoryImplTest {
                 .builder()
                 .rating(2)
                 .memberId(5L)
+                .placeId(1L)
                 .content("test review2")
                 .imageIds(List.of(1L, 3L))
                 .tagIds(List.of(1L, 2L))
@@ -69,6 +72,7 @@ public class ReviewRepositoryImplTest {
                 .builder()
                 .rating(5)
                 .memberId(5L)
+                .placeId(1L)
                 .content("test review3")
                 .imageIds(List.of(2L, 3L))
                 .tagIds(List.of(1L, 2L))
@@ -77,6 +81,7 @@ public class ReviewRepositoryImplTest {
                 .builder()
                 .rating(1)
                 .memberId(5L)
+                .placeId(1L)
                 .content("test review4")
                 .imageIds(List.of(4L))
                 .tagIds(List.of(1L, 2L))
