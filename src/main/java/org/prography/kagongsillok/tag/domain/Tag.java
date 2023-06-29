@@ -27,6 +27,8 @@ public class Tag {
 
     private String tagContent;
 
+    private boolean isDeleted = false;
+
     @Embedded
     private ReviewTags reviews;
 
@@ -34,5 +36,9 @@ public class Tag {
         this.tagName = tagName;
         this.tagContent = tagContent;
         this.reviews = ReviewTags.of(new ArrayList<>());
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }
