@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ReviewTags {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "review_tag_id", nullable = false, updatable = false)
+//    @JoinColumn(name = "review_tags_id", nullable = false)
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
     private ReviewTags(final List<ReviewTag> reviewTags) {
