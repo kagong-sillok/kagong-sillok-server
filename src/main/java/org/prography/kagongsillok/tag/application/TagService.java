@@ -10,6 +10,7 @@ import org.prography.kagongsillok.tag.application.dto.TagDto;
 import org.prography.kagongsillok.tag.application.exception.NotFoundTagException;
 import org.prography.kagongsillok.tag.domain.Tag;
 import org.prography.kagongsillok.tag.domain.TagRepository;
+import org.prography.kagongsillok.tag.infrastructure.TagRepositoryImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagService {
 
     private final TagRepository tagRepository;
+    private final TagRepositoryImpl tagRepositoryImpl;
 
     @Transactional
     public TagDto createTag(final TagCreateCommand tagCreateCommand) {
@@ -36,6 +38,12 @@ public class TagService {
                 throw new NotFoundTagException(tag.getId());
             }
         }
+
+        return CustomListUtils.mapTo(tags, TagDto::from);
+    }
+
+    public List<TagDto> getAllTags() {
+        final List<Tag> tags = tagRepositoryImpl.findAllTags();
 
         return CustomListUtils.mapTo(tags, TagDto::from);
     }
