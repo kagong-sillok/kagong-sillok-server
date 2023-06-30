@@ -17,7 +17,7 @@ import org.prography.kagongsillok.tag.domain.Tag;
 @Getter
 @Entity
 @Table(name = "review_tag")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ReviewTag {
 
     @Id
@@ -30,7 +30,7 @@ public class ReviewTag {
     @ManyToOne(fetch = FetchType.LAZY)
     private Tag tag;
 
-    public ReviewTag(final Review review, final Tag tag) {
+    public void setReviewAndTag(final Review review, final Tag tag) {
         setReview(review);
         setTag(tag);
     }

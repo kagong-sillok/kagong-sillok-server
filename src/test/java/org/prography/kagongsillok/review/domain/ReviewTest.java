@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
 import org.prography.kagongsillok.ReviewTag.domain.ReviewTag;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 import org.prography.kagongsillok.tag.domain.Tag;
 
 public class ReviewTest {
@@ -19,7 +19,7 @@ public class ReviewTest {
                 .rating(4)
                 .content("test review")
                 .imageIds(List.of(1L, 2L, 3L))
-                .tags(ReviewTags.of(new ArrayList<>()))
+                .tags(ReviewReviewTags.of(new ArrayList<>()))
                 .memberId(1L)
                 .placeId(1L)
                 .build();
@@ -42,12 +42,14 @@ public class ReviewTest {
                 .rating(4)
                 .content("test review")
                 .imageIds(List.of(1L, 2L, 3L))
-                .tags(ReviewTags.of(new ArrayList<>()))
+                .tags(ReviewReviewTags.of(new ArrayList<>()))
                 .memberId(1L)
                 .placeId(1L)
                 .build();
-        final ReviewTag reviewTag1 = new ReviewTag(review, tag1);
-        final ReviewTag reviewTag2 = new ReviewTag(review, tag2);
+        final ReviewTag reviewTag1 = new ReviewTag();
+        final ReviewTag reviewTag2 = new ReviewTag();
+        reviewTag1.setReviewAndTag(review, tag1);
+        reviewTag2.setReviewAndTag(review, tag2);
 
         assertAll(
                 () -> assertThat(review.getRating()).isEqualTo(4),

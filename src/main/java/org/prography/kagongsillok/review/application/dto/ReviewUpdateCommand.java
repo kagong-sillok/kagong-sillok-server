@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
 import org.prography.kagongsillok.review.domain.Review;
 
 @Getter
@@ -47,7 +47,7 @@ public class ReviewUpdateCommand {
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
-                .tags(ReviewTags.of(new ArrayList<>()))
+                .tags(ReviewReviewTags.of(new ArrayList<>()))
                 .build();
     }
 }

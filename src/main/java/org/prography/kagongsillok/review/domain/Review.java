@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
@@ -43,7 +43,7 @@ public class Review extends AuditingTimeEntity {
     private String imageIds;
 
     @Embedded
-    private ReviewTags tags;
+    private ReviewReviewTags tags;
 
     private Boolean isDeleted = false;
 
@@ -54,7 +54,7 @@ public class Review extends AuditingTimeEntity {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final ReviewTags tags) {
+            final ReviewReviewTags tags) {
         this.memberId = memberId;
         this.placeId = placeId;
         this.rating = rating;

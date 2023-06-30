@@ -4,6 +4,7 @@ import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰_수정_요청_바디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -12,22 +13,21 @@ import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
-import org.prography.kagongsillok.tag.domain.Tag;
-import org.prography.kagongsillok.tag.domain.TagRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
+import org.prography.kagongsillok.tag.ui.dto.TagResponse;
 
 public class ReviewAcceptanceTest extends AcceptanceTest {
 
     private static final String REVIEW_API_BASE_URL_V1 = "/api/v1/reviews";
-
-    @Autowired
-    private TagRepository tagRepository;
+    private static final String TAG_API_BASE_URL_V1 = "/api/v1/tags";
 
     @Test
     void 리뷰를_생성한다() {
-        final var 태그1 = 태그_생성("#tag1");
-        final var 태그2 = 태그_생성("#tag2");
-        final var 입력_태그 = 입력_태그_두개_생성(태그1, 태그2);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review", 입력_태그);
 
         final var 생성된_리뷰_응답 = 리뷰_생성_요청(리뷰_생성_요청_바디);
@@ -37,9 +37,11 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰_id로_리뷰를_조회한다() {
-        final var 태그1 = 태그_생성("#tag1");
-        final var 태그2 = 태그_생성("#tag2");
-        final var 입력_태그 = 입력_태그_두개_생성(태그1, 태그2);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review", 입력_태그);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
@@ -50,11 +52,14 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰를_수정한다() {
-        final var 태그1_id = 태그_생성("#tag1");
-        final var 태그2_id = 태그_생성("#tag2");
-        final var 태그3_id = 태그_생성("#tag3");
-        final var 입력_태그 = 입력_태그_두개_생성(태그1_id, 태그2_id);
-        final var 수정_입력_태그 = 입력_태그_두개_생성(태그2_id, 태그3_id);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 태그_생성_요청_바디3 = 태그_생성_요청_바디("#tag3", "test tag3");
+        final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 생성된_태그3_id = 태그_생성_요청(태그_생성_요청_바디3).getId();
+        final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
+        final var 수정_입력_태그 = 입력_태그_두개_생성(생성된_태그2_id, 생성된_태그3_id);
         final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review", 입력_태그);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
@@ -66,9 +71,11 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰를_삭제한다() {
-        final var 태그1_id = 태그_생성("#tag1");
-        final var 태그2_id = 태그_생성("#tag2");
-        final var 입력_태그 = 입력_태그_두개_생성(태그1_id, 태그2_id);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(2L, "test review", 입력_태그);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
@@ -80,21 +87,29 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 멤버_id로_생성한_리뷰들을_조회한다() {
-        final var 태그1_id = 태그_생성("#tag1");
-        final var 태그2_id = 태그_생성("#tag2");
-        final var 태그3_id = 태그_생성("#tag3");
-        final var 태그4_id = 태그_생성("#tag4");
-        final var 입력_태그1 = 입력_태그_두개_생성(태그1_id, 태그2_id);
-        final var 입력_태그2 = 입력_태그_두개_생성(태그3_id, 태그4_id);
-        final var memberId = 1L;
-        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(memberId, "test review1", 입력_태그1);
-        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(memberId, "test review2", 입력_태그2);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 태그_생성_요청_바디3 = 태그_생성_요청_바디("#tag3", "test tag3");
+        final var 태그_생성_요청_바디4 = 태그_생성_요청_바디("#tag4", "test tag4");
+        final Long 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final Long 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final Long 생성된_태그3_id = 태그_생성_요청(태그_생성_요청_바디3).getId();
+        final Long 생성된_태그4_id = 태그_생성_요청(태그_생성_요청_바디4).getId();
+        final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
+        final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_id, 생성된_태그4_id);
+//        final var memberId = 1L;
+        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(1L, "test review1", 입력_태그1);
+        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(1L, "test review2", 입력_태그2);
         리뷰_생성_요청(리뷰_생성_요청_바디1);
         리뷰_생성_요청(리뷰_생성_요청_바디2);
 
-        final var 멤버_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(memberId);
+        final var 멤버_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(1L);
 
-        멤버_id로_생성한_리뷰_조회_검증(memberId, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2);
+        멤버_id로_생성한_리뷰_조회_검증(1L, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2);
+    }
+
+    private TagResponse 태그_생성_요청(final TagCreateRequest 태그_생성_요청_바디) {
+        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), TagResponse.class);
     }
 
     private static void 멤버_id로_생성한_리뷰_조회_검증(
@@ -129,7 +144,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         return delete(REVIEW_API_BASE_URL_V1 + "/" + 생성된_리뷰_id).statusCode();
     }
 
-    private static List<Long> 입력_태그_두개_생성(Long 태그1, Long 태그2) {
+    private static List<Long> 입력_태그_두개_생성(final Long 태그1, final Long 태그2) {
         return List.of(태그1, 태그2);
     }
 
@@ -182,10 +197,5 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     private ReviewResponse 리뷰_생성_요청(final ReviewCreateRequest 리뷰_생성_요청_바디) {
         return 응답_바디_추출(post(REVIEW_API_BASE_URL_V1, 리뷰_생성_요청_바디), ReviewResponse.class);
-    }
-
-    private Long 태그_생성(final String tagName) {
-        final Tag tag = new Tag(tagName, "test tag");
-        return tagRepository.save(tag).getId();
     }
 }

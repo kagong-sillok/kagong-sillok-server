@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
 import org.prography.kagongsillok.ReviewTag.domain.ReviewTag;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
 import org.prography.kagongsillok.common.utils.CustomTimeFormattingUtils;
 import org.prography.kagongsillok.review.domain.Review;
 
@@ -69,7 +69,7 @@ public class ReviewDto {
                 .LocalDateTimeToYearMonthDate(localDateTime);
     }
 
-    private static List<Long> getTagIds(ReviewTags tags) {
+    private static List<Long> getTagIds(ReviewReviewTags tags) {
         List<ReviewTag> reviewTags = tags.getReviewTags();
         List<Long> tagIds = new ArrayList<>();
 

@@ -8,10 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.TagReviewTags;
 
 @Getter
 @Entity
@@ -30,12 +30,12 @@ public class Tag {
     private boolean isDeleted = false;
 
     @Embedded
-    private ReviewTags reviews;
+    private TagReviewTags reviews;
 
     public Tag(final String tagName, final String tagContent) {
         this.tagName = tagName;
         this.tagContent = tagContent;
-        this.reviews = ReviewTags.of(new ArrayList<>());
+        this.reviews = TagReviewTags.of(new ArrayList<>());
     }
 
     public void delete() {

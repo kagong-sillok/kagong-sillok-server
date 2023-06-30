@@ -31,11 +31,14 @@ public class ReviewService {
         List<Tag> tags = tagRepository.findByIdIn(reviewCreateCommand.getTagIds());
         final Review review = reviewCreateCommand.toEntity();
 
-        for (Tag tag : tags) {
-             reviewTagRepository.save(new ReviewTag(review, tag));
-        }
-
         final Review savedReview = reviewRepository.save(review);
+
+        for (Tag tag : tags) {
+            ReviewTag reviewTag = new ReviewTag();
+            ReviewTag savedReviewTag = reviewTagRepository.save(reviewTag);
+
+            savedReviewTag.setReviewAndTag(savedReview, tag);
+        }
 
         return ReviewDto.from(savedReview);
     }
@@ -71,7 +74,10 @@ public class ReviewService {
 
         List<Tag> tags = tagRepository.findByIdIn(reviewUpdateCommand.getTagIds());
         for (Tag tag : tags) {
-            reviewTagRepository.save(new ReviewTag(review, tag));
+            ReviewTag reviewTag = new ReviewTag();
+            reviewTagRepository.save(reviewTag);
+
+            reviewTag.setReviewAndTag(review, tag);
         }
 
         final Review target = reviewUpdateCommand.toEntity();

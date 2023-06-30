@@ -16,20 +16,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewTags {
+public class TagReviewTags {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "review_tags_id", nullable = false)
+    @JoinColumn(name = "tag_review_tags_id")
     private List<ReviewTag> reviewTags = new ArrayList<>();
 
-    private ReviewTags(final List<ReviewTag> reviewTags) {
+    private TagReviewTags(final List<ReviewTag> reviewTags) {
         this.reviewTags = reviewTags;
     }
 
-    public static ReviewTags of(final List<ReviewTag> reviewTags) {
+    public static TagReviewTags of(final List<ReviewTag> reviewTags) {
         if (Objects.isNull(reviewTags)) {
-            return new ReviewTags();
+            return new TagReviewTags();
         }
-        return new ReviewTags(reviewTags);
+        return new TagReviewTags(reviewTags);
     }
 }

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,7 +65,7 @@ public class ReviewRepositoryTest {
                 .placeId(1L)
                 .content(content)
                 .imageIds(List.of(1L, 2L, 3L))
-                .tags(ReviewTags.of(new ArrayList<>()))
+                .tags(ReviewReviewTags.of(new ArrayList<>()))
                 .build();
     }
 
