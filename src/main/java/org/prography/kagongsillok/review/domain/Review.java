@@ -23,11 +23,6 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends AuditingTimeEntity {
 
-    private static final int MIN_RATING = 1;
-    private static final int MAX_RATING = 5;
-    private static final int MIN_CONTENT_LENGTH = 1;
-    private static final int MAX_CONTENT_LENGTH = 200;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,9 +31,11 @@ public class Review extends AuditingTimeEntity {
 
     private Long placeId;
 
-    private int rating;
+    @Embedded
+    private Rating rating;
 
-    private String content;
+    @Embedded
+    private Content content;
 
     private String imageIds;
 
@@ -57,8 +54,8 @@ public class Review extends AuditingTimeEntity {
             final ReviewReviewTags tags) {
         this.memberId = memberId;
         this.placeId = placeId;
-        this.rating = rating;
-        this.content = content;
+        this.rating = Rating.from(rating);
+        this.content = Content.from(content);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.tags = tags;
     }
@@ -75,5 +72,13 @@ public class Review extends AuditingTimeEntity {
 
     public void delete() {
         this.isDeleted = true;
+    }
+
+    public int getRating() {
+        return rating.getValue();
+    }
+
+    public String getContent() {
+        return content.getValue();
     }
 }
