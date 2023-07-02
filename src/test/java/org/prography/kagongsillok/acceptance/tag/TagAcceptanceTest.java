@@ -59,15 +59,19 @@ public class TagAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그_id = 태그_생성_요청(태그_생성_요청_바디).getId();
 
         final var 태그_삭제_응답 = 태그_삭제_응답_요청(생성된_태그_id);
-        final var 삭제후_태그_조회_응답코드 = get(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_id).statusCode();
+        final var 삭제후_태그_조회 = 삭제후_태그_조회(생성된_태그_id);
 
-        태그_삭제_검증(태그_삭제_응답, 삭제후_태그_조회_응답코드);
+        태그_삭제_검증(태그_삭제_응답, 삭제후_태그_조회);
     }
 
-    private static void 태그_삭제_검증(final int 태그_삭제_응답, final int 삭제후_태그_조회_응답코드) {
+    private TagListResponse 삭제후_태그_조회(final Long 생성된_태그_id) {
+        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_id), TagListResponse.class);
+    }
+
+    private static void 태그_삭제_검증(final int 태그_삭제_응답, final TagListResponse 삭제후_태그_조회) {
         assertAll(
                 () -> assertThat(태그_삭제_응답).isEqualTo(200),
-                () -> assertThat(삭제후_태그_조회_응답코드).isEqualTo(404)
+                () -> assertThat(삭제후_태그_조회.getTags().size()).isEqualTo(0)
         );
     }
 
