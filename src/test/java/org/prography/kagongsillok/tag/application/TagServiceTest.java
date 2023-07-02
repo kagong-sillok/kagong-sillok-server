@@ -76,9 +76,10 @@ public class TagServiceTest {
         final Long createdTag1_id = tagService.createTag(tagCreateCommand1).getId();
 
         tagService.deleteTag(createdTag1_id);
+        List<TagDto> tagDtos = tagService.getTags(List.of(createdTag1_id));
 
-        assertThatThrownBy(() -> tagService.getTags(List.of(createdTag1_id)))
-                .isInstanceOf(NotFoundTagException.class)
-                .hasMessageContaining(String.valueOf(createdTag1_id));
+        assertAll(
+                () -> assertThat(tagDtos.size()).isEqualTo(0)
+        );
     }
 }
