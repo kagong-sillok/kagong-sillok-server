@@ -17,6 +17,9 @@ import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest.LinkCreateRequ
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
+import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -116,6 +119,47 @@ public class AcceptanceTestFixture {
                         )
                 ))
                 .build();
+    }
+
+    public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
+            final Long memberId,
+            final String content,
+            final List<Long> tagIds
+    ) {
+        return ReviewCreateRequest
+                .builder()
+                .rating(5)
+                .memberId(memberId)
+                .placeId(1L)
+                .content(content)
+                .imageIds(List.of(1L, 2L))
+                .tagIds(tagIds)
+                .build();
+    }
+
+    public static ReviewUpdateRequest 리뷰_수정_요청_바디(
+            final Long id,
+            final int rating,
+            final String content,
+            final List<Long> tagIds
+    ) {
+        return ReviewUpdateRequest
+                .builder()
+                .id(id)
+                .rating(rating)
+                .memberId(2L)
+                .placeId(1L)
+                .content(content)
+                .imageIds(List.of(1L, 2L))
+                .tagIds(tagIds)
+                .build();
+    }
+
+    public static TagCreateRequest 태그_생성_요청_바디(
+            final String tagName,
+            final String tagContent
+    ) {
+        return new TagCreateRequest(tagName, tagContent);
     }
 
     public static LocalJoinRequest 기본_아이디_비밀번호_가입_요청_바디(final String nickname, final String email) {
