@@ -16,20 +16,28 @@ import lombok.NoArgsConstructor;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewReviewTags {
+public class ReviewTagMappings {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "review_review_tags_id")
     private List<ReviewTagMapping> reviewTagMappings = new ArrayList<>();
 
-    private ReviewReviewTags(final List<ReviewTagMapping> reviewTagMappings) {
+    private ReviewTagMappings(final List<ReviewTagMapping> reviewTagMappings) {
         this.reviewTagMappings = reviewTagMappings;
     }
 
-    public static ReviewReviewTags of(final List<ReviewTagMapping> reviewTagMappings) {
+    public static ReviewTagMappings of(final List<ReviewTagMapping> reviewTagMappings) {
         if (Objects.isNull(reviewTagMappings)) {
-            return new ReviewReviewTags();
+            return new ReviewTagMappings();
         }
-        return new ReviewReviewTags(reviewTagMappings);
+        return new ReviewTagMappings(reviewTagMappings);
+    }
+
+    public void addReviewTagMapping(ReviewTagMapping reviewTagMapping) {
+        reviewTagMappings.add(reviewTagMapping);
+    }
+
+    public void clearReviewTagMappings() {
+        reviewTagMappings.clear();
     }
 }

@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMappings;
 import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
 import org.prography.kagongsillok.review.domain.Review;
 
@@ -63,7 +63,7 @@ public class ReviewDto {
                 .build();
     }
 
-    private static List<Long> getTagIds(ReviewReviewTags tags) {
+    private static List<Long> getTagIds(ReviewTagMappings tags) {
         List<ReviewTagMapping> reviewTagMappings = tags.getReviewTagMappings();
         List<Long> tagIds = new ArrayList<>();
 
