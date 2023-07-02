@@ -7,4 +7,6 @@ public interface TagRepositoryCustom {
 
     List<Tag> findAllTags();
 
+    List<Tag> findByIdIn(List<Long> tagIds);
+
 }

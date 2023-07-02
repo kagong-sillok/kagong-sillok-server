@@ -43,7 +43,7 @@ public class ReviewCreateCommand {
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
-                .tags(ReviewReviewTags.of(new ArrayList<>()))
+                .tags(new ArrayList<>())
                 .build();
     }
 }

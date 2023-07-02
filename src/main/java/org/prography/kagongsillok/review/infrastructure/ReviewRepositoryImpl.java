@@ -22,7 +22,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .selectFrom(review)
                 .where(
                         review.memberId.eq(memberId),
-                        review.isDeleted.eq(false)
+                        review.isDeleted.eq(Boolean.FALSE)
                 )
                 .limit(DEFAULT_SEARCH_RESULT_SIZE)
                 .fetch();

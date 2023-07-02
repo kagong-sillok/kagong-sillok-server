@@ -1,7 +1,5 @@
 package org.prography.kagongsillok.tag.domain;
 
-import java.util.ArrayList;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,8 +8,6 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
-import org.prography.kagongsillok.ReviewTag.domain.TagReviewTags;
 
 @Getter
 @Entity
@@ -27,18 +23,14 @@ public class Tag {
 
     private String tagContent;
 
-    private boolean isDeleted = false;
-
-    @Embedded
-    private TagReviewTags reviews;
+    private boolean isDeleted = Boolean.FALSE;
 
     public Tag(final String tagName, final String tagContent) {
         this.tagName = tagName;
         this.tagContent = tagContent;
-        this.reviews = TagReviewTags.of(new ArrayList<>());
     }
 
     public void delete() {
-        this.isDeleted = true;
+        this.isDeleted = Boolean.TRUE;
     }
 }

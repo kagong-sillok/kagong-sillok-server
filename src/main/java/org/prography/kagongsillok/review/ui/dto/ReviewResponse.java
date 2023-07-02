@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.review.ui.dto;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,8 +20,8 @@ public class ReviewResponse {
     private Long memberId;
     private Long placeId;
     private String userNickName;
-    private String createdAt;
-    private String updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 
     @Builder
     public ReviewResponse(
@@ -32,8 +33,8 @@ public class ReviewResponse {
             final Long memberId,
             final Long placeId,
             final String userNickName,
-            final String createdAt,
-            final String updatedAt
+            final ZonedDateTime createdAt,
+            final ZonedDateTime updatedAt
     ) {
         this.id = id;
         this.rating = rating;

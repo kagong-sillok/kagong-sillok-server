@@ -44,7 +44,7 @@ public class ReviewRepositoryImplTest {
                 () -> assertThat(savedReview.getMemberId()).isEqualTo(3L),
                 () -> assertThat(savedReview.getContent()).isEqualTo("test review1"),
                 () -> assertThat(savedReview.getImageIds()).containsAll(List.of(1L, 2L, 3L)),
-                () -> assertThat(savedReview.getTags().getReviewTags().size()).isEqualTo(0)
+                () -> assertThat(savedReview.getTags().getReviewTagMappings().size()).isEqualTo(0)
         );
     }
 

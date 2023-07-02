@@ -19,7 +19,18 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
         return queryFactory
                 .selectFrom(tag)
                 .where(
-                        tag.isDeleted.eq(false)
+                        tag.isDeleted.eq(Boolean.FALSE)
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Tag> findByIdIn(final List<Long> tagIds) {
+        return queryFactory
+                .selectFrom(tag)
+                .where(
+                        tag.id.in(tagIds),
+                        tag.isDeleted.eq(Boolean.FALSE)
                 )
                 .fetch();
     }

@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.ReviewTag.domain.ReviewReviewTags;
+import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
@@ -42,7 +43,7 @@ public class Review extends AuditingTimeEntity {
     @Embedded
     private ReviewReviewTags tags;
 
-    private Boolean isDeleted = false;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @Builder
     public Review(
@@ -51,13 +52,13 @@ public class Review extends AuditingTimeEntity {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final ReviewReviewTags tags) {
+            final List<ReviewTagMapping> tags) {
         this.memberId = memberId;
         this.placeId = placeId;
         this.rating = Rating.from(rating);
         this.content = Content.from(content);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
-        this.tags = tags;
+        this.tags = ReviewReviewTags.of(tags);
     }
 
     public void update(final Review target) {
@@ -80,5 +81,9 @@ public class Review extends AuditingTimeEntity {
 
     public String getContent() {
         return content.getValue();
+    }
+
+    public void addReviewTagMapping(ReviewTagMapping reviewTagMapping) {
+        this.getTags().getReviewTagMappings().add(reviewTagMapping);
     }
 }

@@ -20,16 +20,16 @@ public class ReviewReviewTags {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "review_review_tags_id")
-    private List<ReviewTag> reviewTags = new ArrayList<>();
+    private List<ReviewTagMapping> reviewTagMappings = new ArrayList<>();
 
-    private ReviewReviewTags(final List<ReviewTag> reviewTags) {
-        this.reviewTags = reviewTags;
+    private ReviewReviewTags(final List<ReviewTagMapping> reviewTagMappings) {
+        this.reviewTagMappings = reviewTagMappings;
     }
 
-    public static ReviewReviewTags of(final List<ReviewTag> reviewTags) {
-        if (Objects.isNull(reviewTags)) {
+    public static ReviewReviewTags of(final List<ReviewTagMapping> reviewTagMappings) {
+        if (Objects.isNull(reviewTagMappings)) {
             return new ReviewReviewTags();
         }
-        return new ReviewReviewTags(reviewTags);
+        return new ReviewReviewTags(reviewTagMappings);
     }
 }
