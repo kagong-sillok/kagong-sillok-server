@@ -17,7 +17,7 @@ public class ReviewCreateRequest {
     private int rating;
     private String content;
     private List<Long> imageIds;
-    private List<Long> tagIds;
+    private List<Long> reviewTagIds;
 
     @Builder
     public ReviewCreateRequest(
@@ -26,14 +26,14 @@ public class ReviewCreateRequest {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final List<Long> tagIds
+            final List<Long> reviewTagIds
     ) {
         this.memberId = memberId;
         this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
-        this.tagIds = tagIds;
+        this.reviewTagIds = reviewTagIds;
     }
 
     public ReviewCreateCommand toCommand() {
@@ -43,9 +43,8 @@ public class ReviewCreateRequest {
                 .placeId(placeId)
                 .rating(rating)
                 .content(content)
-                .tagIds(tagIds)
+                .reviewTagIds(reviewTagIds)
                 .imageIds(imageIds)
                 .build();
     }
-
 }

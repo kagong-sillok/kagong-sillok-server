@@ -1,52 +1,57 @@
 package org.prography.kagongsillok.review.application.dto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.review.domain.Review;
+import org.prography.kagongsillok.review.domain.ReviewTag;
+import org.prography.kagongsillok.review.domain.ReviewTagMapping;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewUpdateCommand {
 
-    private Long id;
     private Long memberId;
     private Long placeId;
     private int rating;
     private String content;
     private List<Long> imageIds;
-    private List<Long> tagIds;
+    private List<Long> reviewTagIds;
 
     @Builder
     public ReviewUpdateCommand(
-            final Long id,
             final Long memberId,
             final Long placeId,
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final List<Long> tagIds
+            final List<Long> reviewTagIds
     ) {
-        this.id = id;
         this.memberId = memberId;
         this.placeId = placeId;
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
-        this.tagIds = tagIds;
+        this.reviewTagIds = reviewTagIds;
     }
 
-    public Review toEntity() {
+    public Review toEntity(final Map<Long, ReviewTag> reviewTags) {
         return Review.builder()
                 .memberId(memberId)
                 .placeId(placeId)
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
-                .tags(new ArrayList<>())
+                .tagMappings(
+                        CustomListUtils.mapToExcludeNull(
+                                reviewTagIds,
+                                (reviewTagId) -> new ReviewTagMapping(reviewTags.get(reviewTagId))
+                        )
+                )
                 .build();
     }
 }

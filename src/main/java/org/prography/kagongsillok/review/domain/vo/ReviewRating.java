@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.review.domain;
+package org.prography.kagongsillok.review.domain.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,7 +10,7 @@ import org.prography.kagongsillok.review.domain.exception.InvalidRatingBoundExce
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Rating {
+public class ReviewRating {
 
     private static final int MAX_RATING = 5;
     private static final int MIN_RATING = 1;
@@ -18,13 +18,13 @@ public class Rating {
     @Column(name = "rating")
     private int value;
 
-    private Rating(final int value) {
+    private ReviewRating(final int value) {
         this.value = value;
     }
 
-    public static Rating from(final int value) {
+    public static ReviewRating from(final int value) {
         validateValue(value);
-        return new Rating(value);
+        return new ReviewRating(value);
     }
 
     private static void validateValue(final int value) {

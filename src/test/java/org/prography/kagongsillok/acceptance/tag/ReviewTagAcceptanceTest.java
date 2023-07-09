@@ -1,17 +1,17 @@
 package org.prography.kagongsillok.acceptance.tag;
 
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
-import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
-import org.prography.kagongsillok.tag.ui.dto.TagListResponse;
-import org.prography.kagongsillok.tag.ui.dto.TagResponse;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagListResponse;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagResponse;
 
-public class TagAcceptanceTest extends AcceptanceTest {
+public class ReviewTagAcceptanceTest extends AcceptanceTest {
 
     private static final String TAG_API_BASE_URL_V1 = "/api/v1/tags";
 
@@ -64,11 +64,11 @@ public class TagAcceptanceTest extends AcceptanceTest {
         태그_삭제_검증(태그_삭제_응답, 삭제후_태그_조회);
     }
 
-    private TagListResponse 삭제후_태그_조회(final Long 생성된_태그_id) {
-        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_id), TagListResponse.class);
+    private ReviewTagListResponse 삭제후_태그_조회(final Long 생성된_태그_id) {
+        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_id), ReviewTagListResponse.class);
     }
 
-    private static void 태그_삭제_검증(final int 태그_삭제_응답, final TagListResponse 삭제후_태그_조회) {
+    private static void 태그_삭제_검증(final int 태그_삭제_응답, final ReviewTagListResponse 삭제후_태그_조회) {
         assertAll(
                 () -> assertThat(태그_삭제_응답).isEqualTo(200),
                 () -> assertThat(삭제후_태그_조회.getTags().size()).isEqualTo(0)
@@ -79,7 +79,7 @@ public class TagAcceptanceTest extends AcceptanceTest {
         return delete(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_응답).statusCode();
     }
 
-    private static void 모든_태그_조회_검증(final TagListResponse 모든_태그_조회_응답) {
+    private static void 모든_태그_조회_검증(final ReviewTagListResponse 모든_태그_조회_응답) {
         assertAll(
                 () -> assertThat(모든_태그_조회_응답.getTags().size()).isEqualTo(3),
                 () -> assertThat(모든_태그_조회_응답.getTags()).extracting("tagName")
@@ -89,11 +89,11 @@ public class TagAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private TagListResponse 모든_태그_조회_요청() {
-        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/all"), TagListResponse.class);
+    private ReviewTagListResponse 모든_태그_조회_요청() {
+        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/all"), ReviewTagListResponse.class);
     }
 
-    private static void 태그_id로_생성한_태그_조회_검증(final TagListResponse 조회된_태그들) {
+    private static void 태그_id로_생성한_태그_조회_검증(final ReviewTagListResponse 조회된_태그들) {
         assertAll(
                 () -> assertThat(조회된_태그들.getTags().size()).isEqualTo(2),
                 () -> assertThat(조회된_태그들.getTags()).extracting("tagName")
@@ -103,18 +103,18 @@ public class TagAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private TagListResponse 태그_id로_태그_조회_요청(final String 태그_ids) {
-        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/" + 태그_ids), TagListResponse.class);
+    private ReviewTagListResponse 태그_id로_태그_조회_요청(final String 태그_ids) {
+        return 응답_바디_추출(get(TAG_API_BASE_URL_V1 + "/" + 태그_ids), ReviewTagListResponse.class);
     }
 
-    private static void 생성된_태그_검증(final TagResponse 생성된_태그_응답) {
+    private static void 생성된_태그_검증(final ReviewTagResponse 생성된_태그_응답) {
         assertAll(
                 () -> assertThat(생성된_태그_응답.getTagName()).isEqualTo("#tag1"),
                 () -> assertThat(생성된_태그_응답.getTagContent()).isEqualTo("test tag")
         );
     }
 
-    private TagResponse 태그_생성_요청(final TagCreateRequest 태그_생성_요청_바디) {
-        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), TagResponse.class);
+    private ReviewTagResponse 태그_생성_요청(final ReviewTagCreateRequest 태그_생성_요청_바디) {
+        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 }

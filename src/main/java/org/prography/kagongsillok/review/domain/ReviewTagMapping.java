@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.ReviewTag.domain;
+package org.prography.kagongsillok.review.domain;
 
 
 import javax.persistence.Entity;
@@ -11,12 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.review.domain.Review;
-import org.prography.kagongsillok.tag.domain.Tag;
 
 @Getter
 @Entity
-@Table(name = "review_tag")
+@Table(name = "review_tag_mapping")
 @NoArgsConstructor
 public class ReviewTagMapping {
 
@@ -25,15 +23,10 @@ public class ReviewTagMapping {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
+    @JoinColumn(name = "review_tag_id")
+    private ReviewTag reviewTag;
 
-    public ReviewTagMapping(final Review review, final Tag tag) {
-        review.addReviewTagMapping(this);
-        this.tag = tag;
-    }
-
-    public void disconnectTag() {
-        this.tag = null;
+    public ReviewTagMapping(final ReviewTag reviewTag) {
+        this.reviewTag = reviewTag;
     }
 }

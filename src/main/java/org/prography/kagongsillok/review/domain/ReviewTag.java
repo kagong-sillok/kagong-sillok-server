@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.tag.domain;
+package org.prography.kagongsillok.review.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tag {
+public class ReviewTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Tag {
 
     private boolean isDeleted = Boolean.FALSE;
 
-    public Tag(final String tagName, final String tagContent) {
+    public ReviewTag(final String tagName, final String tagContent) {
         this.tagName = tagName;
         this.tagContent = tagContent;
     }

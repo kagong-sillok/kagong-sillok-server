@@ -7,9 +7,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMappings;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
 import org.prography.kagongsillok.review.domain.Review;
+import org.prography.kagongsillok.review.domain.ReviewTagMapping;
+import org.prography.kagongsillok.review.domain.ReviewTagMappings;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -57,18 +57,18 @@ public class ReviewDto {
                 .rating(review.getRating())
                 .content(review.getContent())
                 .imageIds(review.getImageIds())
-                .tagIds(getTagIds(review.getTags()))
+                .tagIds(getTagIds(review.getTagMappings()))
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .build();
     }
 
-    private static List<Long> getTagIds(ReviewTagMappings tags) {
-        List<ReviewTagMapping> reviewTagMappings = tags.getReviewTagMappings();
+    private static List<Long> getTagIds(ReviewTagMappings reviewTags) {
+        List<ReviewTagMapping> reviewTagMappings = reviewTags.getValues();
         List<Long> tagIds = new ArrayList<>();
 
         for (ReviewTagMapping reviewTagMapping : reviewTagMappings) {
-            tagIds.add(reviewTagMapping.getTag().getId());
+            tagIds.add(reviewTagMapping.getReviewTag().getId());
         }
 
         return tagIds;
