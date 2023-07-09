@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
 @Getter
@@ -27,23 +28,23 @@ public class Record extends AuditingTimeEntity {
 
     private Long placeId;
 
-    private String imageIds;
-
     private String duration;
 
     private String description;
+
+    private String imageIds;
 
     @Builder
     public Record(
             final Long memberId,
             final Long placeId,
-            final String imageIds,
             final String duration,
-            final String description
+            final String description,
+            final List<Long> imageIds
     ) {
         this.memberId = memberId;
         this.placeId = placeId;
-        this.imageIds = imageIds;
+        this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = duration;
         this.description = description;
     }
