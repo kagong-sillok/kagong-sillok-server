@@ -18,8 +18,8 @@ import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
-import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptanceTestFixture {
@@ -133,7 +133,7 @@ public class AcceptanceTestFixture {
                 .placeId(1L)
                 .content(content)
                 .imageIds(List.of(1L, 2L))
-                .tagIds(tagIds)
+                .reviewTagIds(tagIds)
                 .build();
     }
 
@@ -151,15 +151,15 @@ public class AcceptanceTestFixture {
                 .placeId(1L)
                 .content(content)
                 .imageIds(List.of(1L, 2L))
-                .tagIds(tagIds)
+                .reviewTagIds(tagIds)
                 .build();
     }
 
-    public static TagCreateRequest 태그_생성_요청_바디(
+    public static ReviewTagCreateRequest 태그_생성_요청_바디(
             final String tagName,
             final String tagContent
     ) {
-        return new TagCreateRequest(tagName, tagContent);
+        return new ReviewTagCreateRequest(tagName, tagContent);
     }
 
     public static LocalJoinRequest 기본_아이디_비밀번호_가입_요청_바디(final String nickname, final String email) {

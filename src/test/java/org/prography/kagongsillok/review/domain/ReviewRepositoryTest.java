@@ -31,7 +31,7 @@ public class ReviewRepositoryTest {
                 () -> assertThat(savedReview.getMemberId()).isEqualTo(1L),
                 () -> assertThat(savedReview.getContent()).isEqualTo("test review"),
                 () -> assertThat(savedReview.getImageIds()).containsAll(List.of(1L, 2L, 3L)),
-                () -> assertThat(savedReview.getTags().getReviewTagMappings().size()).isEqualTo(0)
+                () -> assertThat(savedReview.getTagMappings().getValues().size()).isEqualTo(0)
         );
     }
 
@@ -64,7 +64,7 @@ public class ReviewRepositoryTest {
                 .placeId(1L)
                 .content(content)
                 .imageIds(List.of(1L, 2L, 3L))
-                .tags(new ArrayList<>())
+                .tagMappings(new ArrayList<>())
                 .build();
     }
 

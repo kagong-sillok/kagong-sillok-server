@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.ReviewTag.domain;
+package org.prography.kagongsillok.review.domain;
 
 
 import java.util.ArrayList;
@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 public class ReviewTagMappings {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "review_review_tags_id")
-    private List<ReviewTagMapping> reviewTagMappings = new ArrayList<>();
+    @JoinColumn(name = "review_id", nullable = false, updatable = false)
+    private List<ReviewTagMapping> values = new ArrayList<>();
 
-    private ReviewTagMappings(final List<ReviewTagMapping> reviewTagMappings) {
-        this.reviewTagMappings = reviewTagMappings;
+    private ReviewTagMappings(final List<ReviewTagMapping> values) {
+        this.values = values;
     }
 
     public static ReviewTagMappings of(final List<ReviewTagMapping> reviewTagMappings) {
@@ -33,11 +33,8 @@ public class ReviewTagMappings {
         return new ReviewTagMappings(reviewTagMappings);
     }
 
-    public void addReviewTagMapping(ReviewTagMapping reviewTagMapping) {
-        reviewTagMappings.add(reviewTagMapping);
-    }
-
-    public void clearReviewTagMappings() {
-        reviewTagMappings.clear();
+    public void update(final ReviewTagMappings newTagMappings) {
+        values.clear();
+        values.addAll(newTagMappings.getValues());
     }
 }

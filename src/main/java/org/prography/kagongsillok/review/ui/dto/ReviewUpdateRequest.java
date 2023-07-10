@@ -18,7 +18,7 @@ public class ReviewUpdateRequest {
     private int rating;
     private String content;
     private List<Long> imageIds;
-    private List<Long> tagIds;
+    private List<Long> reviewTagIds;
 
     @Builder
     public ReviewUpdateRequest(
@@ -28,7 +28,7 @@ public class ReviewUpdateRequest {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final List<Long> tagIds
+            final List<Long> reviewTagIds
     ) {
         this.id = id;
         this.memberId = memberId;
@@ -36,19 +36,18 @@ public class ReviewUpdateRequest {
         this.rating = rating;
         this.content = content;
         this.imageIds = imageIds;
-        this.tagIds = tagIds;
+        this.reviewTagIds = reviewTagIds;
     }
 
     public ReviewUpdateCommand toCommand() {
         return ReviewUpdateCommand
                 .builder()
-                .id(id)
                 .memberId(memberId)
                 .placeId(placeId)
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)
-                .tagIds(tagIds)
+                .reviewTagIds(reviewTagIds)
                 .build();
     }
 

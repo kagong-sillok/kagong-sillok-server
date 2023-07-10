@@ -1,9 +1,8 @@
 package org.prography.kagongsillok.review.application;
 
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagRepository;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
@@ -11,8 +10,8 @@ import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewRepository;
-import org.prography.kagongsillok.tag.domain.Tag;
-import org.prography.kagongsillok.tag.domain.TagRepository;
+import org.prography.kagongsillok.review.domain.ReviewTag;
+import org.prography.kagongsillok.review.domain.ReviewTagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,19 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final TagRepository tagRepository;
     private final ReviewTagRepository reviewTagRepository;
 
     @Transactional
     public ReviewDto createReview(final ReviewCreateCommand reviewCreateCommand) {
-        List<Tag> tags = tagRepository.findByIdIn(reviewCreateCommand.getTagIds());
-        final Review review = reviewCreateCommand.toEntity();
+        final Map<Long, ReviewTag> reviewTagIds
+                = reviewTagRepository.findByPerId(reviewCreateCommand.getReviewTagIds());
+        final Review review = reviewCreateCommand.toEntity(reviewTagIds);
 
         final Review savedReview = reviewRepository.save(review);
-
-        for (Tag tag : tags) {
-            new ReviewTagMapping(savedReview, tag);
-        }
 
         return ReviewDto.from(savedReview);
     }
@@ -57,20 +52,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewDto updateReview(final ReviewUpdateCommand reviewUpdateCommand) {
-        final Long reviewId = reviewUpdateCommand.getId();
-
-        final Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NotFoundReviewException(reviewId));
-
-        review.disconnectReviewTagMapping();
-
-        List<Tag> tags = tagRepository.findByIdIn(reviewUpdateCommand.getTagIds());
-        for (Tag tag : tags) {
-            reviewTagRepository.save(new ReviewTagMapping(review, tag));
-        }
-
-        final Review target = reviewUpdateCommand.toEntity();
+    public ReviewDto updateReview(final Long id, final ReviewUpdateCommand reviewUpdateCommand) {
+        final Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new NotFoundReviewException(id));
+        final Map<Long, ReviewTag> updateReviewTags
+                = reviewTagRepository.findByPerId(reviewUpdateCommand.getReviewTagIds());
+        final Review target = reviewUpdateCommand.toEntity(updateReviewTags);
 
         review.update(target);
 

@@ -15,7 +15,6 @@ import org.prography.kagongsillok.place.domain.Place;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceUpdateCommand {
 
-    private Long id;
     private String name;
     private String address;
     private Double latitude;
@@ -27,7 +26,6 @@ public class PlaceUpdateCommand {
 
     @Builder
     public PlaceUpdateCommand(
-            final Long id,
             final String name,
             final String address,
             final Double latitude,
@@ -37,7 +35,6 @@ public class PlaceUpdateCommand {
             final List<LinkUpdateCommand> links,
             final List<BusinessHourUpdateCommand> businessHours
     ) {
-        this.id = id;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
