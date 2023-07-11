@@ -8,12 +8,13 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 
 @Getter
 @Entity
-@Table(name = "tag")
+@Table(name = "review_tag")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReviewTag {
+public class ReviewTag extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

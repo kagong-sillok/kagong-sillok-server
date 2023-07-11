@@ -11,13 +11,14 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.member.domain.Member;
 
 @Getter
 @Entity
 @Table(name = "kakao_account")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class KakaoAccount {
+public class KakaoAccount extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +30,8 @@ public class KakaoAccount {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Boolean isDeleted = Boolean.FALSE;
-
     public KakaoAccount(final Long kakaoId, final Member member) {
         this.kakaoId = kakaoId;
         this.member = member;
-    }
-
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
     }
 }

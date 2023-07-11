@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.review.domain;
 
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.review.domain.vo.ReviewContent;
@@ -22,7 +23,7 @@ import org.prography.kagongsillok.review.domain.vo.ReviewRating;
 @Entity
 @Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review extends AuditingTimeEntity {
+public class Review extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +44,7 @@ public class Review extends AuditingTimeEntity {
     @Embedded
     private ReviewTagMappings tagMappings;
 
-    private Boolean isDeleted = Boolean.FALSE;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public Review(
@@ -59,6 +60,7 @@ public class Review extends AuditingTimeEntity {
         this.content = ReviewContent.from(content);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.tagMappings = ReviewTagMappings.of(tagMappings);
+        this.writtenAt = ZonedDateTime.now();
     }
 
     public void update(final Review target) {
@@ -70,10 +72,6 @@ public class Review extends AuditingTimeEntity {
 
     public List<Long> getImageIds() {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
-    }
-
-    public void delete() {
-        this.isDeleted = true;
     }
 
     public int getRating() {

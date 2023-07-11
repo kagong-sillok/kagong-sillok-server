@@ -11,13 +11,14 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.member.domain.Member;
 
 @Getter
 @Entity
 @Table(name = "local_account")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocalAccount {
+public class LocalAccount extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +31,6 @@ public class LocalAccount {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Boolean isDeleted = Boolean.FALSE;
-
     public LocalAccount(
             final String loginId,
             final String encryptedPassword,
@@ -40,9 +39,5 @@ public class LocalAccount {
         this.loginId = loginId;
         this.encryptedPassword = encryptedPassword;
         this.member = member;
-    }
-
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
     }
 }

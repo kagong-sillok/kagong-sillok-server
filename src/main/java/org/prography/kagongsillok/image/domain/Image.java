@@ -9,12 +9,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 
 @Getter
 @Entity
 @Table(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Image {
+public class Image extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
