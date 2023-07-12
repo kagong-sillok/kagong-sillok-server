@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.record.domain;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
@@ -18,7 +19,7 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 @Entity
 @Table(name = "record")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Record extends AuditingTimeEntity {
+public class Record extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,8 @@ public class Record extends AuditingTimeEntity {
 
     private String imageIds;
 
+    private ZonedDateTime writtenAt;
+
     @Builder
     public Record(
             final Long memberId,
@@ -47,6 +50,7 @@ public class Record extends AuditingTimeEntity {
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = duration;
         this.description = description;
+        this.writtenAt = ZonedDateTime.now();
     }
 
     public List<Long> getImageIds() {

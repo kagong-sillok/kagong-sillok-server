@@ -17,7 +17,7 @@ public class RecordDto {
     private String description;
     private String duration;
     private List<Long> imageIds;
-    private ZonedDateTime createdAt;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public RecordDto(
@@ -26,14 +26,14 @@ public class RecordDto {
             final String description,
             final String duration,
             final List<Long> imageIds,
-            final ZonedDateTime createdAt
+            final ZonedDateTime writtenAt
     ) {
         this.id = id;
         this.placeName = placeName;
         this.description = description;
         this.duration = duration;
         this.imageIds = imageIds;
-        this.createdAt = createdAt;
+        this.writtenAt = writtenAt;
     }
 
     public static RecordDto from(final Record record, final String placeName) {
@@ -43,7 +43,7 @@ public class RecordDto {
                 .description(record.getDescription())
                 .duration(record.getDuration())
                 .imageIds(record.getImageIds())
-                .createdAt(record.getCreatedAt())
+                .writtenAt(record.getWrittenAt())
                 .build();
     }
 }

@@ -17,7 +17,7 @@ public class RecordResponse {
     private String description;
     private String duration;
     private List<Long> imageIds;
-    private ZonedDateTime createdAt;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public RecordResponse(
@@ -26,14 +26,14 @@ public class RecordResponse {
             final String description,
             final String duration,
             final List<Long> imageIds,
-            final ZonedDateTime createdAt
+            final ZonedDateTime writtenAt
     ) {
         this.id = id;
         this.placeName = placeName;
         this.description = description;
         this.duration = duration;
         this.imageIds = imageIds;
-        this.createdAt = createdAt;
+        this.writtenAt = writtenAt;
     }
 
     public static RecordResponse from(final RecordDto recordDto) {
@@ -43,7 +43,7 @@ public class RecordResponse {
                 .duration(recordDto.getDuration())
                 .description(recordDto.getDescription())
                 .imageIds(recordDto.getImageIds())
-                .createdAt(recordDto.getCreatedAt())
+                .writtenAt(recordDto.getWrittenAt())
                 .build();
     }
 }
