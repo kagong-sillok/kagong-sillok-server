@@ -2,6 +2,7 @@ package org.prography.kagongsillok.record.domain;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +15,8 @@ import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
+import org.prography.kagongsillok.record.domain.vo.RecordDescription;
+import org.prography.kagongsillok.record.domain.vo.RecordDuration;
 
 @Getter
 @Entity
@@ -31,9 +34,11 @@ public class Record extends AbstractRootEntity {
 
     private String placeName;
 
-    private String duration;
+    @Embedded
+    private RecordDuration duration;
 
-    private String description;
+    @Embedded
+    private RecordDescription description;
 
     private String imageIds;
 
@@ -52,8 +57,8 @@ public class Record extends AbstractRootEntity {
         this.placeId = placeId;
         this.placeName = placeName;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
-        this.duration = duration;
-        this.description = description;
+        this.duration = RecordDuration.from(duration);
+        this.description = RecordDescription.from(description);
         this.writtenAt = ZonedDateTime.now();
     }
 
