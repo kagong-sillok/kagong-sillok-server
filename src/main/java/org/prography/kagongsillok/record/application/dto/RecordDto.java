@@ -40,8 +40,8 @@ public class RecordDto {
         return RecordDto.builder()
                 .id(record.getId())
                 .placeName(record.getPlaceName())
-                .description(record.getDescription())
-                .duration(record.getDuration())
+                .duration(record.getDuration().getValue())
+                .description(record.getDescription().getValue())
                 .imageIds(record.getImageIds())
                 .writtenAt(record.getWrittenAt())
                 .build();

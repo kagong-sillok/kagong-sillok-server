@@ -1,6 +1,8 @@
 package org.prography.kagongsillok.record.application;
 
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
@@ -8,6 +10,7 @@ import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.prography.kagongsillok.record.application.dto.RecordCreateCommand;
 import org.prography.kagongsillok.record.application.dto.RecordDto;
+import org.prography.kagongsillok.record.application.dto.RecordWrittenAtDto;
 import org.prography.kagongsillok.record.domain.Record;
 import org.prography.kagongsillok.record.domain.RecordRepository;
 import org.springframework.stereotype.Service;
@@ -38,4 +41,9 @@ public class RecordService {
         return CustomListUtils.mapTo(records, RecordDto::from);
     }
 
+    public List<RecordWrittenAtDto> getTimelines(final Long memberId, final String yearMonth) {
+        final List<ZonedDateTime> zonedDateTimes = recordRepository.findRecordByYearMonth(memberId, yearMonth);
+
+        return CustomListUtils.mapTo(zonedDateTimes, RecordWrittenAtDto::from);
+    }
 }
