@@ -10,8 +10,8 @@ import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
-import org.prography.kagongsillok.tag.domain.Tag;
-import org.prography.kagongsillok.tag.domain.TagRepository;
+import org.prography.kagongsillok.review.domain.ReviewTag;
+import org.prography.kagongsillok.review.domain.ReviewTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ public class ReviewServiceTest {
     private ReviewService reviewService;
 
     @Autowired
-    private TagRepository tagRepository;
+    private ReviewTagRepository reviewTagRepository;
 
     @Test
     void 리뷰를_생성한다() {
@@ -36,7 +36,7 @@ public class ReviewServiceTest {
                 .rating(5)
                 .content("test review")
                 .imageIds(List.of(1L, 2L))
-                .tagIds(List.of(tagId1, tagId2))
+                .reviewTagIds(List.of(tagId1, tagId2))
                 .build();
 
         final ReviewDto reviewDto = reviewService.createReview(reviewCreateCommand);
@@ -59,7 +59,7 @@ public class ReviewServiceTest {
                 .rating(5)
                 .content("test review")
                 .imageIds(List.of(1L, 2L, 3L))
-                .tagIds(List.of(tagId1))
+                .reviewTagIds(List.of(tagId1))
                 .build();
         final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
 
@@ -85,20 +85,19 @@ public class ReviewServiceTest {
                 .rating(5)
                 .content("test review")
                 .imageIds(List.of(1L, 2L))
-                .tagIds(List.of(tagId1, tagId2))
+                .reviewTagIds(List.of(tagId1, tagId2))
                 .build();
         final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
         final ReviewUpdateCommand reviewUpdateCommand = ReviewUpdateCommand
                 .builder()
-                .id(createdReviewId)
                 .memberId(3L)
                 .rating(4)
                 .content("updated test review")
                 .imageIds(List.of(1L, 3L))
-                .tagIds(List.of(tagId3))
+                .reviewTagIds(List.of(tagId3))
                 .build();
 
-        final ReviewDto reviewDto = reviewService.updateReview(reviewUpdateCommand);
+        final ReviewDto reviewDto = reviewService.updateReview(createdReviewId, reviewUpdateCommand);
 
         assertAll(
                 () -> assertThat(reviewDto.getMemberId()).isEqualTo(3L),
@@ -118,7 +117,7 @@ public class ReviewServiceTest {
                 .rating(5)
                 .content("test review")
                 .imageIds(List.of(1L))
-                .tagIds(List.of(tagId1))
+                .reviewTagIds(List.of(tagId1))
                 .build();
         final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
         reviewService.deleteReview(createdReviewId);
@@ -140,7 +139,7 @@ public class ReviewServiceTest {
                 .rating(5)
                 .content("test review1")
                 .imageIds(List.of(1L, 2L))
-                .tagIds(List.of(tagId1, tagId3))
+                .reviewTagIds(List.of(tagId1, tagId3))
                 .build();
         final ReviewCreateCommand reviewCreateCommand2 = ReviewCreateCommand
                 .builder()
@@ -148,7 +147,7 @@ public class ReviewServiceTest {
                 .rating(1)
                 .content("test review2")
                 .imageIds(List.of(3L, 4L))
-                .tagIds(List.of(tagId4))
+                .reviewTagIds(List.of(tagId4))
                 .build();
         final ReviewCreateCommand reviewCreateCommand3 = ReviewCreateCommand
                 .builder()
@@ -156,7 +155,7 @@ public class ReviewServiceTest {
                 .rating(3)
                 .content("test review3")
                 .imageIds(List.of(5L))
-                .tagIds(List.of(tagId2, tagId3))
+                .reviewTagIds(List.of(tagId2, tagId3))
                 .build();
         reviewService.createReview(reviewCreateCommand1);
         reviewService.createReview(reviewCreateCommand2);
@@ -178,7 +177,7 @@ public class ReviewServiceTest {
     }
 
     private Long saveTagAndGetTagId(final String tagName) {
-        final Tag tag1 = new Tag(tagName, "test tag");
-        return tagRepository.save(tag1).getId();
+        final ReviewTag reviewTag1 = new ReviewTag(tagName, "test tag");
+        return reviewTagRepository.save(reviewTag1).getId();
     }
 }

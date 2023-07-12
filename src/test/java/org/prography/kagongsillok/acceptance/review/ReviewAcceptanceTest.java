@@ -1,9 +1,9 @@
 package org.prography.kagongsillok.acceptance.review;
 
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_리뷰_생성_요청_바디;
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰_수정_요청_바디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰_수정_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import org.prography.kagongsillok.acceptance.AcceptanceTest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
-import org.prography.kagongsillok.tag.ui.dto.TagCreateRequest;
-import org.prography.kagongsillok.tag.ui.dto.TagResponse;
 
 public class ReviewAcceptanceTest extends AcceptanceTest {
 
@@ -108,8 +108,8 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         멤버_id로_생성한_리뷰_조회_검증(1L, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2);
     }
 
-    private TagResponse 태그_생성_요청(final TagCreateRequest 태그_생성_요청_바디) {
-        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), TagResponse.class);
+    private ReviewTagResponse 태그_생성_요청(final ReviewTagCreateRequest 태그_생성_요청_바디) {
+        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 
     private static void 멤버_id로_생성한_리뷰_조회_검증(
@@ -117,7 +117,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
             final ReviewListResponse 멤버_id로_리뷰_조회_응답,
             final List<Long> 입력_태그1,
             final List<Long> 입력_태그2
-            ) {
+    ) {
         assertAll(
                 () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews().size()).isEqualTo(2),
                 () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("memberId")

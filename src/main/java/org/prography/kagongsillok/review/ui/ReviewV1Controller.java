@@ -54,7 +54,10 @@ public class ReviewV1Controller {
     public ResponseEntity<CommonResponse<ReviewResponse>> updateReview(
             @RequestBody ReviewUpdateRequest reviewUpdateRequest
     ) {
-        final ReviewDto updatedReview = reviewService.updateReview(reviewUpdateRequest.toCommand());
+        final ReviewDto updatedReview = reviewService.updateReview(
+                reviewUpdateRequest.getId(),
+                reviewUpdateRequest.toCommand()
+        );
         return CommonResponse.success(ReviewResponse.from(updatedReview));
     }
 

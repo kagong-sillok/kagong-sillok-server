@@ -7,9 +7,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMappings;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
 import org.prography.kagongsillok.review.domain.Review;
+import org.prography.kagongsillok.review.domain.ReviewTagMapping;
+import org.prography.kagongsillok.review.domain.ReviewTagMappings;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,8 +22,7 @@ public class ReviewDto {
     private String content;
     private List<Long> imageIds;
     private List<Long> tagIds;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public ReviewDto(
@@ -34,8 +33,7 @@ public class ReviewDto {
             final String content,
             final List<Long> imageIds,
             final List<Long> tagIds,
-            final ZonedDateTime createdAt,
-            final ZonedDateTime updatedAt
+            final ZonedDateTime writtenAt
     ) {
         this.id = id;
         this.memberId = memberId;
@@ -44,8 +42,7 @@ public class ReviewDto {
         this.content = content;
         this.imageIds = imageIds;
         this.tagIds = tagIds;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.writtenAt = writtenAt;
     }
 
     public static ReviewDto from(Review review) {
@@ -57,18 +54,17 @@ public class ReviewDto {
                 .rating(review.getRating())
                 .content(review.getContent())
                 .imageIds(review.getImageIds())
-                .tagIds(getTagIds(review.getTags()))
-                .createdAt(review.getCreatedAt())
-                .updatedAt(review.getUpdatedAt())
+                .tagIds(getTagIds(review.getTagMappings()))
+                .writtenAt(review.getWrittenAt())
                 .build();
     }
 
-    private static List<Long> getTagIds(ReviewTagMappings tags) {
-        List<ReviewTagMapping> reviewTagMappings = tags.getReviewTagMappings();
+    private static List<Long> getTagIds(ReviewTagMappings reviewTags) {
+        List<ReviewTagMapping> reviewTagMappings = reviewTags.getValues();
         List<Long> tagIds = new ArrayList<>();
 
         for (ReviewTagMapping reviewTagMapping : reviewTagMappings) {
-            tagIds.add(reviewTagMapping.getTag().getId());
+            tagIds.add(reviewTagMapping.getReviewTag().getId());
         }
 
         return tagIds;

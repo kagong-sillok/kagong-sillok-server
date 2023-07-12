@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.review.domain;
 
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,17 +13,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMappings;
-import org.prography.kagongsillok.ReviewTag.domain.ReviewTagMapping;
-import org.prography.kagongsillok.common.auditing.AuditingTimeEntity;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
+import org.prography.kagongsillok.review.domain.vo.ReviewContent;
+import org.prography.kagongsillok.review.domain.vo.ReviewRating;
 
 @Getter
 @Entity
 @Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review extends AuditingTimeEntity {
+public class Review extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,17 +34,17 @@ public class Review extends AuditingTimeEntity {
     private Long placeId;
 
     @Embedded
-    private Rating rating;
+    private ReviewRating rating;
 
     @Embedded
-    private Content content;
+    private ReviewContent content;
 
     private String imageIds;
 
     @Embedded
-    private ReviewTagMappings tags;
+    private ReviewTagMappings tagMappings;
 
-    private Boolean isDeleted = Boolean.FALSE;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public Review(
@@ -52,27 +53,25 @@ public class Review extends AuditingTimeEntity {
             final int rating,
             final String content,
             final List<Long> imageIds,
-            final List<ReviewTagMapping> tags) {
+            final List<ReviewTagMapping> tagMappings) {
         this.memberId = memberId;
         this.placeId = placeId;
-        this.rating = Rating.from(rating);
-        this.content = Content.from(content);
+        this.rating = ReviewRating.from(rating);
+        this.content = ReviewContent.from(content);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
-        this.tags = ReviewTagMappings.of(tags);
+        this.tagMappings = ReviewTagMappings.of(tagMappings);
+        this.writtenAt = ZonedDateTime.now();
     }
 
     public void update(final Review target) {
         this.rating = target.rating;
         this.content = target.content;
         this.imageIds = target.imageIds;
+        this.tagMappings.update(target.tagMappings);
     }
 
     public List<Long> getImageIds() {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
-    }
-
-    public void delete() {
-        this.isDeleted = true;
     }
 
     public int getRating() {
@@ -81,17 +80,5 @@ public class Review extends AuditingTimeEntity {
 
     public String getContent() {
         return content.getValue();
-    }
-
-    public void addReviewTagMapping(ReviewTagMapping reviewTagMapping) {
-        tags.addReviewTagMapping(reviewTagMapping);
-    }
-
-    public void disconnectReviewTagMapping() {
-        for (ReviewTagMapping reviewTagMapping : tags.getReviewTagMappings()) {
-            reviewTagMapping.disconnectTag();
-        }
-
-        tags.clearReviewTagMappings();
     }
 }

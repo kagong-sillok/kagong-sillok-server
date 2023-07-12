@@ -32,6 +32,7 @@ public class AuthService {
 
         return MemberDto.from(savedMember);
     }
+
     private LocalAccount saveLocalAccount(final LocalJoinCommand command, final Member member) {
         final LocalAccount localAccount = new LocalAccount(
                 command.getLoginId(),
