@@ -20,8 +20,7 @@ public class ReviewResponse {
     private Long memberId;
     private Long placeId;
     private String userNickName;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public ReviewResponse(
@@ -33,8 +32,7 @@ public class ReviewResponse {
             final Long memberId,
             final Long placeId,
             final String userNickName,
-            final ZonedDateTime createdAt,
-            final ZonedDateTime updatedAt
+            final ZonedDateTime writtenAt
     ) {
         this.id = id;
         this.rating = rating;
@@ -44,8 +42,7 @@ public class ReviewResponse {
         this.memberId = memberId;
         this.placeId = placeId;
         this.userNickName = userNickName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.writtenAt = writtenAt;
     }
 
     public static ReviewResponse from(ReviewDto reviewDto) {
@@ -59,8 +56,7 @@ public class ReviewResponse {
                 .imageIds(reviewDto.getImageIds())
                 .tagIds(reviewDto.getTagIds())
                 .userNickName("임시 닉네임")
-                .createdAt(reviewDto.getCreatedAt())
-                .updatedAt(reviewDto.getUpdatedAt())
+                .writtenAt(reviewDto.getWrittenAt())
                 .build();
     }
 }

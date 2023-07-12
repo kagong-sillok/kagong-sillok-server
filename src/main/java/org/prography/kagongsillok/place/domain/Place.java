@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
@@ -18,7 +19,7 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 @Entity
 @Table(name = "place")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Place {
+public class Place extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +38,6 @@ public class Place {
 
     @Embedded
     private BusinessHours businessHours;
-
-    private Boolean isDeleted = false;
 
     @Builder
     public Place(
@@ -68,10 +67,6 @@ public class Place {
         this.phone = target.phone;
         this.links.update(target.links);
         this.businessHours.update(target.businessHours);
-    }
-
-    public void delete() {
-        this.isDeleted = true;
     }
 
     public List<Long> getImageIds() {

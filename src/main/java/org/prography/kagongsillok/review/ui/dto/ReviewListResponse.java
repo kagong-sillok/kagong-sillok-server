@@ -18,5 +18,4 @@ public class ReviewListResponse {
     public static ReviewListResponse of(final List<ReviewDto> reviewDtos) {
         return new ReviewListResponse(CustomListUtils.mapTo(reviewDtos, ReviewResponse::from));
     }
-
 }

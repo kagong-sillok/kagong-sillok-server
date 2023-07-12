@@ -22,8 +22,7 @@ public class ReviewDto {
     private String content;
     private List<Long> imageIds;
     private List<Long> tagIds;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    private ZonedDateTime writtenAt;
 
     @Builder
     public ReviewDto(
@@ -34,8 +33,7 @@ public class ReviewDto {
             final String content,
             final List<Long> imageIds,
             final List<Long> tagIds,
-            final ZonedDateTime createdAt,
-            final ZonedDateTime updatedAt
+            final ZonedDateTime writtenAt
     ) {
         this.id = id;
         this.memberId = memberId;
@@ -44,8 +42,7 @@ public class ReviewDto {
         this.content = content;
         this.imageIds = imageIds;
         this.tagIds = tagIds;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.writtenAt = writtenAt;
     }
 
     public static ReviewDto from(Review review) {
@@ -58,8 +55,7 @@ public class ReviewDto {
                 .content(review.getContent())
                 .imageIds(review.getImageIds())
                 .tagIds(getTagIds(review.getTagMappings()))
-                .createdAt(review.getCreatedAt())
-                .updatedAt(review.getUpdatedAt())
+                .writtenAt(review.getWrittenAt())
                 .build();
     }
 
