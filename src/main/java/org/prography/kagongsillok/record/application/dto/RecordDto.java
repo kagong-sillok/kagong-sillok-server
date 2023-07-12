@@ -36,10 +36,10 @@ public class RecordDto {
         this.writtenAt = writtenAt;
     }
 
-    public static RecordDto from(final Record record, final String placeName) {
+    public static RecordDto from(final Record record) {
         return RecordDto.builder()
                 .id(record.getId())
-                .placeName(placeName)
+                .placeName(record.getPlaceName())
                 .description(record.getDescription())
                 .duration(record.getDuration())
                 .imageIds(record.getImageIds())

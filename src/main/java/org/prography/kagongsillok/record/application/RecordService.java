@@ -1,6 +1,8 @@
 package org.prography.kagongsillok.record.application;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
@@ -25,9 +27,15 @@ public class RecordService {
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
 
-        final Record savedRecord = recordRepository.save(recordCreateCommand.toEntity());
+        final Record savedRecord = recordRepository.save(recordCreateCommand.toEntity(place.getName()));
 
-        return RecordDto.from(savedRecord, place.getName());
+        return RecordDto.from(savedRecord);
+    }
+
+    public List<RecordDto> getMemberRecords(final Long memberId) {
+        final List<Record> records = recordRepository.findMemberRecordByMemberId(memberId);
+
+        return CustomListUtils.mapTo(records, RecordDto::from);
     }
 
 }

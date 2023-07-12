@@ -29,6 +29,8 @@ public class Record extends AbstractRootEntity {
 
     private Long placeId;
 
+    private String placeName;
+
     private String duration;
 
     private String description;
@@ -41,12 +43,14 @@ public class Record extends AbstractRootEntity {
     public Record(
             final Long memberId,
             final Long placeId,
+            final String placeName,
             final String duration,
             final String description,
             final List<Long> imageIds
     ) {
         this.memberId = memberId;
         this.placeId = placeId;
+        this.placeName = placeName;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = duration;
         this.description = description;

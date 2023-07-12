@@ -33,10 +33,11 @@ public class RecordCreateCommand {
         this.imageIds = imageIds;
     }
 
-    public Record toEntity() {
+    public Record toEntity(final String placeName) {
         return Record.builder()
                 .memberId(memberId)
                 .placeId(placeId)
+                .placeName(placeName)
                 .duration(duration)
                 .description(description)
                 .imageIds(imageIds)
