@@ -44,14 +44,14 @@ public class StudyRecordDto {
                 .id(studyRecord.getId())
                 .placeName(studyRecord.getPlaceName())
                 .studyDay(getStudyDay(studyRecord))
-                .duration(studyRecord.getDuration().getValue())
-                .description(studyRecord.getDescription().getValue())
+                .duration(studyRecord.getDuration())
+                .description(studyRecord.getDescription())
                 .imageIds(studyRecord.getImageIds())
                 .writtenAt(studyRecord.getWrittenAt())
                 .build();
     }
 
     private static String getStudyDay(final StudyRecord studyRecord) {
-        return studyRecord.getStudyYearMonth().getValue() + "." + studyRecord.getStudyDate().getValue();
+        return studyRecord.getStudyYearMonth() + "." + studyRecord.getStudyDate();
     }
 }

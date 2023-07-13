@@ -77,4 +77,20 @@ public class StudyRecord extends AbstractRootEntity {
     public List<Long> getImageIds() {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
     }
+
+    public String getStudyYearMonth() {
+        return studyYearMonth.getValue();
+    }
+
+    public String getStudyDate() {
+        return studyDate.getValue();
+    }
+
+    public String getDuration() {
+        return duration.getValue();
+    }
+
+    public String getDescription() {
+        return description.getValue();
+    }
 }
