@@ -15,14 +15,14 @@ import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
-import org.prography.kagongsillok.record.domain.vo.RecordDescription;
-import org.prography.kagongsillok.record.domain.vo.RecordDuration;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordDescription;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordDuration;
 
 @Getter
 @Entity
 @Table(name = "record")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Record extends AbstractRootEntity {
+public class StudyRecord extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,17 +35,17 @@ public class Record extends AbstractRootEntity {
     private String placeName;
 
     @Embedded
-    private RecordDuration duration;
+    private StudyRecordDuration duration;
 
     @Embedded
-    private RecordDescription description;
+    private StudyRecordDescription description;
 
     private String imageIds;
 
     private ZonedDateTime writtenAt;
 
     @Builder
-    public Record(
+    public StudyRecord(
             final Long memberId,
             final Long placeId,
             final String placeName,
@@ -57,8 +57,8 @@ public class Record extends AbstractRootEntity {
         this.placeId = placeId;
         this.placeName = placeName;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
-        this.duration = RecordDuration.from(duration);
-        this.description = RecordDescription.from(description);
+        this.duration = StudyRecordDuration.from(duration);
+        this.description = StudyRecordDescription.from(description);
         this.writtenAt = ZonedDateTime.now();
     }
 

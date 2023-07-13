@@ -10,7 +10,7 @@ import org.prography.kagongsillok.record.domain.exception.InvalidDurationBoundEx
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecordDuration {
+public class StudyRecordDuration {
 
     private static final int MAX_HOUR = 23;
     private static final int MIN_HOUR = 0;
@@ -20,13 +20,13 @@ public class RecordDuration {
     @Column(name = "duration")
     private String value;
 
-    private RecordDuration(final String value) {
+    private StudyRecordDuration(final String value) {
         this.value = value;
     }
 
-    public static RecordDuration from(final String value) {
+    public static StudyRecordDuration from(final String value) {
         validateValue(value);
-        return new RecordDuration(value);
+        return new StudyRecordDuration(value);
     }
 
     private static void validateValue(final String value) {

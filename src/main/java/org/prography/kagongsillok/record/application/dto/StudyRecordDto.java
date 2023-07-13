@@ -1,4 +1,4 @@
-package org.prography.kagongsillok.record.ui.dto;
+package org.prography.kagongsillok.record.application.dto;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -6,11 +6,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.record.application.dto.RecordDto;
+import org.prography.kagongsillok.record.domain.StudyRecord;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RecordResponse {
+public class StudyRecordDto {
 
     private Long id;
     private String placeName;
@@ -20,7 +20,7 @@ public class RecordResponse {
     private ZonedDateTime writtenAt;
 
     @Builder
-    public RecordResponse(
+    public StudyRecordDto(
             final Long id,
             final String placeName,
             final String description,
@@ -36,14 +36,14 @@ public class RecordResponse {
         this.writtenAt = writtenAt;
     }
 
-    public static RecordResponse from(final RecordDto recordDto) {
-        return RecordResponse.builder()
-                .id(recordDto.getId())
-                .placeName(recordDto.getPlaceName())
-                .duration(recordDto.getDuration())
-                .description(recordDto.getDescription())
-                .imageIds(recordDto.getImageIds())
-                .writtenAt(recordDto.getWrittenAt())
+    public static StudyRecordDto from(final StudyRecord studyRecord) {
+        return StudyRecordDto.builder()
+                .id(studyRecord.getId())
+                .placeName(studyRecord.getPlaceName())
+                .duration(studyRecord.getDuration().getValue())
+                .description(studyRecord.getDescription().getValue())
+                .imageIds(studyRecord.getImageIds())
+                .writtenAt(studyRecord.getWrittenAt())
                 .build();
     }
 }

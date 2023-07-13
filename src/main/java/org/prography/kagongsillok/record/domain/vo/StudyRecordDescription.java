@@ -10,7 +10,7 @@ import org.prography.kagongsillok.review.domain.exception.InvalidContentLengthEx
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecordDescription {
+public class StudyRecordDescription {
 
     private static final int MAX_DESCRIPTION_LENGTH = 10;
     private static final int MIN_DESCRIPTION_LENGTH = 1;
@@ -18,13 +18,13 @@ public class RecordDescription {
     @Column(name = "description")
     private String value;
 
-    private RecordDescription(final String value) {
+    private StudyRecordDescription(final String value) {
         this.value = value;
     }
 
-    public static RecordDescription from(final String value) {
+    public static StudyRecordDescription from(final String value) {
         validateValue(value);
-        return new RecordDescription(value);
+        return new StudyRecordDescription(value);
     }
 
     private static void validateValue(final String value) {

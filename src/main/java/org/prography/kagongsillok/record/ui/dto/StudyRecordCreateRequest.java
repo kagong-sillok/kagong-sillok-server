@@ -5,11 +5,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.record.application.dto.RecordCreateCommand;
+import org.prography.kagongsillok.record.application.dto.StudyRecordCreateCommand;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RecordCreateRequest {
+public class StudyRecordCreateRequest {
 
     private Long memberId;
     private Long placeId;
@@ -18,7 +18,7 @@ public class RecordCreateRequest {
     private List<Long> imageIds;
 
     @Builder
-    public RecordCreateRequest(final Long memberId, final Long placeId, final String duration, final String description,
+    public StudyRecordCreateRequest(final Long memberId, final Long placeId, final String duration, final String description,
             final List<Long> imageIds) {
         this.memberId = memberId;
         this.placeId = placeId;
@@ -27,8 +27,8 @@ public class RecordCreateRequest {
         this.imageIds = imageIds;
     }
 
-    public RecordCreateCommand toCommand() {
-        return RecordCreateCommand.builder()
+    public StudyRecordCreateCommand toCommand() {
+        return StudyRecordCreateCommand.builder()
                 .memberId(memberId)
                 .placeId(placeId)
                 .duration(duration)

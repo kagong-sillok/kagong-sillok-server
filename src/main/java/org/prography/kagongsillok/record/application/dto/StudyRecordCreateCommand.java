@@ -5,12 +5,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.common.utils.CustomStringUtils;
-import org.prography.kagongsillok.record.domain.Record;
+import org.prography.kagongsillok.record.domain.StudyRecord;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RecordCreateCommand {
+public class StudyRecordCreateCommand {
 
     private Long memberId;
     private Long placeId;
@@ -19,7 +18,7 @@ public class RecordCreateCommand {
     private List<Long> imageIds;
 
     @Builder
-    public RecordCreateCommand(
+    public StudyRecordCreateCommand(
             final Long memberId,
             final Long placeId,
             final String duration,
@@ -33,8 +32,8 @@ public class RecordCreateCommand {
         this.imageIds = imageIds;
     }
 
-    public Record toEntity(final String placeName) {
-        return Record.builder()
+    public StudyRecord toEntity(final String placeName) {
+        return StudyRecord.builder()
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName(placeName)

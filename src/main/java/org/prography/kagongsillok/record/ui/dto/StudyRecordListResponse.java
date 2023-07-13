@@ -6,16 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
-import org.prography.kagongsillok.record.application.dto.RecordDto;
+import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class RecordListResponse {
+public class StudyRecordListResponse {
 
-    private List<RecordResponse> records;
+    private List<StudyRecordResponse> records;
 
-    public static RecordListResponse of(final List<RecordDto> recordDtos) {
-        return new RecordListResponse(CustomListUtils.mapTo(recordDtos, RecordResponse::from));
+    public static StudyRecordListResponse of(final List<StudyRecordDto> studyRecordDtos) {
+        return new StudyRecordListResponse(CustomListUtils.mapTo(studyRecordDtos, StudyRecordResponse::from));
     }
 }
