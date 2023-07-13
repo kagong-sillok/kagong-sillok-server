@@ -3,6 +3,8 @@ package org.prography.kagongsillok.record.ui;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
+import org.prography.kagongsillok.place.application.dto.PlaceDto;
+import org.prography.kagongsillok.place.ui.dto.PlaceListResponse;
 import org.prography.kagongsillok.record.application.StudyRecordService;
 import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
 import org.prography.kagongsillok.record.ui.dto.StudyRecordCreateRequest;
@@ -51,5 +53,14 @@ public class StudyRecordV1Controller {
         final List<StudyRecordDto> studyRecordDtos = studyRecordService.getMemberStudyRecordsByYearMonth(memberId, year, month);
 
         return CommonResponse.success(StudyRecordListResponse.of(studyRecordDtos));
+    }
+
+    @GetMapping("/places/{memberId}")
+    public ResponseEntity<CommonResponse<PlaceListResponse>> getStudyPlaces(
+            @PathVariable("memberId") Long memberId
+    ) {
+        final List<PlaceDto> placeDtos = studyRecordService.getMemberStudyPlaces(memberId);
+
+        return CommonResponse.success(PlaceListResponse.of(placeDtos));
     }
 }
