@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.review.domain.exception.InvalidContentLengthException;
+import org.prography.kagongsillok.record.domain.exception.InvalidStudyDescriptionBoundException;
 
 @Getter
 @Embeddable
@@ -29,7 +29,7 @@ public class StudyRecordDescription {
 
     private static void validateValue(final String value) {
         if (isUnderDescriptionLength(value) || isOverDescriptionLength(value)) {
-            throw new InvalidContentLengthException(value);
+            throw new InvalidStudyDescriptionBoundException(value);
         }
     }
 

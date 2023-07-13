@@ -17,6 +17,8 @@ import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDescription;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDuration;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyDate;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyYearMonth;
 
 @Getter
 @Entity
@@ -35,6 +37,12 @@ public class StudyRecord extends AbstractRootEntity {
     private String placeName;
 
     @Embedded
+    private StudyRecordStudyYearMonth studyYearMonth;
+
+    @Embedded
+    private StudyRecordStudyDate studyDate;
+
+    @Embedded
     private StudyRecordDuration duration;
 
     @Embedded
@@ -49,6 +57,8 @@ public class StudyRecord extends AbstractRootEntity {
             final Long memberId,
             final Long placeId,
             final String placeName,
+            final String studyYearMonth,
+            final String studyDate,
             final String duration,
             final String description,
             final List<Long> imageIds
@@ -56,6 +66,8 @@ public class StudyRecord extends AbstractRootEntity {
         this.memberId = memberId;
         this.placeId = placeId;
         this.placeName = placeName;
+        this.studyYearMonth = StudyRecordStudyYearMonth.from(studyYearMonth);
+        this.studyDate = StudyRecordStudyDate.from(studyDate);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = StudyRecordDuration.from(duration);
         this.description = StudyRecordDescription.from(description);

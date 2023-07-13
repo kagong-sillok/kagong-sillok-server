@@ -14,6 +14,7 @@ public class StudyRecordDto {
 
     private Long id;
     private String placeName;
+    private String studyDay;
     private String description;
     private String duration;
     private List<Long> imageIds;
@@ -23,6 +24,7 @@ public class StudyRecordDto {
     public StudyRecordDto(
             final Long id,
             final String placeName,
+            final String studyDay,
             final String description,
             final String duration,
             final List<Long> imageIds,
@@ -30,6 +32,7 @@ public class StudyRecordDto {
     ) {
         this.id = id;
         this.placeName = placeName;
+        this.studyDay = studyDay;
         this.description = description;
         this.duration = duration;
         this.imageIds = imageIds;
@@ -40,10 +43,15 @@ public class StudyRecordDto {
         return StudyRecordDto.builder()
                 .id(studyRecord.getId())
                 .placeName(studyRecord.getPlaceName())
+                .studyDay(getStudyDay(studyRecord))
                 .duration(studyRecord.getDuration().getValue())
                 .description(studyRecord.getDescription().getValue())
                 .imageIds(studyRecord.getImageIds())
                 .writtenAt(studyRecord.getWrittenAt())
                 .build();
+    }
+
+    private static String getStudyDay(final StudyRecord studyRecord) {
+        return studyRecord.getStudyYearMonth().getValue() + "." + studyRecord.getStudyDate().getValue();
     }
 }

@@ -5,7 +5,7 @@ import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.prography.kagongsillok.record.domain.exception.InvalidDurationBoundException;
+import org.prography.kagongsillok.record.domain.exception.InvalidStudyDurationBoundException;
 
 @Getter
 @Embeddable
@@ -33,9 +33,8 @@ public class StudyRecordDuration {
         final String[] values = value.split(":");
         if (isUnderMinHour(values[0]) || isOverMaxHour(values[0])
                 || isUnderMinMinute(values[1]) || isOverMaxMinute(values[1])) {
-            throw new InvalidDurationBoundException(value);
+            throw new InvalidStudyDurationBoundException(value);
         }
-
     }
 
     private static boolean isUnderMinHour(final String hourValue) {

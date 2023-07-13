@@ -3,6 +3,7 @@ package org.prography.kagongsillok.record.application;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
@@ -34,6 +35,13 @@ public class StudyRecordService {
 
     public List<StudyRecordDto> getMemberStudyRecords(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
+
+        return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
+    }
+
+    public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final String year, final String month) {
+        final String yearMonth = year + "." + month;
+        final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(memberId, yearMonth);
 
         return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
     }
