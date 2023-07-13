@@ -2,6 +2,7 @@ package org.prography.kagongsillok.record.infrastructure;
 
 import static org.prography.kagongsillok.record.domain.QStudyRecord.studyRecord;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,8 @@ public class StudyRecordRepositoryImpl implements StudyRecordRepositoryCustom {
         return queryFactory
                 .selectFrom(studyRecord)
                 .where(
-                        studyRecord.memberId.eq(memberId)
+                        studyRecord.memberId.eq(memberId),
+                        isNotDeleted()
                 )
                 .fetch();
     }
@@ -30,8 +32,13 @@ public class StudyRecordRepositoryImpl implements StudyRecordRepositoryCustom {
                 .selectFrom(studyRecord)
                 .where(
                         studyRecord.memberId.eq(memberId),
-                        studyRecord.studyYearMonth.value.eq(yearMonth)
+                        studyRecord.studyYearMonth.value.eq(yearMonth),
+                        isNotDeleted()
                 )
                 .fetch();
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return studyRecord.isDeleted.eq(Boolean.FALSE);
     }
 }

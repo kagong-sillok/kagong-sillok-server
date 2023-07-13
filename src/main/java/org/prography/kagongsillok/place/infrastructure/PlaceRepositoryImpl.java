@@ -1,7 +1,6 @@
 package org.prography.kagongsillok.place.infrastructure;
 
 import static org.prography.kagongsillok.place.domain.QPlace.place;
-import static org.prography.kagongsillok.review.domain.QReviewTag.reviewTag;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

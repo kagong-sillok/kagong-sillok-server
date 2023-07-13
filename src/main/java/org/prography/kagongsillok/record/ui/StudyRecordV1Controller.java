@@ -11,6 +11,7 @@ import org.prography.kagongsillok.record.ui.dto.StudyRecordCreateRequest;
 import org.prography.kagongsillok.record.ui.dto.StudyRecordListResponse;
 import org.prography.kagongsillok.record.ui.dto.StudyRecordResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,5 +63,11 @@ public class StudyRecordV1Controller {
         final List<PlaceDto> placeDtos = studyRecordService.getMemberStudyPlaces(memberId);
 
         return CommonResponse.success(PlaceListResponse.of(placeDtos));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudyRecord(@PathVariable("id") final Long id) {
+        studyRecordService.deleteStudyRecord(id);
+        return ResponseEntity.ok().build();
     }
 }

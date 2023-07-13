@@ -11,6 +11,7 @@ import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.prography.kagongsillok.record.application.dto.StudyRecordCreateCommand;
 import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
+import org.prography.kagongsillok.record.application.exception.NotFoundStudyRecordException;
 import org.prography.kagongsillok.record.domain.StudyRecord;
 import org.prography.kagongsillok.record.domain.StudyRecordRepository;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,13 @@ public class StudyRecordService {
         final List<Place> studyPlaces = placeRepository.findByIdIn(placeIds);
 
         return CustomListUtils.mapTo(studyPlaces, PlaceDto::from);
+    }
+
+    @Transactional
+    public void deleteStudyRecord(final Long id) {
+        final StudyRecord studyRecord = studyRecordRepository.findById(id)
+                .orElseThrow(() -> new NotFoundStudyRecordException(id));
+
+        studyRecord.delete();
     }
 }
