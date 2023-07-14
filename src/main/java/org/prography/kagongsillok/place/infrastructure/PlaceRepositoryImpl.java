@@ -30,7 +30,11 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
         }
 
         return queryFactory.selectFrom(place)
-                .where(latitudeBetween(location, latitudeBound), longitudeBetween(location, longitudeBound))
+                .where(
+                        latitudeBetween(location, latitudeBound),
+                        longitudeBetween(location, longitudeBound),
+                        isNotDeleted()
+                )
                 .limit(DEFAULT_SEARCH_RESULT_SIZE)
                 .fetch();
     }
@@ -41,9 +45,24 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
             return List.of();
         }
 
-        return queryFactory.selectFrom(place)
-                .where(nameContains(name))
+        return queryFactory
+                .selectFrom(place)
+                .where(
+                        nameContains(name),
+                        isNotDeleted()
+                )
                 .limit(DEFAULT_SEARCH_RESULT_SIZE)
+                .fetch();
+    }
+
+    @Override
+    public List<Place> findByIdIn(final List<Long> placeIds) {
+        return queryFactory
+                .selectFrom(place)
+                .where(
+                        idIn(placeIds),
+                        isNotDeleted()
+                )
                 .fetch();
     }
 
@@ -73,5 +92,13 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                 location.getLongitude() - longitudeBound,
                 location.getLongitude() + longitudeBound
         );
+    }
+
+    private BooleanExpression idIn(final List<Long> ids) {
+        return place.id.in(ids);
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return place.isDeleted.eq(Boolean.FALSE);
     }
 }

@@ -13,4 +13,6 @@ public interface PlaceRepositoryCustom {
     );
 
     List<Place> findByNameContains(final String name);
+
+    List<Place> findByIdIn(final List<Long> placeIds);
 }
