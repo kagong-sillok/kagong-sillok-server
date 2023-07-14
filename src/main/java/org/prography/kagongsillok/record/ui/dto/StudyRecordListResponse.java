@@ -13,7 +13,7 @@ import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyRecordListResponse {
 
-    private List<StudyRecordResponse> records;
+    private List<StudyRecordResponse> studyRecords;
 
     public static StudyRecordListResponse of(final List<StudyRecordDto> studyRecordDtos) {
         return new StudyRecordListResponse(CustomListUtils.mapTo(studyRecordDtos, StudyRecordResponse::from));

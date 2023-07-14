@@ -59,7 +59,7 @@ public class StudyRecordServiceTest {
     }
 
     @Test
-    void 맴버_ID로_공부_기록들을_조회한다() {
+    void 멤버_ID로_공부_기록들을_조회한다() {
         final Long memberId = 1L;
         final Long placeId1 = createPlaceAndGetPlaceId("place1");
         final Long placeId2 = createPlaceAndGetPlaceId("place2");
@@ -100,7 +100,7 @@ public class StudyRecordServiceTest {
     }
 
     @Test
-    void 맴버_ID와_년도와_월로_공부_기록들을_조회한다() {
+    void 멤버_ID와_년도와_월로_공부_기록들을_조회한다() {
         final Long memberId = 1L;
         final Long placeId1 = createPlaceAndGetPlaceId("place1");
         final Long placeId2 = createPlaceAndGetPlaceId("place2");
@@ -144,7 +144,7 @@ public class StudyRecordServiceTest {
     }
 
     @Test
-    void 맴버_ID로_공부_기록의_장소들을_조회한다() {
+    void 멤버_ID로_공부_기록의_장소들을_조회한다() {
         final Long memberId = 1L;
         final Long placeId1 = createPlaceAndGetPlaceId("place1");
         final Long placeId2 = createPlaceAndGetPlaceId("place2");
@@ -211,7 +211,7 @@ public class StudyRecordServiceTest {
                 .imageIds(List.of(1L, 2L))
                 .build();
         final Long createdStudyRecordId = studyRecordService.createStudyRecord(studyRecordCreateCommand1).getId();
-        
+
         studyRecordService.deleteStudyRecord(createdStudyRecordId);
         final List<StudyRecordDto> studyRecordDtos = studyRecordService.getMemberStudyRecords(memberId);
 

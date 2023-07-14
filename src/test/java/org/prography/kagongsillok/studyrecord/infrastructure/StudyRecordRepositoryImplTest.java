@@ -23,7 +23,7 @@ public class StudyRecordRepositoryImplTest {
     private StudyRecordRepositoryImpl studyRecordRepositoryImpl;
 
     @Test
-    void 맴버_ID로_공부_기록들을_조회한다() {
+    void 멤버_ID로_공부_기록들을_조회한다() {
         final Long memberId = 1L;
         final Long placeId = 2L;
         final StudyRecord studyRecord1 = StudyRecord
@@ -79,7 +79,7 @@ public class StudyRecordRepositoryImplTest {
     }
 
     @Test
-    void 맴버_ID와_년도와_월로_타임라인을_조회한다() {
+    void 멤버_ID와_년도와_월로_타임라인을_조회한다() {
         final Long memberId = 1L;
         final Long placeId = 2L;
         final StudyRecord studyRecord1 = StudyRecord
