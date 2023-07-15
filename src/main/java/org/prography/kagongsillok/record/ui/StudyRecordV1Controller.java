@@ -48,8 +48,8 @@ public class StudyRecordV1Controller {
     @GetMapping("/timelines/{memberId}")
     public ResponseEntity<CommonResponse<StudyRecordListResponse>> getMemberRecordsByYearMonth(
             @PathVariable("memberId") Long memberId,
-            @RequestParam String year,
-            @RequestParam String month
+            @RequestParam int year,
+            @RequestParam int month
     ) {
         final List<StudyRecordDto> studyRecordDtos = studyRecordService.getMemberStudyRecordsByYearMonth(memberId, year, month);
 

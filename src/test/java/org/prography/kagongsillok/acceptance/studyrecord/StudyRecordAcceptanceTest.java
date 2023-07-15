@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.공부_기록_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_세개_링크_두개_장소_생성_요청_바디;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
@@ -135,7 +136,8 @@ public class StudyRecordAcceptanceTest extends AcceptanceTest {
     }
 
     private StudyRecordListResponse 멤버_id와_년도와_월로_공부_기록_조회_요청(final long 멤버_id) {
-        return 응답_바디_추출(get(STUDY_RECORD_API_BASE_URL_V1 + "/timelines/" + 멤버_id + "?year=2023&month=07"), StudyRecordListResponse.class);
+        return 응답_바디_추출(get(STUDY_RECORD_API_BASE_URL_V1 + "/timelines/" + 멤버_id + "?year=2023&month=7"),
+                StudyRecordListResponse.class);
     }
 
     private static void 멤버_id로_공부_기록_조회_검증(final StudyRecordListResponse 멤버_id로_공부_기록_조회_응답) {
@@ -156,7 +158,7 @@ public class StudyRecordAcceptanceTest extends AcceptanceTest {
         assertAll(
                 () -> assertThat(생성된_공부_기록_응답.getId()).isEqualTo(1L),
                 () -> assertThat(생성된_공부_기록_응답.getPlaceName()).isEqualTo("place"),
-                () -> assertThat(생성된_공부_기록_응답.getStudyDay()).isEqualTo("2023.07.06"),
+                () -> assertThat(생성된_공부_기록_응답.getStudyDay()).isEqualTo(LocalDate.of(2023, 7, 6)),
                 () -> assertThat(생성된_공부_기록_응답.getDuration()).isEqualTo("00:50"),
                 () -> assertThat(생성된_공부_기록_응답.getDescription()).isEqualTo("모각코"),
                 () -> assertThat(생성된_공부_기록_응답.getImageIds()).isEqualTo(List.of(1L, 2L))

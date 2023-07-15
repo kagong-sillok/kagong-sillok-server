@@ -13,8 +13,9 @@ public class StudyRecordCreateCommand {
 
     private Long memberId;
     private Long placeId;
-    private String studyYearMonth;
-    private String studyDate;
+    private int studyYear;
+    private int studyMonth;
+    private int studyDate;
     private String duration;
     private String description;
     private List<Long> imageIds;
@@ -23,15 +24,17 @@ public class StudyRecordCreateCommand {
     public StudyRecordCreateCommand(
             final Long memberId,
             final Long placeId,
-            final String studyYearMonth,
-            final String studyDate,
+            final int studyYear,
+            final int studyMonth,
+            final int studyDate,
             final String duration,
             final String description,
             final List<Long> imageIds
     ) {
         this.memberId = memberId;
         this.placeId = placeId;
-        this.studyYearMonth = studyYearMonth;
+        this.studyYear = studyYear;
+        this.studyMonth = studyMonth;
         this.studyDate = studyDate;
         this.duration = duration;
         this.description = description;
@@ -43,7 +46,8 @@ public class StudyRecordCreateCommand {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName(placeName)
-                .studyYearMonth(studyYearMonth)
+                .studyYear(studyYear)
+                .studyMonth(studyMonth)
                 .studyDate(studyDate)
                 .duration(duration)
                 .description(description)

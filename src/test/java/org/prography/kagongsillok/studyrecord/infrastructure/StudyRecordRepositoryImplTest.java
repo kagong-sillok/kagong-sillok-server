@@ -31,8 +31,9 @@ public class StudyRecordRepositoryImplTest {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName("place2")
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("10:00")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -42,8 +43,9 @@ public class StudyRecordRepositoryImplTest {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName("place2")
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("10:00")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -53,8 +55,9 @@ public class StudyRecordRepositoryImplTest {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName("place2")
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("10:00")
                 .description("모각코3")
                 .imageIds(List.of(1L, 2L))
@@ -87,8 +90,9 @@ public class StudyRecordRepositoryImplTest {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName("place2")
-                .studyYearMonth("2022.06")
-                .studyDate("10")
+                .studyYear(2022)
+                .studyMonth(6)
+                .studyDate(10)
                 .duration("10:00")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -98,8 +102,9 @@ public class StudyRecordRepositoryImplTest {
                 .memberId(memberId)
                 .placeId(placeId)
                 .placeName("place2")
-                .studyYearMonth("2022.06")
-                .studyDate("10")
+                .studyYear(2022)
+                .studyMonth(6)
+                .studyDate(10)
                 .duration("10:00")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -108,7 +113,7 @@ public class StudyRecordRepositoryImplTest {
         studyRecordRepository.save(studyRecord2).getId();
 
         final List<StudyRecord> studyRecords = studyRecordRepositoryImpl.findMemberRecordByMemberIdAndYearMonth(
-                memberId, "2022.06");
+                memberId, 2022, 6);
 
         assertAll(
                 () -> assertThat(studyRecords.size()).isEqualTo(2),

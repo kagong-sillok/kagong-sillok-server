@@ -1,5 +1,9 @@
 package org.prography.kagongsillok.record.application.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AccessLevel;
@@ -14,7 +18,7 @@ public class StudyRecordDto {
 
     private Long id;
     private String placeName;
-    private String studyDay;
+    private LocalDate studyDay;
     private String description;
     private String duration;
     private List<Long> imageIds;
@@ -24,7 +28,7 @@ public class StudyRecordDto {
     public StudyRecordDto(
             final Long id,
             final String placeName,
-            final String studyDay,
+            final LocalDate studyDay,
             final String description,
             final String duration,
             final List<Long> imageIds,
@@ -51,7 +55,11 @@ public class StudyRecordDto {
                 .build();
     }
 
-    private static String getStudyDay(final StudyRecord studyRecord) {
-        return studyRecord.getStudyYearMonth() + "." + studyRecord.getStudyDate();
+    private static LocalDate getStudyDay(final StudyRecord studyRecord) {
+        return LocalDate.of(
+                studyRecord.getStudyYear(),
+                studyRecord.getStudyMonth(),
+                studyRecord.getStudyDate()
+        );
     }
 }

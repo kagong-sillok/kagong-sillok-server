@@ -26,12 +26,12 @@ public class StudyRecordService {
     private final PlaceRepository placeRepository;
 
     @Transactional
-    public StudyRecordDto createStudyRecord(final StudyRecordCreateCommand studyRecordCreateCommand) {
-        final Long placeId = studyRecordCreateCommand.getPlaceId();
+    public StudyRecordDto createStudyRecord(final StudyRecordCreateCommand command) {
+        final Long placeId = command.getPlaceId();
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
 
-        final StudyRecord savedStudyRecord = studyRecordRepository.save(studyRecordCreateCommand.toEntity(place.getName()));
+        final StudyRecord savedStudyRecord = studyRecordRepository.save(command.toEntity(place.getName()));
 
         return StudyRecordDto.from(savedStudyRecord);
     }
@@ -42,16 +42,20 @@ public class StudyRecordService {
         return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
     }
 
-    public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final String year, final String month) {
-        final String yearMonth = year + "." + month;
-        final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(memberId, yearMonth);
+    public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final int year,
+            final int month) {
+        final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(
+                memberId, year, month);
 
         return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
     }
 
     public List<PlaceDto> getMemberStudyPlaces(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
-        final List<Long> placeIds = studyRecords.stream().map(StudyRecord::getPlaceId).collect(Collectors.toList());
+        final List<Long> placeIds = studyRecords
+                .stream()
+                .map(StudyRecord::getPlaceId)
+                .collect(Collectors.toList());
 
         final List<Place> studyPlaces = placeRepository.findByIdIn(placeIds);
 

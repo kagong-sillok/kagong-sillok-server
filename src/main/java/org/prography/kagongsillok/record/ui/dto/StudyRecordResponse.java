@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.record.ui.dto;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ public class StudyRecordResponse {
 
     private Long id;
     private String placeName;
-    private String studyDay;
+    private LocalDate studyDay;
     private String description;
     private String duration;
     private List<Long> imageIds;
@@ -24,7 +25,7 @@ public class StudyRecordResponse {
     public StudyRecordResponse(
             final Long id,
             final String placeName,
-            final String studyDay,
+            final LocalDate studyDay,
             final String description,
             final String duration,
             final List<Long> imageIds,

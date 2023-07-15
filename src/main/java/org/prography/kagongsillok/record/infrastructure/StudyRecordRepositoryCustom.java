@@ -7,6 +7,6 @@ public interface StudyRecordRepositoryCustom {
 
     List<StudyRecord> findMemberRecordByMemberId(final Long memberId);
 
-    List<StudyRecord> findMemberRecordByMemberIdAndYearMonth(final Long memberId, final String yearMonth);
+    List<StudyRecord> findMemberRecordByMemberIdAndYearMonth(final Long memberId, final int year, final int month);
 
 }

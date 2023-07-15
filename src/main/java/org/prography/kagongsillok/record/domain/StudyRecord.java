@@ -18,11 +18,12 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDescription;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDuration;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyDate;
-import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyYearMonth;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyMonth;
+import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyYear;
 
 @Getter
 @Entity
-@Table(name = "record")
+@Table(name = "study_record")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyRecord extends AbstractRootEntity {
 
@@ -37,7 +38,10 @@ public class StudyRecord extends AbstractRootEntity {
     private String placeName;
 
     @Embedded
-    private StudyRecordStudyYearMonth studyYearMonth;
+    private StudyRecordStudyYear studyYear;
+
+    @Embedded
+    private StudyRecordStudyMonth studyMonth;
 
     @Embedded
     private StudyRecordStudyDate studyDate;
@@ -57,8 +61,9 @@ public class StudyRecord extends AbstractRootEntity {
             final Long memberId,
             final Long placeId,
             final String placeName,
-            final String studyYearMonth,
-            final String studyDate,
+            final int studyYear,
+            final int studyMonth,
+            final int studyDate,
             final String duration,
             final String description,
             final List<Long> imageIds
@@ -66,7 +71,8 @@ public class StudyRecord extends AbstractRootEntity {
         this.memberId = memberId;
         this.placeId = placeId;
         this.placeName = placeName;
-        this.studyYearMonth = StudyRecordStudyYearMonth.from(studyYearMonth);
+        this.studyYear = StudyRecordStudyYear.from(studyYear);
+        this.studyMonth = StudyRecordStudyMonth.from(studyMonth);
         this.studyDate = StudyRecordStudyDate.from(studyDate);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = StudyRecordDuration.from(duration);
@@ -78,11 +84,15 @@ public class StudyRecord extends AbstractRootEntity {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
     }
 
-    public String getStudyYearMonth() {
-        return studyYearMonth.getValue();
+    public int getStudyYear() {
+        return studyYear.getIntValue();
     }
 
-    public String getStudyDate() {
+    public int getStudyMonth() {
+        return studyMonth.getIntValue();
+    }
+
+    public int getStudyDate() {
         return studyDate.getValue();
     }
 

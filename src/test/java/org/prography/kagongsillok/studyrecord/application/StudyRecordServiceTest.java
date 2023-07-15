@@ -1,9 +1,9 @@
 package org.prography.kagongsillok.studyrecord.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -40,8 +40,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId)
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("03:30")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -51,7 +52,7 @@ public class StudyRecordServiceTest {
 
         assertAll(
                 () -> assertThat(studyRecordDto.getPlaceName()).isEqualTo(placeName),
-                () -> assertThat(studyRecordDto.getStudyDay()).isEqualTo("2023.07.10"),
+                () -> assertThat(studyRecordDto.getStudyDay()).isEqualTo(LocalDate.of(2023, 7, 10)),
                 () -> assertThat(studyRecordDto.getDuration()).isEqualTo("03:30"),
                 () -> assertThat(studyRecordDto.getDescription()).isEqualTo("모각코"),
                 () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(1L, 2L))
@@ -67,8 +68,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId1)
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("03:30")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -77,8 +79,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId2)
-                .studyYearMonth("2023.05")
-                .studyDate("15")
+                .studyYear(2023)
+                .studyMonth(5)
+                .studyDate(15)
                 .duration("05:15")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -93,7 +96,7 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDtos).extracting("placeName")
                         .containsAll(List.of("place1", "place2")),
                 () -> assertThat(studyRecordDtos).extracting("studyDay")
-                        .containsAll(List.of("2023.07.10", "2023.05.15")),
+                        .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 5, 15))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
                         .containsAll(List.of("03:30", "05:15"))
         );
@@ -108,8 +111,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId1)
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -118,8 +122,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId2)
-                .studyYearMonth("2023.07")
-                .studyDate("27")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(27)
                 .duration("05:15")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -128,14 +133,14 @@ public class StudyRecordServiceTest {
         studyRecordService.createStudyRecord(studyRecordCreateCommand2);
 
         final List<StudyRecordDto> studyRecordDtos = studyRecordService.getMemberStudyRecordsByYearMonth(memberId,
-                "2023", "07");
+                2023, 7);
 
         assertAll(
                 () -> assertThat(studyRecordDtos.size()).isEqualTo(2),
                 () -> assertThat(studyRecordDtos).extracting("placeName")
                         .containsAll(List.of("place1", "place2")),
                 () -> assertThat(studyRecordDtos).extracting("studyDay")
-                        .containsAll(List.of("2023.07.10", "2023.07.27")),
+                        .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 7, 27))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
                         .containsAll(List.of("03:30", "05:15")),
                 () -> assertThat(studyRecordDtos).extracting("description")
@@ -153,8 +158,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId1)
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -163,8 +169,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId2)
-                .studyYearMonth("2023.07")
-                .studyDate("27")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(27)
                 .duration("05:15")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -173,8 +180,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId3)
-                .studyYearMonth("2023.07")
-                .studyDate("27")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(27)
                 .duration("01:20")
                 .description("모각코3")
                 .imageIds(List.of(1L, 2L))
@@ -204,8 +212,9 @@ public class StudyRecordServiceTest {
                 .builder()
                 .memberId(memberId)
                 .placeId(placeId1)
-                .studyYearMonth("2023.07")
-                .studyDate("10")
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDate(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))

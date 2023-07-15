@@ -11,8 +11,8 @@ import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyDate;
 
 public class StudyRecordStudyDateTest {
     @ParameterizedTest
-    @ValueSource(strings = {"10", "26"})
-    void 공부한_일자를_생성한다(final String rawDate) {
+    @ValueSource(ints = {10, 26})
+    void 공부한_일자를_생성한다(final int rawDate) {
         final StudyRecordStudyDate studyRecordStudyDate = StudyRecordStudyDate.from(rawDate);
 
         assertThat(studyRecordStudyDate.getValue()).isEqualTo(rawDate);
@@ -20,13 +20,13 @@ public class StudyRecordStudyDateTest {
 
     @Test
     void 공부한_일자가_1보다_작으면_예외가_발생한다() {
-        assertThatThrownBy(() -> StudyRecordStudyDate.from("0"))
+        assertThatThrownBy(() -> StudyRecordStudyDate.from(0))
                 .isInstanceOf(InvalidStudyDateException.class);
     }
 
     @Test
     void 공부한_일자가_31보다_크면_예외가_발생한다() {
-        assertThatThrownBy(() -> StudyRecordStudyDate.from("32"))
+        assertThatThrownBy(() -> StudyRecordStudyDate.from(32))
                 .isInstanceOf(InvalidStudyDateException.class);
     }
 }
