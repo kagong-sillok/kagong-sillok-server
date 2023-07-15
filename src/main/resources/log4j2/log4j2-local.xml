@@ -1,0 +1,35 @@
+<Configuration>
+  <name>Default</name>
+  <status>info</status>
+  <Properties>
+    <Property>
+      <name>log-path</name>
+      <value>logs</value>
+    </Property>
+  </Properties>
+  <Appenders>
+    <Console>
+      <name>ConsoleAppender</name>
+      <target>SYSTEM_OUT</target>
+      <PatternLayout>
+        <pattern>%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{cyan} %highlight{[%-5p]}{FATAL=bg_red, ERROR=red, INFO=green, DEBUG=blue, TRACE=bg_yellow} %style{[%t]}{yellow} [%F{-3}] - %m%n</pattern>
+      </PatternLayout>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root>
+      <level>info</level>
+      <AppenderRef>
+        <ref>ConsoleAppender</ref>
+      </AppenderRef>
+    </Root>
+    <Logger>
+      <name>org.prography.kagongsillok</name>
+      <additivity>false</additivity>
+      <level>debug</level>
+      <AppenderRef>
+        <ref>ConsoleAppender</ref>
+      </AppenderRef>
+    </Logger>
+  </Loggers>
+</Configuration>
