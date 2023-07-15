@@ -103,4 +103,5 @@ public class StudyRecord extends AbstractRootEntity {
     public String getDescription() {
         return description.getValue();
     }
+
 }
