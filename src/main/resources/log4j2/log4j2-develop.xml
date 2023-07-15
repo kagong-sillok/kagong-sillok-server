@@ -1,0 +1,34 @@
+<Configuration packages="org.prography.kagongsillok.common.logging">
+  <name>Default</name>
+  <status>info</status>
+  <Properties>
+    <Property>
+      <name>log-path</name>
+      <value>logs</value>
+    </Property>
+  </Properties>
+  <Appenders>
+    <Slack name="SlackAppender" channel="#monitoring-dev" token="${env:SLACK_MONITORING_TOKEN}">
+    </Slack>
+    <Async>
+      <name>AsyncSlackAppender</name>
+      <AppenderRef>
+        <ref>SlackAppender</ref>
+      </AppenderRef>
+    </Async>
+  </Appenders>
+  <Loggers>
+    <Root>
+      <level>error</level>
+      <AppenderRef ref="AsyncSlackAppender" />
+    </Root>
+    <Logger>
+      <name>org.prography.kagongsillok</name>
+      <additivity>false</additivity>
+      <level>warn</level>
+      <AppenderRef>
+        <ref>AsyncSlackAppender</ref>
+      </AppenderRef>
+    </Logger>
+  </Loggers>
+</Configuration>
