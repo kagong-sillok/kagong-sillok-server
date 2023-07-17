@@ -34,8 +34,7 @@ public class StudyRecordRepositoryImpl implements StudyRecordRepositoryCustom {
                 .selectFrom(studyRecord)
                 .where(
                         studyRecord.memberId.eq(memberId),
-                        studyRecord.studyYear.value.eq(Year.of(year)),
-                        studyRecord.studyMonth.value.eq(Month.of(month)),
+                        checkYearAndMonth(year, month),
                         isNotDeleted()
                 )
                 .fetch();
@@ -43,5 +42,9 @@ public class StudyRecordRepositoryImpl implements StudyRecordRepositoryCustom {
 
     private BooleanExpression isNotDeleted() {
         return studyRecord.isDeleted.eq(Boolean.FALSE);
+    }
+
+    private BooleanExpression checkYearAndMonth(final int year, final int month) {
+        return studyRecord.studyDate.value.year().eq(year).and(studyRecord.studyDate.value.month().eq(month));
     }
 }

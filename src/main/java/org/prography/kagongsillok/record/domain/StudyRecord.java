@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.record.domain;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import javax.persistence.Embedded;
@@ -18,8 +19,6 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDescription;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordDuration;
 import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyDate;
-import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyMonth;
-import org.prography.kagongsillok.record.domain.vo.StudyRecordStudyYear;
 
 @Getter
 @Entity
@@ -36,12 +35,6 @@ public class StudyRecord extends AbstractRootEntity {
     private Long placeId;
 
     private String placeName;
-
-    @Embedded
-    private StudyRecordStudyYear studyYear;
-
-    @Embedded
-    private StudyRecordStudyMonth studyMonth;
 
     @Embedded
     private StudyRecordStudyDate studyDate;
@@ -63,7 +56,7 @@ public class StudyRecord extends AbstractRootEntity {
             final String placeName,
             final int studyYear,
             final int studyMonth,
-            final int studyDate,
+            final int studyDay,
             final String duration,
             final String description,
             final List<Long> imageIds
@@ -71,9 +64,7 @@ public class StudyRecord extends AbstractRootEntity {
         this.memberId = memberId;
         this.placeId = placeId;
         this.placeName = placeName;
-        this.studyYear = StudyRecordStudyYear.from(studyYear);
-        this.studyMonth = StudyRecordStudyMonth.from(studyMonth);
-        this.studyDate = StudyRecordStudyDate.from(studyDate);
+        this.studyDate = StudyRecordStudyDate.of(studyYear, studyMonth, studyDay);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.duration = StudyRecordDuration.from(duration);
         this.description = StudyRecordDescription.from(description);
@@ -84,15 +75,7 @@ public class StudyRecord extends AbstractRootEntity {
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
     }
 
-    public int getStudyYear() {
-        return studyYear.getIntValue();
-    }
-
-    public int getStudyMonth() {
-        return studyMonth.getIntValue();
-    }
-
-    public int getStudyDate() {
+    public LocalDate getStudyDate() {
         return studyDate.getValue();
     }
 

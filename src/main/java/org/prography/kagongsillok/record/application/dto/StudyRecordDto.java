@@ -18,7 +18,7 @@ public class StudyRecordDto {
 
     private Long id;
     private String placeName;
-    private LocalDate studyDay;
+    private LocalDate studyDate;
     private String description;
     private String duration;
     private List<Long> imageIds;
@@ -28,7 +28,7 @@ public class StudyRecordDto {
     public StudyRecordDto(
             final Long id,
             final String placeName,
-            final LocalDate studyDay,
+            final LocalDate studyDate,
             final String description,
             final String duration,
             final List<Long> imageIds,
@@ -36,7 +36,7 @@ public class StudyRecordDto {
     ) {
         this.id = id;
         this.placeName = placeName;
-        this.studyDay = studyDay;
+        this.studyDate = studyDate;
         this.description = description;
         this.duration = duration;
         this.imageIds = imageIds;
@@ -47,19 +47,11 @@ public class StudyRecordDto {
         return StudyRecordDto.builder()
                 .id(studyRecord.getId())
                 .placeName(studyRecord.getPlaceName())
-                .studyDay(getStudyDay(studyRecord))
+                .studyDate(studyRecord.getStudyDate())
                 .duration(studyRecord.getDuration())
                 .description(studyRecord.getDescription())
                 .imageIds(studyRecord.getImageIds())
                 .writtenAt(studyRecord.getWrittenAt())
                 .build();
-    }
-
-    private static LocalDate getStudyDay(final StudyRecord studyRecord) {
-        return LocalDate.of(
-                studyRecord.getStudyYear(),
-                studyRecord.getStudyMonth(),
-                studyRecord.getStudyDate()
-        );
     }
 }

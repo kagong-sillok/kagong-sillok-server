@@ -15,7 +15,7 @@ public class StudyRecordCreateRequest {
     private Long placeId;
     private int studyYear;
     private int studyMonth;
-    private int studyDate;
+    private int studyDay;
     private String duration;
     private String description;
     private List<Long> imageIds;
@@ -26,7 +26,7 @@ public class StudyRecordCreateRequest {
             final Long placeId,
             final int studyYear,
             final int studyMonth,
-            final int studyDate,
+            final int studyDay,
             final String duration,
             final String description,
             final List<Long> imageIds) {
@@ -34,7 +34,7 @@ public class StudyRecordCreateRequest {
         this.placeId = placeId;
         this.studyYear = studyYear;
         this.studyMonth = studyMonth;
-        this.studyDate = studyDate;
+        this.studyDay = studyDay;
         this.duration = duration;
         this.description = description;
         this.imageIds = imageIds;
@@ -46,7 +46,7 @@ public class StudyRecordCreateRequest {
                 .placeId(placeId)
                 .studyYear(studyYear)
                 .studyMonth(studyMonth)
-                .studyDate(studyDate)
+                .studyDay(studyDay)
                 .duration(duration)
                 .description(description)
                 .imageIds(imageIds)

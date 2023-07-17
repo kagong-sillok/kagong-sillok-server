@@ -15,7 +15,7 @@ public class StudyRecordResponse {
 
     private Long id;
     private String placeName;
-    private LocalDate studyDay;
+    private LocalDate studyDate;
     private String description;
     private String duration;
     private List<Long> imageIds;
@@ -25,7 +25,7 @@ public class StudyRecordResponse {
     public StudyRecordResponse(
             final Long id,
             final String placeName,
-            final LocalDate studyDay,
+            final LocalDate studyDate,
             final String description,
             final String duration,
             final List<Long> imageIds,
@@ -33,7 +33,7 @@ public class StudyRecordResponse {
     ) {
         this.id = id;
         this.placeName = placeName;
-        this.studyDay = studyDay;
+        this.studyDate = studyDate;
         this.description = description;
         this.duration = duration;
         this.imageIds = imageIds;
@@ -44,7 +44,7 @@ public class StudyRecordResponse {
         return StudyRecordResponse.builder()
                 .id(studyRecordDto.getId())
                 .placeName(studyRecordDto.getPlaceName())
-                .studyDay(studyRecordDto.getStudyDay())
+                .studyDate(studyRecordDto.getStudyDate())
                 .duration(studyRecordDto.getDuration())
                 .description(studyRecordDto.getDescription())
                 .imageIds(studyRecordDto.getImageIds())

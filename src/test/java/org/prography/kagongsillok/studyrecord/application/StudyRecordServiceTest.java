@@ -42,7 +42,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("03:30")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -52,7 +52,7 @@ public class StudyRecordServiceTest {
 
         assertAll(
                 () -> assertThat(studyRecordDto.getPlaceName()).isEqualTo(placeName),
-                () -> assertThat(studyRecordDto.getStudyDay()).isEqualTo(LocalDate.of(2023, 7, 10)),
+                () -> assertThat(studyRecordDto.getStudyDate()).isEqualTo(LocalDate.of(2023, 7, 10)),
                 () -> assertThat(studyRecordDto.getDuration()).isEqualTo("03:30"),
                 () -> assertThat(studyRecordDto.getDescription()).isEqualTo("모각코"),
                 () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(1L, 2L))
@@ -70,7 +70,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId1)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("03:30")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -81,7 +81,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId2)
                 .studyYear(2023)
                 .studyMonth(5)
-                .studyDate(15)
+                .studyDay(15)
                 .duration("05:15")
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
@@ -95,7 +95,7 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDtos.size()).isEqualTo(2),
                 () -> assertThat(studyRecordDtos).extracting("placeName")
                         .containsAll(List.of("place1", "place2")),
-                () -> assertThat(studyRecordDtos).extracting("studyDay")
+                () -> assertThat(studyRecordDtos).extracting("studyDate")
                         .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 5, 15))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
                         .containsAll(List.of("03:30", "05:15"))
@@ -113,7 +113,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId1)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -124,7 +124,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId2)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(27)
+                .studyDay(27)
                 .duration("05:15")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -139,7 +139,7 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDtos.size()).isEqualTo(2),
                 () -> assertThat(studyRecordDtos).extracting("placeName")
                         .containsAll(List.of("place1", "place2")),
-                () -> assertThat(studyRecordDtos).extracting("studyDay")
+                () -> assertThat(studyRecordDtos).extracting("studyDate")
                         .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 7, 27))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
                         .containsAll(List.of("03:30", "05:15")),
@@ -160,7 +160,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId1)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -171,7 +171,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId2)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(27)
+                .studyDay(27)
                 .duration("05:15")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -182,7 +182,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId3)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(27)
+                .studyDay(27)
                 .duration("01:20")
                 .description("모각코3")
                 .imageIds(List.of(1L, 2L))
@@ -214,7 +214,7 @@ public class StudyRecordServiceTest {
                 .placeId(placeId1)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("03:30")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))

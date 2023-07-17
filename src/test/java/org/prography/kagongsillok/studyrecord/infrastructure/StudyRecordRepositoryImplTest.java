@@ -3,6 +3,7 @@ package org.prography.kagongsillok.studyrecord.infrastructure;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.record.domain.StudyRecord;
@@ -33,7 +34,7 @@ public class StudyRecordRepositoryImplTest {
                 .placeName("place2")
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("10:00")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -45,7 +46,7 @@ public class StudyRecordRepositoryImplTest {
                 .placeName("place2")
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("10:00")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -57,7 +58,7 @@ public class StudyRecordRepositoryImplTest {
                 .placeName("place2")
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("10:00")
                 .description("모각코3")
                 .imageIds(List.of(1L, 2L))
@@ -74,6 +75,9 @@ public class StudyRecordRepositoryImplTest {
                         .containsAll(List.of(2L, 2L, 2L)),
                 () -> assertThat(studyRecords).extracting("placeName")
                         .containsAll(List.of("place2", "place2", "place2")),
+                () -> assertThat(studyRecords).extracting("studyDate")
+                        .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 7, 10),
+                                LocalDate.of(2023, 7, 10))),
                 () -> assertThat(studyRecords).extracting("duration")
                         .containsAll(List.of("10:00", "10:00", "10:00")),
                 () -> assertThat(studyRecords).extracting("description")
@@ -92,7 +96,7 @@ public class StudyRecordRepositoryImplTest {
                 .placeName("place2")
                 .studyYear(2022)
                 .studyMonth(6)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("10:00")
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
@@ -104,7 +108,7 @@ public class StudyRecordRepositoryImplTest {
                 .placeName("place2")
                 .studyYear(2022)
                 .studyMonth(6)
-                .studyDate(10)
+                .studyDay(10)
                 .duration("10:00")
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
@@ -121,6 +125,8 @@ public class StudyRecordRepositoryImplTest {
                         .containsAll(List.of(2L, 2L)),
                 () -> assertThat(studyRecords).extracting("placeName")
                         .containsAll(List.of("place2", "place2")),
+                () -> assertThat(studyRecords).extracting("studyDate")
+                        .containsAll(List.of(LocalDate.of(2022, 6, 10), LocalDate.of(2022, 6, 10))),
                 () -> assertThat(studyRecords).extracting("duration")
                         .containsAll(List.of("10:00", "10:00")),
                 () -> assertThat(studyRecords).extracting("description")

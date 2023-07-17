@@ -200,7 +200,7 @@ public class AcceptanceTestFixture {
                 .placeId(placeId)
                 .studyYear(2023)
                 .studyMonth(7)
-                .studyDate(6)
+                .studyDay(6)
                 .duration("00:50")
                 .description(description)
                 .imageIds(List.of(1L, 2L))

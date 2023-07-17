@@ -1,5 +1,8 @@
 package org.prography.kagongsillok.record.domain.vo;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.Year;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
@@ -12,32 +15,24 @@ import org.prography.kagongsillok.record.domain.exception.InvalidStudyDateExcept
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyRecordStudyDate {
 
-    private static final int MAX_DATE = 31;
-    private static final int MIN_DATE = 1;
-
     @Column(name = "study_date")
-    private int value;
+    private LocalDate value;
 
-    private StudyRecordStudyDate(final int value) {
+    private StudyRecordStudyDate(final LocalDate value) {
         this.value = value;
     }
 
-    public static StudyRecordStudyDate from(final int value) {
-        validateValue(value);
-        return new StudyRecordStudyDate(value);
+    public static StudyRecordStudyDate of(final int year, final int month, final int day) {
+        return new StudyRecordStudyDate(validateValue(year, month, day));
     }
 
-    private static void validateValue(final int value) {
-        if (isUnderMinDate(value) || isOverMaxDate(value)) {
-            throw new InvalidStudyDateException(value);
+    private static LocalDate validateValue(final int year, final int month, final int day) {
+        LocalDate studyDate;
+        try {
+            studyDate = LocalDate.of(year, month, day);
+        } catch (DateTimeException e) {
+            throw new InvalidStudyDateException(year, month, day);
         }
-    }
-
-    private static boolean isUnderMinDate(final int value) {
-        return value < MIN_DATE;
-    }
-
-    private static boolean isOverMaxDate(final int value) {
-        return value > MAX_DATE;
+        return studyDate;
     }
 }
