@@ -16,7 +16,7 @@ public class StudyRecordCreateCommand {
     private int studyYear;
     private int studyMonth;
     private int studyDay;
-    private String duration;
+    private int duration;
     private String description;
     private List<Long> imageIds;
 
@@ -27,7 +27,7 @@ public class StudyRecordCreateCommand {
             final int studyYear,
             final int studyMonth,
             final int studyDay,
-            final String duration,
+            final int duration,
             final String description,
             final List<Long> imageIds
     ) {

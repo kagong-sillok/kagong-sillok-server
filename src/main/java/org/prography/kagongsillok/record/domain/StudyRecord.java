@@ -57,7 +57,7 @@ public class StudyRecord extends AbstractRootEntity {
             final int studyYear,
             final int studyMonth,
             final int studyDay,
-            final String duration,
+            final int duration,
             final String description,
             final List<Long> imageIds
     ) {
@@ -79,7 +79,7 @@ public class StudyRecord extends AbstractRootEntity {
         return studyDate.getValue();
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration.getValue();
     }
 

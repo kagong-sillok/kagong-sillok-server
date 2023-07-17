@@ -201,7 +201,7 @@ public class AcceptanceTestFixture {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(6)
-                .duration("00:50")
+                .duration(50)
                 .description(description)
                 .imageIds(List.of(1L, 2L))
                 .build();

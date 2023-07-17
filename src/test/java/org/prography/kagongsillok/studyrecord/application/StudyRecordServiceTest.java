@@ -43,7 +43,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(10)
-                .duration("03:30")
+                .duration(100)
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -53,7 +53,7 @@ public class StudyRecordServiceTest {
         assertAll(
                 () -> assertThat(studyRecordDto.getPlaceName()).isEqualTo(placeName),
                 () -> assertThat(studyRecordDto.getStudyDate()).isEqualTo(LocalDate.of(2023, 7, 10)),
-                () -> assertThat(studyRecordDto.getDuration()).isEqualTo("03:30"),
+                () -> assertThat(studyRecordDto.getDuration()).isEqualTo(100),
                 () -> assertThat(studyRecordDto.getDescription()).isEqualTo("모각코"),
                 () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(1L, 2L))
         );
@@ -71,7 +71,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(10)
-                .duration("03:30")
+                .duration(100)
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -82,7 +82,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(5)
                 .studyDay(15)
-                .duration("05:15")
+                .duration(120)
                 .description("모각코")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -98,7 +98,7 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDtos).extracting("studyDate")
                         .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 5, 15))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
-                        .containsAll(List.of("03:30", "05:15"))
+                        .containsAll(List.of(100, 120))
         );
     }
 
@@ -114,7 +114,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(10)
-                .duration("03:30")
+                .duration(30)
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -125,7 +125,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(27)
-                .duration("05:15")
+                .duration(150)
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -142,7 +142,7 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDtos).extracting("studyDate")
                         .containsAll(List.of(LocalDate.of(2023, 7, 10), LocalDate.of(2023, 7, 27))),
                 () -> assertThat(studyRecordDtos).extracting("duration")
-                        .containsAll(List.of("03:30", "05:15")),
+                        .containsAll(List.of(30, 150)),
                 () -> assertThat(studyRecordDtos).extracting("description")
                         .containsAll(List.of("모각코1", "모각코2"))
         );
@@ -161,7 +161,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(10)
-                .duration("03:30")
+                .duration(111)
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -172,7 +172,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(27)
-                .duration("05:15")
+                .duration(195)
                 .description("모각코2")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -183,7 +183,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(27)
-                .duration("01:20")
+                .duration(200)
                 .description("모각코3")
                 .imageIds(List.of(1L, 2L))
                 .build();
@@ -215,7 +215,7 @@ public class StudyRecordServiceTest {
                 .studyYear(2023)
                 .studyMonth(7)
                 .studyDay(10)
-                .duration("03:30")
+                .duration(123)
                 .description("모각코1")
                 .imageIds(List.of(1L, 2L))
                 .build();

@@ -17,7 +17,7 @@ public class StudyRecordResponse {
     private String placeName;
     private LocalDate studyDate;
     private String description;
-    private String duration;
+    private int duration;
     private List<Long> imageIds;
     private ZonedDateTime writtenAt;
 
@@ -27,7 +27,7 @@ public class StudyRecordResponse {
             final String placeName,
             final LocalDate studyDate,
             final String description,
-            final String duration,
+            final int duration,
             final List<Long> imageIds,
             final ZonedDateTime writtenAt
     ) {
