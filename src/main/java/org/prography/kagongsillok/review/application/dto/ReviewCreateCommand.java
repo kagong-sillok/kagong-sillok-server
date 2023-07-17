@@ -38,10 +38,11 @@ public class ReviewCreateCommand {
         this.reviewTagIds = reviewTagIds;
     }
 
-    public Review toEntity(final Map<Long, ReviewTag> reviewTags) {
+    public Review toEntity(final String memberNickName, final Map<Long, ReviewTag> reviewTags) {
         return Review.builder()
                 .memberId(memberId)
                 .placeId(placeId)
+                .memberNickName(memberNickName)
                 .rating(rating)
                 .content(content)
                 .imageIds(imageIds)

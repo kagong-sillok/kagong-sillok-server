@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
+import org.prography.kagongsillok.member.domain.Member;
+import org.prography.kagongsillok.member.domain.MemberRepository;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
@@ -23,12 +26,18 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewTagRepository reviewTagRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public ReviewDto createReview(final ReviewCreateCommand reviewCreateCommand) {
         final Map<Long, ReviewTag> reviewTagIds
                 = reviewTagRepository.findByPerId(reviewCreateCommand.getReviewTagIds());
-        final Review review = reviewCreateCommand.toEntity(reviewTagIds);
+
+        final Long memberId = reviewCreateCommand.getMemberId();
+
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundMemberException(memberId));
+        final Review review = reviewCreateCommand.toEntity(member.getNickname(), reviewTagIds);
 
         final Review savedReview = reviewRepository.save(review);
 
