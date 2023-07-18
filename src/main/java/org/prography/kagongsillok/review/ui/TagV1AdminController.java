@@ -19,22 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/tags")
-public class TagV1Controller {
+@RequestMapping("/admin/v1/tags")
+public class TagV1AdminController {
 
     private final ReviewTagService reviewTagService;
 
-    @GetMapping("/{ids}")
-    public ResponseEntity<CommonResponse<ReviewTagListResponse>> getTags(
-            @PathVariable("ids") final List<Long> ids
+    @PostMapping
+    public ResponseEntity<CommonResponse<ReviewTagResponse>> createTag(
+            @RequestBody final ReviewTagCreateRequest reviewTagCreateRequest
     ) {
-        final List<ReviewTagDto> reviewTagDtos = reviewTagService.getTags(ids);
-        return CommonResponse.success(ReviewTagListResponse.from(reviewTagDtos));
+        final ReviewTagDto createdTag = reviewTagService.createTag(reviewTagCreateRequest.toCommand());
+        return CommonResponse.success(ReviewTagResponse.from(createdTag));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<CommonResponse<ReviewTagListResponse>> getAllTags() {
-        final List<ReviewTagDto> reviewTagDtos = reviewTagService.getAllTags();
-        return CommonResponse.success(ReviewTagListResponse.from(reviewTagDtos));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable("id") final Long id) {
+        reviewTagService.deleteTag(id);
+        return ResponseEntity.ok().build();
     }
 }
