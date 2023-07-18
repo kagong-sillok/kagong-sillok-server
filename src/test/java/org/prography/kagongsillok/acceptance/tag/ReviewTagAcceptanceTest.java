@@ -13,6 +13,7 @@ import org.prography.kagongsillok.review.ui.dto.ReviewTagResponse;
 
 public class ReviewTagAcceptanceTest extends AcceptanceTest {
 
+    private static final String TAG_ADMIN_BASE_URL_V1 = "/admin/v1/tags";
     private static final String TAG_API_BASE_URL_V1 = "/api/v1/tags";
 
     @Test
@@ -76,7 +77,7 @@ public class ReviewTagAcceptanceTest extends AcceptanceTest {
     }
 
     private int 태그_삭제_응답_요청(final Long 생성된_태그_응답) {
-        return delete(TAG_API_BASE_URL_V1 + "/" + 생성된_태그_응답).statusCode();
+        return delete(TAG_ADMIN_BASE_URL_V1 + "/" + 생성된_태그_응답).statusCode();
     }
 
     private static void 모든_태그_조회_검증(final ReviewTagListResponse 모든_태그_조회_응답) {
@@ -115,6 +116,6 @@ public class ReviewTagAcceptanceTest extends AcceptanceTest {
     }
 
     private ReviewTagResponse 태그_생성_요청(final ReviewTagCreateRequest 태그_생성_요청_바디) {
-        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
+        return 응답_바디_추출(post(TAG_ADMIN_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 }

@@ -22,7 +22,7 @@ import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
 public class ReviewAcceptanceTest extends AcceptanceTest {
 
     private static final String REVIEW_API_BASE_URL_V1 = "/api/v1/reviews";
-    private static final String TAG_API_BASE_URL_V1 = "/api/v1/tags";
+    private static final String TAG_ADMIN_BASE_URL_V1 = "/admin/v1/tags";
     private static final String AUTH_API_BASE_URL_V1 = "/api/v1/auth";
 
     @Test
@@ -127,7 +127,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
     }
 
     private ReviewTagResponse 태그_생성_요청(final ReviewTagCreateRequest 태그_생성_요청_바디) {
-        return 응답_바디_추출(post(TAG_API_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
+        return 응답_바디_추출(post(TAG_ADMIN_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 
     private static void 멤버_id로_생성한_리뷰_조회_검증(
