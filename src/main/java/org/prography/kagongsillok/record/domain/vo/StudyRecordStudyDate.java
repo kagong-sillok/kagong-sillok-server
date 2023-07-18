@@ -27,12 +27,10 @@ public class StudyRecordStudyDate {
     }
 
     private static LocalDate validateValue(final int year, final int month, final int day) {
-        LocalDate studyDate;
         try {
-            studyDate = LocalDate.of(year, month, day);
+            return LocalDate.of(year, month, day);
         } catch (DateTimeException e) {
             throw new InvalidStudyDateException(year, month, day);
         }
-        return studyDate;
     }
 }
