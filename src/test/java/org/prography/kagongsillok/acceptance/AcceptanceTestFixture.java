@@ -17,6 +17,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest.LinkCreateRequ
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.BusinessHourUpdateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest.LinkUpdateRequest;
+import org.prography.kagongsillok.record.ui.dto.StudyRecordCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewTagCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
@@ -190,5 +191,19 @@ public class AcceptanceTestFixture {
 
     public static KakaoLoginRequest 카카오_로그인_요청_바디(final String authorizationCode, final String redirectUri) {
         return new KakaoLoginRequest(authorizationCode, redirectUri);
+    }
+
+    public static StudyRecordCreateRequest 공부_기록_생성_요청_바디(final Long memberId, final Long placeId,
+            final String description) {
+        return StudyRecordCreateRequest.builder()
+                .memberId(memberId)
+                .placeId(placeId)
+                .studyYear(2023)
+                .studyMonth(7)
+                .studyDay(6)
+                .duration(50)
+                .description(description)
+                .imageIds(List.of(1L, 2L))
+                .build();
     }
 }
