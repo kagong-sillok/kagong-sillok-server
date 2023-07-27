@@ -30,7 +30,7 @@ public class AuthService {
         final Member savedMember = memberRepository.save(command.toMemberEntity());
         final LocalAccount savedLocalAccount = saveLocalAccount(command, savedMember);
 
-        return MemberDto.from(savedMember);
+        return MemberDto.from(savedMember, 0);
     }
 
     private LocalAccount saveLocalAccount(final LocalJoinCommand command, final Member member) {

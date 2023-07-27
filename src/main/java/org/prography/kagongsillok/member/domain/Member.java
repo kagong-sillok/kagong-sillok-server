@@ -59,4 +59,8 @@ public class Member extends AbstractRootEntity {
     public String getNickname() {
         return nickname.getValue();
     }
+
+    public int getLoginCount() {
+        return loginHistory.getLoginCount();
+    }
 }
