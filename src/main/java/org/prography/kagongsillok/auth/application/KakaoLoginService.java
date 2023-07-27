@@ -51,7 +51,11 @@ public class KakaoLoginService {
                     final Member savedMember = saveKakaoMember(kakaoUser, Role.MEMBER);
                     return saveKakaoAccount(kakaoUser, savedMember);
                 });
-        return loginManager.loginMember(kakaoAccount.getMember());
+
+        final Member member = kakaoAccount.getMember();
+        member.loginHistoryUpdate();
+
+        return loginManager.loginMember(member);
     }
 
     private String getKakaoAccessToken(final String authorizationCode, final String redirectUri) {

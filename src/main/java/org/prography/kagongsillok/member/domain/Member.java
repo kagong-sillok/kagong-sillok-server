@@ -63,4 +63,8 @@ public class Member extends AbstractRootEntity {
     public int getLoginCount() {
         return loginHistory.getLoginCount();
     }
+
+    public void loginHistoryUpdate() {
+        loginHistory.loginHistoryUpdate();
+    }
 }

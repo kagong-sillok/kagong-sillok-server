@@ -50,6 +50,8 @@ public class AuthService {
         matchPassword(planePassword, localAccount);
 
         final Member member = localAccount.getMember();
+        member.loginHistoryUpdate();
+
         return loginManager.loginMember(member);
     }
 

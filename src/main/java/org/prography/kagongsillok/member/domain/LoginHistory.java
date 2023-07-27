@@ -14,13 +14,13 @@ public class LoginHistory {
     private LocalDate latestLoginDate;
     private int loginCount;
 
-    private LoginHistory(final LocalDate latestLoginDate, final int loginCount) {
+    private LoginHistory(final LocalDate latestLoginDate) {
         this.latestLoginDate = latestLoginDate;
-        this.loginCount = loginCount;
+        this.loginCount = 0;
     }
 
     public static LoginHistory from() {
-        return new LoginHistory(LocalDate.now(), 1);
+        return new LoginHistory(LocalDate.now());
     }
 
     public void loginHistoryUpdate() {
