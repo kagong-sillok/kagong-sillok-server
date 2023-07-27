@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.member.domain;
 
+import java.time.LocalDate;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,12 +12,13 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 
 @Getter
 @Entity
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +30,26 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean isDeleted = Boolean.FALSE;
+
+    private String profileImage;
+
+    @Embedded
+    private LoginHistory loginHistory;
 
     public Member(final String nickname, final String email, final Role role) {
         this.nickname = Nickname.from(nickname);
         this.email = Email.from(email);
         this.role = role;
+        this.profileImage = null;
+        this.loginHistory = LoginHistory.from();
     }
 
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
+    public Member(final String nickname, final String email, final Role role, String profileImage) {
+        this.nickname = Nickname.from(nickname);
+        this.email = Email.from(email);
+        this.role = role;
+        this.profileImage = profileImage;
+        this.loginHistory = LoginHistory.from();
     }
 
     public String getEmail() {

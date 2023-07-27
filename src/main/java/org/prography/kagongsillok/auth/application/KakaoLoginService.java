@@ -64,7 +64,7 @@ public class KakaoLoginService {
     }
 
     private Member saveKakaoMember(final KakaoUserInfo kakaoUser, final Role role) {
-        final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), role);
+        final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), role, kakaoUser.getProfileImageUrl());
         return memberRepository.save(member);
     }
 
