@@ -3,6 +3,7 @@ package org.prography.kagongsillok.member.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 class MemberTest {
@@ -15,6 +16,9 @@ class MemberTest {
                 () -> assertThat(member.getNickname()).isEqualTo("닉네임"),
                 () -> assertThat(member.getEmail()).isEqualTo("test@test.com"),
                 () -> assertThat(member.getRole()).isSameAs(Role.MEMBER),
+                () -> assertThat(member.getProfileImage()).isNull(),
+                () -> assertThat(member.getLoginHistory().getLatestLoginDate()).isEqualTo(LocalDate.now()),
+                () -> assertThat(member.getLoginCount()).isEqualTo(0),
                 () -> assertThat(member.getIsDeleted()).isFalse()
         );
     }
