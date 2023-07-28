@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.기본_닉네임_이메일_가입_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰_수정_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_리뷰_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
@@ -111,7 +112,6 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final Long 생성된_태그4_id = 태그_생성_요청(태그_생성_요청_바디4).getId();
         final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_id, 생성된_태그4_id);
-//        final var memberId = 1L;
         final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1);
         final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2);
         리뷰_생성_요청(리뷰_생성_요청_바디1);
@@ -120,6 +120,31 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 멤버_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(생성된_멤버_id);
 
         멤버_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2);
+    }
+
+    @Test
+    void 장소_id로_생성한_리뷰들을_조회한다() {
+        final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
+        final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 태그_생성_요청_바디3 = 태그_생성_요청_바디("#tag3", "test tag3");
+        final var 태그_생성_요청_바디4 = 태그_생성_요청_바디("#tag4", "test tag4");
+        final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 생성된_태그3_id = 태그_생성_요청(태그_생성_요청_바디3).getId();
+        final var 생성된_태그4_id = 태그_생성_요청(태그_생성_요청_바디4).getId();
+        final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
+        final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_id, 생성된_태그4_id);
+        final var 장소_id = 1L;
+        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1, 장소_id);
+        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2, 장소_id);
+        리뷰_생성_요청(리뷰_생성_요청_바디1);
+        리뷰_생성_요청(리뷰_생성_요청_바디2);
+
+        final var 장소_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(장소_id);
+
+        장소_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 장소_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2, 장소_id);
     }
 
     private MemberResponse 멤버_생성_요청(final LocalJoinRequest 멤버_생성_요청_바디) {
@@ -149,8 +174,34 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         );
     }
 
+    private static void 장소_id로_생성한_리뷰_조회_검증(
+            final Long memberId,
+            final ReviewListResponse 장소_id로_리뷰_조회_요청,
+            final List<Long> 입력_태그1,
+            final List<Long> 입력_태그2,
+            final Long 장소_id
+    ) {
+        assertAll(
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews().size()).isEqualTo(2),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("memberId")
+                        .containsAll(List.of(memberId, memberId)),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("content")
+                        .containsAll(List.of("test review1", "test review2")),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("tagIds")
+                        .containsAll(List.of(입력_태그1, 입력_태그2)),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("memberNickName")
+                        .containsAll(List.of("닉네임", "닉네임")),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("placeId")
+                        .containsAll(List.of(장소_id, 장소_id))
+        );
+    }
+
     private ReviewListResponse 멤버_id로_리뷰_조회_요청(final Long memberId) {
         return 응답_바디_추출(get(REVIEW_API_BASE_URL_V1 + "/member/" + memberId), ReviewListResponse.class);
+    }
+
+    private ReviewListResponse 장소_id로_리뷰_조회_요청(final Long placeId) {
+        return 응답_바디_추출(get(REVIEW_API_BASE_URL_V1 + "/place/" + placeId), ReviewListResponse.class);
     }
 
     private static void 리뷰_삭제_검증(final int 리뷰_삭제_응답, final int 삭제후_리뷰_조회_응답코드) {

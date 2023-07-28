@@ -157,6 +157,23 @@ public class AcceptanceTestFixture {
                 .build();
     }
 
+    public static ReviewCreateRequest 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(
+            final Long memberId,
+            final String content,
+            final List<Long> tagIds,
+            final Long placeId
+    ) {
+        return ReviewCreateRequest
+                .builder()
+                .rating(5)
+                .memberId(memberId)
+                .placeId(placeId)
+                .content(content)
+                .imageIds(List.of(1L, 2L))
+                .reviewTagIds(tagIds)
+                .build();
+    }
+
     public static ReviewUpdateRequest 리뷰_수정_요청_바디(
             final Long id,
             final int rating,

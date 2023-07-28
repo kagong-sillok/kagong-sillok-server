@@ -60,6 +60,12 @@ public class ReviewService {
         return CustomListUtils.mapTo(reviews, ReviewDto::from);
     }
 
+    public List<ReviewDto> getAllReviewsByPlaceId(final Long placeId) {
+        final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
+
+        return CustomListUtils.mapTo(reviews, ReviewDto::from);
+    }
+
     @Transactional
     public ReviewDto updateReview(final Long id, final ReviewUpdateCommand reviewUpdateCommand) {
         final Review review = reviewRepository.findById(id)
