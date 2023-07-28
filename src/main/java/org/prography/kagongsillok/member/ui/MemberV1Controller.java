@@ -2,6 +2,7 @@ package org.prography.kagongsillok.member.ui;
 
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.resolver.dto.AccessTokenDto;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.member.application.MemberService;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
@@ -19,11 +20,8 @@ public class MemberV1Controller {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<MemberResponse>> getMember(
-            HttpServletRequest request
-    ) {
-        String accessToken = getAccessToken(request.getHeader("accessToken"));
-        final MemberDto memberDto = memberService.getMember(accessToken);
+    public ResponseEntity<CommonResponse<MemberResponse>> getMember(AccessTokenDto accessTokenDto) {
+        final MemberDto memberDto = memberService.getMember(accessTokenDto.getAccessToken());
         return CommonResponse.success(MemberResponse.from(memberDto));
     }
 

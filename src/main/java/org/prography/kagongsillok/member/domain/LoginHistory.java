@@ -16,7 +16,7 @@ public class LoginHistory {
 
     private LoginHistory(final LocalDate latestLoginDate) {
         this.latestLoginDate = latestLoginDate;
-        this.loginCount = 0;
+        this.loginCount = 1;
     }
 
     public static LoginHistory from() {
