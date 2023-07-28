@@ -3,6 +3,7 @@ package org.prography.kagongsillok.acceptance.image;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.넓이_100_높이_200_jpeg_이미지_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_생성_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,27 @@ public class ImageAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    void 이미지를_여러개_등록한다() {
+        final var 이미지_두개_생성_요청_바디 = 이미지_두개_생성_요청_바디("testImageUrl1", "testImageUrl2");
+
+        final var 생성된_이미지들_응답 = 이미지_여러개_생성_요청(이미지_두개_생성_요청_바디);
+
+        생성된_이미지_여러개_검증(생성된_이미지들_응답);
+    }
+
+    private static void 생성된_이미지_여러개_검증(final List<ImageResponse> 생성된_이미지들_응답) {
+        assertAll(
+                () -> assertThat(생성된_이미지들_응답.size()).isEqualTo(2),
+                () -> assertThat(생성된_이미지들_응답).extracting("url")
+                        .containsAll(List.of("testImageUrl1", "testImageUrl2")),
+                () -> assertThat(생성된_이미지들_응답).extracting("width")
+                        .containsAll(List.of(100, 100)),
+                () -> assertThat(생성된_이미지들_응답).extracting("height")
+                        .containsAll(List.of(200, 200))
+        );
+    }
+
+    @Test
     void 이미지_id_로_이미지_목록을_조회한다() {
         final var 이미지1_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl1");
         final var 이미지2_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl2");
@@ -41,6 +63,10 @@ public class ImageAcceptanceTest extends AcceptanceTest {
 
     private ImageResponse 이미지_생성_요청(final ImageCreateRequest 이미지_생성_요청_바디) {
         return 응답_바디_추출(post(IMAGE_API_BASE_URL_V1, 이미지_생성_요청_바디), ImageResponse.class);
+    }
+
+    private List<ImageResponse> 이미지_여러개_생성_요청(final List<ImageCreateRequest> 이미지_두개_생성_요청_바디) {
+        return 응답_바디_추출(post(IMAGE_API_BASE_URL_V1 + "/images", 이미지_두개_생성_요청_바디), ImageListResponse.class).getImages();
     }
 
     private List<ImageResponse> 이미지_목록_조회(final Long 이미지_id1, final Long 이미지_id2, final Long 이미지_id3) {

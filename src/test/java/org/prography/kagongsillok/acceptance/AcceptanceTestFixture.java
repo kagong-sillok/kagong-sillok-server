@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.acceptance;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,24 @@ public class AcceptanceTestFixture {
                 .height(200)
                 .extension("jpeg")
                 .build();
+    }
+
+    public static List<ImageCreateRequest> 이미지_두개_생성_요청_바디(final String url1, final String url2) {
+        final ImageCreateRequest imageCreateRequest1 = ImageCreateRequest
+                .builder()
+                .url(url1)
+                .width(100)
+                .height(200)
+                .extension("jpeg")
+                .build();
+        final ImageCreateRequest imageCreateRequest2 = ImageCreateRequest
+                .builder()
+                .url(url2)
+                .width(100)
+                .height(200)
+                .extension("jpeg")
+                .build();
+        return new ArrayList<>(List.of(imageCreateRequest1, imageCreateRequest2));
     }
 
     public static PlaceCreateRequest 이미지_세개_링크_두개_장소_생성_요청_바디(

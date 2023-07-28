@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.image.application.ImageServiceTestFixture.squareSize100jpegImageCreateCommand;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.image.application.dto.ImageCreateCommand;
@@ -35,6 +36,44 @@ class ImageServiceTest {
                 () -> assertThat(imageDto.getHeight()).isEqualTo(100),
                 () -> assertThat(imageDto.getWidth()).isEqualTo(100),
                 () -> assertThat(imageDto.getExtension()).isEqualTo("jpeg")
+        );
+    }
+
+    @Test
+    void 이미지를_여러개_생성한다() {
+        final ImageCreateCommand imageCreateCommand1 = ImageCreateCommand.builder()
+                .url("testImageUrl1")
+                .width(100)
+                .height(100)
+                .extension("jpeg")
+                .build();
+        final ImageCreateCommand imageCreateCommand2 = ImageCreateCommand.builder()
+                .url("testImageUrl2")
+                .width(200)
+                .height(200)
+                .extension("jpeg")
+                .build();
+        final ImageCreateCommand imageCreateCommand3 = ImageCreateCommand.builder()
+                .url("testImageUrl3")
+                .width(300)
+                .height(300)
+                .extension("jpeg")
+                .build();
+        final List<ImageCreateCommand> imageCreateCommands = new ArrayList<>();
+        imageCreateCommands.add(imageCreateCommand1);
+        imageCreateCommands.add(imageCreateCommand2);
+        imageCreateCommands.add(imageCreateCommand3);
+
+        final List<ImageDto> imageDtos = imageService.createImages(imageCreateCommands);
+
+        assertAll(
+                () -> assertThat(imageDtos.size()).isEqualTo(3),
+                () -> assertThat(imageDtos).extracting("url")
+                        .containsAll(List.of("testImageUrl1", "testImageUrl2", "testImageUrl3")),
+                () -> assertThat(imageDtos).extracting("width")
+                        .containsAll(List.of(100, 200, 300)),
+                () -> assertThat(imageDtos).extracting("height")
+                        .containsAll(List.of(100, 200, 300))
         );
     }
 
