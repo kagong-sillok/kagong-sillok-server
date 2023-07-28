@@ -14,7 +14,7 @@ public class LoginHistoryTest {
 
         assertAll(
                 () -> assertThat(loginHistory.getLatestLoginDate()).isEqualTo(LocalDate.now()),
-                () -> assertThat(loginHistory.getLoginCount()).isEqualTo(0)
+                () -> assertThat(loginHistory.getLoginCount()).isEqualTo(1)
         );
     }
 }

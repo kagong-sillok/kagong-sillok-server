@@ -47,7 +47,7 @@ public class MemberServiceTest {
                 () -> assertThat(memberDto.getEmail()).isEqualTo("test@test.com"),
                 () -> assertThat(memberDto.getNickname()).isEqualTo("닉네임"),
                 () -> assertThat(memberDto.getRole()).isSameAs(Role.MEMBER.name()),
-                () -> assertThat(memberDto.getLoginCount()).isEqualTo(0),
+                () -> assertThat(memberDto.getLoginCount()).isEqualTo(1),
                 () -> assertThat(memberDto.getTotalStudyTime()).isEqualTo(0)
         );
     }

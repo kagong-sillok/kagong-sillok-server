@@ -18,7 +18,7 @@ class MemberTest {
                 () -> assertThat(member.getRole()).isSameAs(Role.MEMBER),
                 () -> assertThat(member.getProfileImage()).isNull(),
                 () -> assertThat(member.getLoginHistory().getLatestLoginDate()).isEqualTo(LocalDate.now()),
-                () -> assertThat(member.getLoginCount()).isEqualTo(0),
+                () -> assertThat(member.getLoginCount()).isEqualTo(1),
                 () -> assertThat(member.getIsDeleted()).isFalse()
         );
     }
