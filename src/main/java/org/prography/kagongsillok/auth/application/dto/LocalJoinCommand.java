@@ -33,6 +33,11 @@ public class LocalJoinCommand {
     }
 
     public Member toMemberEntity() {
-        return new Member(nickname, email, Role.valueOf(role));
+        return Member.builder()
+                .nickname(nickname)
+                .email(email)
+                .role(Role.valueOf(role))
+                .profileImageUrl(null)
+                .build();
     }
 }

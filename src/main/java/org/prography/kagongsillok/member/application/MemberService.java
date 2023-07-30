@@ -35,6 +35,9 @@ public class MemberService {
     }
 
     private int calculateTotalStudyTime(final List<StudyRecord> studyRecords) {
-        return studyRecords.stream().mapToInt(studyRecord -> studyRecord.getDuration()).sum();
+        return studyRecords
+                .stream()
+                .mapToInt(StudyRecord::getDuration)
+                .sum();
     }
 }

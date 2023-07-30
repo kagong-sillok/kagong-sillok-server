@@ -10,13 +10,17 @@ class MemberTest {
 
     @Test
     void 회원들_생성한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
 
         assertAll(
                 () -> assertThat(member.getNickname()).isEqualTo("닉네임"),
                 () -> assertThat(member.getEmail()).isEqualTo("test@test.com"),
                 () -> assertThat(member.getRole()).isSameAs(Role.MEMBER),
-                () -> assertThat(member.getProfileImage()).isNull(),
+                () -> assertThat(member.getProfileImageUrl()).isNull(),
                 () -> assertThat(member.getLoginHistory().getLatestLoginDate()).isEqualTo(LocalDate.now()),
                 () -> assertThat(member.getLoginCount()).isEqualTo(1),
                 () -> assertThat(member.getIsDeleted()).isFalse()
@@ -25,7 +29,11 @@ class MemberTest {
 
     @Test
     void 회원을_삭제한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
 
         member.delete();
 

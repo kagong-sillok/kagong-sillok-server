@@ -256,7 +256,11 @@ public class ReviewServiceTest {
     }
 
     private Long saveMemberAndGetMemberId() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         return memberRepository.save(member).getId();
     }
 }

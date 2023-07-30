@@ -19,18 +19,18 @@ public class LoginHistory {
         this.loginCount = 1;
     }
 
-    public static LoginHistory from() {
+    public static LoginHistory init() {
         return new LoginHistory(LocalDate.now());
     }
 
     public void loginHistoryUpdate() {
-        if (checkDate()) {
+        if (checkBeforeDate()) {
             latestLoginDate = LocalDate.now();
-            loginCount += 1;
+            loginCount++;
         }
     }
 
-    private boolean checkDate() {
+    private boolean checkBeforeDate() {
         return latestLoginDate.isBefore(LocalDate.now());
     }
 }

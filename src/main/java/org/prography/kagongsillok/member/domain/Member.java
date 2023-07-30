@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.member.domain;
 
-import java.time.LocalDate;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
@@ -31,25 +31,18 @@ public class Member extends AbstractRootEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String profileImage;
+    private String profileImageUrl;
 
     @Embedded
     private LoginHistory loginHistory;
 
-    public Member(final String nickname, final String email, final Role role) {
+    @Builder
+    public Member(final String nickname, final String email, final Role role, String profileImageUrl) {
         this.nickname = Nickname.from(nickname);
         this.email = Email.from(email);
         this.role = role;
-        this.profileImage = null;
-        this.loginHistory = LoginHistory.from();
-    }
-
-    public Member(final String nickname, final String email, final Role role, String profileImage) {
-        this.nickname = Nickname.from(nickname);
-        this.email = Email.from(email);
-        this.role = role;
-        this.profileImage = profileImage;
-        this.loginHistory = LoginHistory.from();
+        this.profileImageUrl = profileImageUrl;
+        this.loginHistory = LoginHistory.init();
     }
 
     public String getEmail() {

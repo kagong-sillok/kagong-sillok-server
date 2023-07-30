@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.member.ui;
 
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.resolver.dto.AccessTokenDto;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
@@ -23,9 +22,5 @@ public class MemberV1Controller {
     public ResponseEntity<CommonResponse<MemberResponse>> getMember(AccessTokenDto accessTokenDto) {
         final MemberDto memberDto = memberService.getMember(accessTokenDto.getAccessToken());
         return CommonResponse.success(MemberResponse.from(memberDto));
-    }
-
-    private String getAccessToken(String accessTokenHeader) {
-        return accessTokenHeader.trim().split(" ")[1];
     }
 }

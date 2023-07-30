@@ -10,7 +10,7 @@ public class LoginHistoryTest {
 
     @Test
     void 로그인_기록을_생성한다() {
-        final LoginHistory loginHistory = LoginHistory.from();
+        final LoginHistory loginHistory = LoginHistory.init();
 
         assertAll(
                 () -> assertThat(loginHistory.getLatestLoginDate()).isEqualTo(LocalDate.now()),

@@ -1,8 +1,8 @@
 package org.prography.kagongsillok.image.ui;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.image.application.ImageService;
 import org.prography.kagongsillok.image.application.dto.ImageCreateCommand;
@@ -51,6 +51,6 @@ public class ImageV1Controller {
     }
 
     private List<ImageCreateCommand> toCommands(final List<ImageCreateRequest> requests) {
-        return requests.stream().map(request -> request.toCommand()).collect(Collectors.toList());
+        return CustomListUtils.mapTo(requests, ImageCreateRequest::toCommand);
     }
 }

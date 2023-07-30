@@ -13,7 +13,11 @@ public class ReviewTest {
 
     @Test
     void 태그가_없는_리뷰를_생성한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Review review = Review.builder()
                 .rating(4)
                 .content("test review")
@@ -36,7 +40,11 @@ public class ReviewTest {
 
     @Test
     void 태그가_있는_리뷰를_생성한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final ReviewTag reviewTag1 = new ReviewTag("#tag1", "test tag1");
         final ReviewTag reviewTag2 = new ReviewTag("#tag2", "test tag2");
         final Review review = Review.builder()

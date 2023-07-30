@@ -36,7 +36,7 @@ public class MemberDto {
                 .nickname(member.getNickname())
                 .email(member.getEmail())
                 .role(member.getRole().name())
-                .profileImage(member.getProfileImage())
+                .profileImage(member.getProfileImageUrl())
                 .loginCount(member.getLoginCount())
                 .totalStudyTime(totalStudyTime)
                 .build();
