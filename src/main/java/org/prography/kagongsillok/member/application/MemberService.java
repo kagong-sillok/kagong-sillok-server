@@ -8,7 +8,6 @@ import org.prography.kagongsillok.member.application.exception.NotFoundMemberExc
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.member.domain.MemberRepository;
 import org.prography.kagongsillok.record.domain.StudyRecord;
-import org.prography.kagongsillok.record.domain.StudyRecordRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final StudyRecordRepository studyRecordRepository;
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
     public MemberDto getMember(final String accessToken) {
@@ -29,15 +27,6 @@ public class MemberService {
             throw new NotFoundMemberException(memberId);
         }
 
-        List<StudyRecord> memberStudyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
-
-        return MemberDto.from(member, calculateTotalStudyTime(memberStudyRecords));
-    }
-
-    private int calculateTotalStudyTime(final List<StudyRecord> studyRecords) {
-        return studyRecords
-                .stream()
-                .mapToInt(StudyRecord::getDuration)
-                .sum();
+        return MemberDto.from(member);
     }
 }

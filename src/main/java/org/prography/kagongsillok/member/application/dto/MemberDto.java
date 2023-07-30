@@ -16,21 +16,19 @@ public class MemberDto {
     private String role;
     private String profileImage;
     private int loginCount;
-    private int totalStudyTime;
 
     @Builder
     public MemberDto(final Long id, final String nickname, final String email, final String role,
-            final String profileImage, final int loginCount, final int totalStudyTime) {
+            final String profileImage, final int loginCount) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.role = role;
         this.profileImage = profileImage;
         this.loginCount = loginCount;
-        this.totalStudyTime = totalStudyTime;
     }
 
-    public static MemberDto from(final Member member, final int totalStudyTime) {
+    public static MemberDto from(final Member member) {
         return MemberDto.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
@@ -38,7 +36,6 @@ public class MemberDto {
                 .role(member.getRole().name())
                 .profileImage(member.getProfileImageUrl())
                 .loginCount(member.getLoginCount())
-                .totalStudyTime(totalStudyTime)
                 .build();
     }
 }
