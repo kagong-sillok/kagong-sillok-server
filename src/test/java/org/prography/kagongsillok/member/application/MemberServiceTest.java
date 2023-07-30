@@ -34,14 +34,8 @@ public class MemberServiceTest {
     @Test
     void 멤버를_조회한다() {
         final Long memberId = localLoginMemberId();
-        final String accessToken = jwtAuthTokenProvider.createAccessToken(memberId, Role.MEMBER,
-                ZonedDateTime.of(
-                        LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59)),
-                        ZoneId.of("Asia/Seoul")
-                )
-        );
 
-        final MemberDto memberDto = memberService.getMember(accessToken);
+        final MemberDto memberDto = memberService.getMember(memberId);
 
         assertAll(
                 () -> assertThat(memberDto.getEmail()).isEqualTo("test@test.com"),

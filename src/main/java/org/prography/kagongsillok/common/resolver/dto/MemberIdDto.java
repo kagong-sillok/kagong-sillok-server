@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AccessTokenDto {
-    private String accessToken;
+public class MemberIdDto {
+    private Long memberId;
 
-    public AccessTokenDto(final String accessToken) {
-        this.accessToken = accessToken;
+    public MemberIdDto(final Long memberId) {
+        this.memberId = memberId;
     }
 }

@@ -37,7 +37,6 @@ public class LocalJoinCommand {
                 .nickname(nickname)
                 .email(email)
                 .role(Role.valueOf(role))
-                .profileImageUrl(null)
                 .build();
     }
 }
