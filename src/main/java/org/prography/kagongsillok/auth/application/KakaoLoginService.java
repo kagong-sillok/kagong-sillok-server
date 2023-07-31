@@ -51,7 +51,11 @@ public class KakaoLoginService {
                     final Member savedMember = saveKakaoMember(kakaoUser, Role.MEMBER);
                     return saveKakaoAccount(kakaoUser, savedMember);
                 });
-        return loginManager.loginMember(kakaoAccount.getMember());
+
+        final Member member = kakaoAccount.getMember();
+        member.loginHistoryUpdate();
+
+        return loginManager.loginMember(member);
     }
 
     private String getKakaoAccessToken(final String authorizationCode, final String redirectUri) {
@@ -64,7 +68,12 @@ public class KakaoLoginService {
     }
 
     private Member saveKakaoMember(final KakaoUserInfo kakaoUser, final Role role) {
-        final Member member = new Member(kakaoUser.getNickname(), kakaoUser.getEmail(), role);
+        final Member member = Member.builder()
+                .nickname(kakaoUser.getNickname())
+                .email(kakaoUser.getEmail())
+                .role(role)
+                .profileImageUrl(kakaoUser.getProfileImageUrl())
+                .build();
         return memberRepository.save(member);
     }
 

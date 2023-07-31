@@ -9,14 +9,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 
 @Getter
 @Entity
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends AbstractRootEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +30,19 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean isDeleted = Boolean.FALSE;
 
-    public Member(final String nickname, final String email, final Role role) {
+    private String profileImageUrl;
+
+    @Embedded
+    private LoginHistory loginHistory;
+
+    @Builder
+    public Member(final String nickname, final String email, final Role role, String profileImageUrl) {
         this.nickname = Nickname.from(nickname);
         this.email = Email.from(email);
         this.role = role;
-    }
-
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
+        this.profileImageUrl = profileImageUrl;
+        this.loginHistory = LoginHistory.init();
     }
 
     public String getEmail() {
@@ -46,5 +51,13 @@ public class Member {
 
     public String getNickname() {
         return nickname.getValue();
+    }
+
+    public int getLoginCount() {
+        return loginHistory.getLoginCount();
+    }
+
+    public void loginHistoryUpdate() {
+        loginHistory.loginHistoryUpdate();
     }
 }

@@ -43,7 +43,11 @@ public class ReviewRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(new Member("닉네임", "test@test.com", Role.MEMBER));
+        member = memberRepository.save(Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build());
         reviewTag1 = reviewTagRepository.save(new ReviewTag("testTag1", "testTag1"));
         reviewTag2 = reviewTagRepository.save(new ReviewTag("testTag2", "testTag2"));
         reviewTag3 = reviewTagRepository.save(new ReviewTag("testTag3", "testTag3"));

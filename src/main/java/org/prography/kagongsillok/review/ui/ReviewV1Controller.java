@@ -34,9 +34,9 @@ public class ReviewV1Controller {
         return CommonResponse.success(ReviewResponse.from(createdReview));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{reviewId}")
     public ResponseEntity<CommonResponse<ReviewResponse>> getReview(
-            @PathVariable("id") Long id
+            @PathVariable("reviewId") Long id
     ) {
         final ReviewDto reviewDto = reviewService.getReview(id);
         return CommonResponse.success(ReviewResponse.from(reviewDto));
@@ -47,6 +47,14 @@ public class ReviewV1Controller {
             @PathVariable("memberId") Long memberId
     ) {
         final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByMemberId(memberId);
+        return CommonResponse.success(ReviewListResponse.of(reviewDtos));
+    }
+
+    @GetMapping("/place/{placeId}")
+    public ResponseEntity<CommonResponse<ReviewListResponse>> getAllPlaceReviews(
+            @PathVariable("placeId") Long placeId
+    ) {
+        final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByPlaceId(placeId);
         return CommonResponse.success(ReviewListResponse.of(reviewDtos));
     }
 
@@ -61,8 +69,8 @@ public class ReviewV1Controller {
         return CommonResponse.success(ReviewResponse.from(updatedReview));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable("id") final Long id) {
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable("reviewId") final Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.ok().build();
     }

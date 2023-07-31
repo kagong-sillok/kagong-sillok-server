@@ -26,7 +26,11 @@ public class ReviewRepositoryTest {
 
     @Test
     void 리뷰_ID로_리뷰를_조회한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Long memberId = memberRepository.save(member).getId();
         final Review review1 = createReviewOfMemberIdAndContent(memberId, member.getNickname(), "test review");
         final Long savedReviewId = reviewRepository.save(review1).getId();
@@ -46,7 +50,11 @@ public class ReviewRepositoryTest {
 
     @Test
     void 멤버_ID로_작성한_리뷰들을_조회한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Long memberId = memberRepository.save(member).getId();
         final String memberNickName = member.getNickname();
         final Review review1 = createReviewOfMemberIdAndContent(memberId, memberNickName, "test review1");

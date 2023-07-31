@@ -26,7 +26,11 @@ class AccessTokenManagerTest {
 
     @Test
     void 액세스_토큰을_생성한다() {
-        final Member member = new Member("testMember", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("testMember")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Member savedMember = memberRepository.save(member);
 
         final AccessTokenCreateInfo accessTokenCreateInfo = accessTokenManager.create(member);

@@ -1,7 +1,9 @@
 package org.prography.kagongsillok.review.infrastructure;
 
+import static org.prography.kagongsillok.record.domain.QStudyRecord.studyRecord;
 import static org.prography.kagongsillok.review.domain.QReview.review;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +24,25 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .selectFrom(review)
                 .where(
                         review.memberId.eq(memberId),
-                        review.isDeleted.eq(Boolean.FALSE)
+                        isNotDeleted()
                 )
                 .limit(DEFAULT_SEARCH_RESULT_SIZE)
                 .fetch();
+    }
+
+    @Override
+    public List<Review> findAllByPlaceId(final Long placeId) {
+        return queryFactory
+                .selectFrom(review)
+                .where(
+                        review.placeId.eq(placeId),
+                        isNotDeleted()
+                )
+                .limit(DEFAULT_SEARCH_RESULT_SIZE)
+                .fetch();
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return review.isDeleted.eq(Boolean.FALSE);
     }
 }
