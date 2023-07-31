@@ -42,10 +42,14 @@ public class ImageService {
     }
 
     private List<Image> toImages(List<ImageCreateCommand> commands) {
-        return commands.stream().map(command -> command.toEntity()).collect(Collectors.toList());
+        return commands.stream()
+                .map(command -> command.toEntity())
+                .collect(Collectors.toList());
     }
 
     private List<Image> saveImages(List<Image> images) {
-        return images.stream().map(imageRepository::save).collect(Collectors.toList());
+        return images.stream()
+                .map(imageRepository::save)
+                .collect(Collectors.toList());
     }
 }

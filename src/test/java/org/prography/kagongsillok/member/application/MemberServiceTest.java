@@ -3,15 +3,10 @@ package org.prography.kagongsillok.member.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.auth.application.AuthService;
 import org.prography.kagongsillok.auth.application.dto.LocalJoinCommand;
-import org.prography.kagongsillok.auth.infrastructure.JwtAuthTokenProvider;
+import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
 import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +23,11 @@ public class MemberServiceTest {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private JwtAuthTokenProvider jwtAuthTokenProvider;
-
     @Test
     void 멤버를_조회한다() {
         final Long memberId = localLoginMemberId();
-
-        final MemberDto memberDto = memberService.getMember(memberId);
+        final LoginMemberDto loginMemberDto = new LoginMemberDto(memberId, Role.MEMBER);
+        final MemberDto memberDto = memberService.getMember(loginMemberDto);
 
         assertAll(
                 () -> assertThat(memberDto.getEmail()).isEqualTo("test@test.com"),

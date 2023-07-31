@@ -2,6 +2,7 @@ package org.prography.kagongsillok.member.application;
 
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.infrastructure.JwtAuthTokenProvider;
+import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
 import org.prography.kagongsillok.member.domain.Member;
@@ -15,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    public MemberDto getMember(final Long memberId) {
+    public MemberDto getMember(final LoginMemberDto loginMemberDto) {
+        final Long memberId = loginMemberDto.getMemberId();
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException(memberId));
         if (member.getIsDeleted()) {

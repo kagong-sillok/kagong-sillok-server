@@ -2,8 +2,10 @@ package org.prography.kagongsillok.common.resolver;
 
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
 import org.prography.kagongsillok.auth.infrastructure.JwtAuthTokenProvider;
-import org.prography.kagongsillok.common.resolver.dto.MemberIdDto;
+import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
+import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -20,7 +22,7 @@ public class AccessTokenArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.getParameterType().equals(MemberIdDto.class);
+        return parameter.getParameterType().equals(LoginMemberDto.class);
     }
 
     @Override
@@ -29,9 +31,11 @@ public class AccessTokenArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
 
         String accessToken = getAccessToken(httpServletRequest.getHeader("authorization"));
-        Long memberId = jwtAuthTokenProvider.getLoginMemberByAccessToken(accessToken).getMemberId();
+        final LoginMemberInfo loginMemberInfo = jwtAuthTokenProvider.getLoginMemberByAccessToken(accessToken);
+        final Long memberId = loginMemberInfo.getMemberId();
+        final Role role = loginMemberInfo.getRole();
 
-        return new MemberIdDto(memberId);
+        return new LoginMemberDto(memberId, role);
     }
 
     private String getAccessToken(String accessTokenHeader) {
