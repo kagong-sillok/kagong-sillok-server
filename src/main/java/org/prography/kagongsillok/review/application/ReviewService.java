@@ -134,7 +134,7 @@ public class ReviewService {
                 .orElse(
                         Member.builder()
                                 .nickname("알 수 없음")
-                                .email("알 수 없음")
+                                .email("Unknown@unknown.com")
                                 .build()
                 );
     }
