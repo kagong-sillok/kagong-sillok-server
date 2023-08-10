@@ -1,6 +1,6 @@
-package org.prography.kagongsillok.member.infrastructure;
+package org.prography.kagongsillok.image.infrastructure;
 
-import static org.prography.kagongsillok.member.domain.QMember.member;
+import static org.prography.kagongsillok.image.domain.QImage.image;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,35 +8,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.member.domain.Member;
+import org.prography.kagongsillok.image.domain.Image;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepositoryCustom {
+public class ImageRepositoryImpl implements ImageRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Map<Long, Member> findByIdIn(final List<Long> memberIds) {
-        final List<Member> members = queryFactory
-                .selectFrom(member)
+    public Map<Long, Image> findByIdInToMap(final List<Long> imageIds) {
+
+        final List<Image> images = queryFactory
+                .selectFrom(image)
                 .where(
-                        idIn(memberIds),
+                        idIn(imageIds),
                         isNotDeleted()
                 )
                 .fetch();
 
-        return members
+        return images
                 .stream()
-                .collect(Collectors.toMap(Member::getId, m -> m));
+                .collect(Collectors.toMap(Image::getId, i -> i));
     }
 
     private BooleanExpression idIn(final List<Long> ids) {
-        return member.id.in(ids);
+        return image.id.in(ids);
     }
 
     private BooleanExpression isNotDeleted() {
-        return member.isDeleted.eq(Boolean.FALSE);
+        return image.isDeleted.eq(Boolean.FALSE);
     }
 }

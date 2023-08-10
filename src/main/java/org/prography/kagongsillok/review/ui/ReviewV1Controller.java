@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.review.application.ReviewService;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
-import org.prography.kagongsillok.review.application.dto.ReviewImagesInfoDto;
+import org.prography.kagongsillok.review.application.dto.ReviewImageListDto;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewImagesInfoResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
@@ -81,7 +81,7 @@ public class ReviewV1Controller {
     public ResponseEntity<CommonResponse<ReviewImagesInfoResponse>> getPlaceReviewImages(
             @PathVariable("placeId") Long placeId
     ) {
-        final ReviewImagesInfoDto reviewImagesInfoDto = reviewService.getPlaceReviewImages(placeId);
-        return CommonResponse.success(ReviewImagesInfoResponse.from(reviewImagesInfoDto));
+        final ReviewImageListDto reviewImageListDto = reviewService.getPlaceReviewImages(placeId);
+        return CommonResponse.success(ReviewImagesInfoResponse.from(reviewImageListDto));
     }
 }

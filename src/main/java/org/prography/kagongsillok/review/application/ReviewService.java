@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
-import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
@@ -15,7 +14,7 @@ import org.prography.kagongsillok.member.domain.MemberRepository;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 import org.prography.kagongsillok.review.application.dto.ReviewImageDto;
-import org.prography.kagongsillok.review.application.dto.ReviewImagesInfoDto;
+import org.prography.kagongsillok.review.application.dto.ReviewImageListDto;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.prography.kagongsillok.review.domain.Review;
@@ -95,7 +94,7 @@ public class ReviewService {
         review.delete();
     }
 
-    public ReviewImagesInfoDto getPlaceReviewImages(final Long placeId) {
+    public ReviewImageListDto getPlaceReviewImages(final Long placeId) {
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
 
         final List<Long> reviewImageIds = reviews.stream()
@@ -106,17 +105,17 @@ public class ReviewService {
                 .map(Review::getMemberId)
                 .collect(Collectors.toList());
 
-        final List<Image> images = imageRepository.findByIdIn(reviewImageIds);
-        final List<Member> members = memberRepository.findByIdIn(memberIds);
+        final Map<Long, Image> images = imageRepository.findByIdInToMap(reviewImageIds);
+        final Map<Long, Member> members = memberRepository.findByIdIn(memberIds);
 
-        return ReviewImagesInfoDto.of(
+        return ReviewImageListDto.of(
                 reviewImageIds.size(),
                 bindMemberAndImage(reviews, members, images)
         );
     }
 
-    private List<ReviewImageDto> bindMemberAndImage(final List<Review> reviews, final List<Member> members,
-            final List<Image> images) {
+    private List<ReviewImageDto> bindMemberAndImage(final List<Review> reviews, final Map<Long, Member> members,
+            final Map<Long, Image> images) {
 
         List<ReviewImageDto> reviewImageDtos = new ArrayList<>();
 
@@ -127,30 +126,20 @@ public class ReviewService {
         return reviewImageDtos;
     }
 
-    private Member getMappedMember(final Review review, final List<Member> members) {
-        return members.stream()
-                .filter(member -> member.getId() == review.getMemberId())
-                .findFirst()
-                .orElse(
-                        Member.builder()
-                                .nickname("알 수 없음")
-                                .email("Unknown@unknown.com")
-                                .build()
-                );
+    private Member getMappedMember(final Review review, final Map<Long, Member> members) {
+        return members.get(review.getMemberId());
     }
 
-    private List<Image> getMappedImage(final Review review, final List<Image> images) {
-        return images.stream()
-                .filter(
-                        image -> review
-                                .getImageIds()
-                                .contains(image.getId())
-                )
+    private List<Image> getMappedImage(final Review review, final Map<Long, Image> images) {
+        return review
+                .getImageIds()
+                .stream()
+                .map(images::get)
                 .collect(Collectors.toList());
     }
 
-    private List<ReviewImageDto> getReviewImageDtos(final Review review, final List<Member> members,
-            final List<Image> images) {
+    private List<ReviewImageDto> getReviewImageDtos(final Review review, final Map<Long, Member> members,
+            final Map<Long, Image> images) {
 
         final List<ReviewImageDto> reviewImageDtos = new ArrayList<>();
         final Member mappedMember = getMappedMember(review, members);

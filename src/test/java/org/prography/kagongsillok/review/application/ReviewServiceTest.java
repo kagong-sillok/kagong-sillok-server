@@ -13,7 +13,7 @@ import org.prography.kagongsillok.member.domain.MemberRepository;
 import org.prography.kagongsillok.member.domain.Role;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
-import org.prography.kagongsillok.review.application.dto.ReviewImagesInfoDto;
+import org.prography.kagongsillok.review.application.dto.ReviewImageListDto;
 import org.prography.kagongsillok.review.application.dto.ReviewUpdateCommand;
 import org.prography.kagongsillok.review.application.exception.NotFoundReviewException;
 import org.prography.kagongsillok.review.domain.ReviewTag;
@@ -287,18 +287,18 @@ public class ReviewServiceTest {
         reviewService.createReview(reviewCreateCommand1);
         reviewService.createReview(reviewCreateCommand2);
 
-        final ReviewImagesInfoDto reviewImagesInfoDto = reviewService.getPlaceReviewImages(placeId);
-        System.out.println(reviewImagesInfoDto);
+        final ReviewImageListDto reviewImageListDto = reviewService.getPlaceReviewImages(placeId);
+        System.out.println(reviewImageListDto);
 
         assertAll(
-                () -> assertThat(reviewImagesInfoDto.getReviewImageDtos().size()).isEqualTo(4),
-                () -> assertThat(reviewImagesInfoDto.getReviewImageDtos())
+                () -> assertThat(reviewImageListDto.getReviewImageDtos().size()).isEqualTo(4),
+                () -> assertThat(reviewImageListDto.getReviewImageDtos())
                         .extracting("imageUrl")
                         .containsAll(List.of("imageUrl1", "imageUrl2", "imageUrl3", "imageUrl4")),
-                () -> assertThat(reviewImagesInfoDto.getReviewImageDtos())
+                () -> assertThat(reviewImageListDto.getReviewImageDtos())
                         .extracting("memberName")
                         .containsAll(List.of("닉네임", "닉네임", "닉네임", "닉네임")),
-                () -> assertThat(reviewImagesInfoDto.getTotalImageCount()).isEqualTo(4)
+                () -> assertThat(reviewImageListDto.getTotalImageCount()).isEqualTo(4)
         );
     }
 
