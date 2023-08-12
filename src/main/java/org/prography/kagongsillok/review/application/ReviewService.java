@@ -127,13 +127,24 @@ public class ReviewService {
     }
 
     private Member getMappedMember(final Review review, final Map<Long, Member> members) {
-        return members.get(review.getMemberId());
+        Long memberId = review.getMemberId();
+
+        if (!members.containsKey(memberId)) {
+            // 가드 로직: 멤버 ID가 멤버 맵에 존재하지 않으면 null 반환 또는 예외 처리 등을 수행할 수 있습니다.
+            return Member.builder()
+                    .nickname("알 수 없음")
+                    .email("Unknown@unknown.com")
+                    .build();
+        }
+
+        return members.get(memberId);
     }
 
     private List<Image> getMappedImage(final Review review, final Map<Long, Image> images) {
         return review
                 .getImageIds()
                 .stream()
+                .filter(imageId -> images.containsKey(imageId))
                 .map(images::get)
                 .collect(Collectors.toList());
     }
