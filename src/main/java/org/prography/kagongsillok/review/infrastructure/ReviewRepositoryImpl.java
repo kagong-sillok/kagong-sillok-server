@@ -1,13 +1,17 @@
 package org.prography.kagongsillok.review.infrastructure;
 
 import static org.prography.kagongsillok.review.domain.QReview.review;
+import static org.prography.kagongsillok.review.domain.QReviewTag.reviewTag;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.review.domain.Review;
+import org.prography.kagongsillok.review.domain.ReviewTag;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -62,6 +66,17 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         ))
                         .collect(Collectors.toList())
                         .size() > 0)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Review> findByPlaceIds(final List<Long> placeIds) {
+        return queryFactory.selectFrom(review)
+                .where(
+                        review.placeId.in(placeIds),
+                        isNotDeleted()
+                )
+                .stream()
                 .collect(Collectors.toList());
     }
 
