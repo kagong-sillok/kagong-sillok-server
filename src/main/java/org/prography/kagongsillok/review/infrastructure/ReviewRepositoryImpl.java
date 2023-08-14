@@ -2,16 +2,14 @@ package org.prography.kagongsillok.review.infrastructure;
 
 import static org.prography.kagongsillok.review.domain.QReview.review;
 import static org.prography.kagongsillok.review.domain.QReviewTag.reviewTag;
+import static org.prography.kagongsillok.review.domain.QReviewTagMapping.reviewTagMapping;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.review.domain.Review;
-import org.prography.kagongsillok.review.domain.ReviewTag;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,6 +36,10 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findAllByPlaceId(final Long placeId) {
         return queryFactory
                 .selectFrom(review)
+                .leftJoin(review.tagMappings.values, reviewTagMapping)
+                .fetchJoin()
+                .leftJoin(reviewTagMapping.reviewTag, reviewTag)
+                .fetchJoin()
                 .where(
                         review.placeId.eq(placeId),
                         isNotDeleted()
@@ -50,6 +52,10 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findByReviewTagIds(final List<Long> reviewTagIds) {
         List<Review> allReviews = queryFactory
                 .selectFrom(review)
+                .leftJoin(review.tagMappings.values, reviewTagMapping)
+                .fetchJoin()
+                .leftJoin(reviewTagMapping.reviewTag, reviewTag)
+                .fetchJoin()
                 .where(
                         isNotDeleted()
                 )
@@ -72,6 +78,10 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     @Override
     public List<Review> findByPlaceIds(final List<Long> placeIds) {
         return queryFactory.selectFrom(review)
+                .leftJoin(review.tagMappings.values, reviewTagMapping)
+                .fetchJoin()
+                .leftJoin(reviewTagMapping.reviewTag, reviewTag)
+                .fetchJoin()
                 .where(
                         review.placeId.in(placeIds),
                         isNotDeleted()

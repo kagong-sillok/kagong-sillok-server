@@ -24,14 +24,8 @@ public class ReviewTag extends AbstractRootEntity {
 
     private String tagContent;
 
-    private boolean isDeleted = Boolean.FALSE;
-
     public ReviewTag(final String tagName, final String tagContent) {
         this.tagName = tagName;
         this.tagContent = tagContent;
-    }
-
-    public void delete() {
-        this.isDeleted = Boolean.TRUE;
     }
 }

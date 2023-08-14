@@ -1,19 +1,13 @@
 package org.prography.kagongsillok.place.application;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
-import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
@@ -98,7 +92,9 @@ public class PlaceService {
         final List<Review> reviews = reviewRepository.findByReviewTagIds(reviewTagIds);
         final List<Long> placeIds = reviews.stream()
                 .map(review -> review.getPlaceId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet())
+                .stream()
+                .toList();
         final List<Place> places = placeRepository.findByIdIn(placeIds);
 
         return createPlaceDtos(places, reviews);

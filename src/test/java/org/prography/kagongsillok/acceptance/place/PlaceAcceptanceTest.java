@@ -177,8 +177,7 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", -10.0, -20.0);
         final var 생성_장소1_ID = 장소_생성_요청(장소_생성_요청_바디1).getId();
         final var 생성_장소2_ID = 장소_생성_요청(장소_생성_요청_바디2).getId();
-        장소_생성_요청(장소_생성_요청_바디2);
-        장소_생성_요청(장소_생성_요청_바디3);
+        final var 생성_장소3_ID = 장소_생성_요청(장소_생성_요청_바디3).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
         final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
         final var 태그_생성_요청_바디3 = 태그_생성_요청_바디("#tag3", "test tag3");
