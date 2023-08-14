@@ -2,22 +2,34 @@ package org.prography.kagongsillok.acceptance.place;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.기본_닉네임_이메일_가입_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_세개_링크_두개_장소_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.장소_ID로_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.장소_수정_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
+import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
+import org.prography.kagongsillok.member.ui.dto.MemberResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceListResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceLocationAroundSearchRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewTagResponse;
 
 public class PlaceAcceptanceTest extends AcceptanceTest {
 
     private static final String PLACE_ADMIN_BASE_URL_V1 = "/admin/v1/places";
     private static final String PLACE_API_BASE_URL_V1 = "/api/v1/places";
+    private static final String REVIEW_API_BASE_URL_V1 = "api/v1/reviews";
+    private static final String TAG_ADMIN_BASE_URL_V1 = "admin/v1/tags";
+    private static final String AUTH_API_BASE_URL_V1 = "/api/v1/auth";
 
     @Test
     void 관리자가_장소를_등록한다() {
@@ -154,6 +166,77 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         final var 장소_이름으로_검색_응답1 = 장소_이름으로_검색_요청("testPlace3");
 
         없는_장소_이름으로_검색_검증(장소_이름으로_검색_응답1);
+    }
+
+    @Test
+    void 태그로_관련된_장소들을_검색한다() {
+        final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
+        final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
+        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0);
+        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", -10.0, -20.0);
+        final var 생성_장소1_ID = 장소_생성_요청(장소_생성_요청_바디1).getId();
+        final var 생성_장소2_ID = 장소_생성_요청(장소_생성_요청_바디2).getId();
+        장소_생성_요청(장소_생성_요청_바디2);
+        장소_생성_요청(장소_생성_요청_바디3);
+        final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
+        final var 태그_생성_요청_바디2 = 태그_생성_요청_바디("#tag2", "test tag2");
+        final var 태그_생성_요청_바디3 = 태그_생성_요청_바디("#tag3", "test tag3");
+        final var 태그_생성_요청_바디4 = 태그_생성_요청_바디("#tag4", "test tag4");
+        final var 생성된_태그1_ID = 태그_생성_요청(태그_생성_요청_바디1).getId();
+        final var 생성된_태그2_ID = 태그_생성_요청(태그_생성_요청_바디2).getId();
+        final var 생성된_태그3_ID = 태그_생성_요청(태그_생성_요청_바디3).getId();
+        final var 생성된_태그4_ID = 태그_생성_요청(태그_생성_요청_바디4).getId();
+        final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_ID, 생성된_태그2_ID);
+        final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_ID, 생성된_태그4_ID);
+        final var 리뷰_생성_요청_바디1 = 장소_ID로_리뷰_생성_요청_바디(생성_장소1_ID, 생성된_멤버_id, "test review", 입력_태그1);
+        final var 리뷰_생성_요청_바디2 = 장소_ID로_리뷰_생성_요청_바디(생성_장소2_ID, 생성된_멤버_id, "test review", 입력_태그2);
+        리뷰_생성_요청(리뷰_생성_요청_바디1);
+        리뷰_생성_요청(리뷰_생성_요청_바디2);
+        final var 조회할_태그_ID들 = 조회할_태그_생성(생성된_태그1_ID, 생성된_태그3_ID);
+
+        final var 태그_ID로_장소_조회_응답 = 태그_ID로_장소_조회_요청(조회할_태그_ID들);
+
+        태그_ID로_장소_조회_검증(태그_ID로_장소_조회_응답);
+    }
+
+    private MemberResponse 멤버_생성_요청(final LocalJoinRequest 멤버_생성_요청_바디) {
+        return 응답_바디_추출(post(AUTH_API_BASE_URL_V1 + "/local/join", 멤버_생성_요청_바디), MemberResponse.class);
+    }
+
+    private static void 태그_ID로_장소_조회_검증(final PlaceListResponse 태그_ID로_장소_조회_응답) {
+        assertAll(
+                () -> assertThat(태그_ID로_장소_조회_응답.getPlaces().size()).isEqualTo(2),
+                () -> assertThat(태그_ID로_장소_조회_응답.getPlaces()).extracting("name")
+                        .containsAll(List.of("testPlace1", "testPlace2")),
+                () -> assertThat(태그_ID로_장소_조회_응답.getPlaces()).extracting("latitude")
+                        .containsAll(List.of(10.0, -50.0)),
+                () -> assertThat(태그_ID로_장소_조회_응답.getPlaces()).extracting("longitude")
+                        .containsAll(List.of(10.0, -50.0))
+        );
+    }
+
+    private PlaceListResponse 태그_ID로_장소_조회_요청(final List<Long> 조회할_태그_ID들) {
+        return 응답_바디_추출(get(PLACE_API_BASE_URL_V1 + "/tags"
+                + "?tagIds=" + 조회할_태그_ID들.get(0)
+                + "&tagIds=" + 조회할_태그_ID들.get(1)
+        ), PlaceListResponse.class);
+    }
+
+    private List<Long> 조회할_태그_생성(final Long 생성된_태그1_ID, final Long 생성된_태그2_ID) {
+        return List.of(생성된_태그1_ID, 생성된_태그2_ID);
+    }
+
+    private ReviewResponse 리뷰_생성_요청(final ReviewCreateRequest 리뷰_생성_요청_바디) {
+        return 응답_바디_추출(post(REVIEW_API_BASE_URL_V1, 리뷰_생성_요청_바디), ReviewResponse.class);
+    }
+
+    private static List<Long> 입력_태그_두개_생성(final Long 태그1, final Long 태그2) {
+        return List.of(태그1, 태그2);
+    }
+
+    private ReviewTagResponse 태그_생성_요청(final ReviewTagCreateRequest 태그_생성_요청_바디) {
+        return 응답_바디_추출(post(TAG_ADMIN_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 
     private static void 없는_장소_이름으로_검색_검증(final PlaceListResponse 장소_이름으로_검색_응답1) {
@@ -296,6 +379,4 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
     private PlaceResponse 장소_생성_요청(final PlaceCreateRequest 장소_생성_요청_바디) {
         return 응답_바디_추출(post(PLACE_ADMIN_BASE_URL_V1, 장소_생성_요청_바디), PlaceResponse.class);
     }
-
-
 }

@@ -48,7 +48,7 @@ public class PlaceV1Controller {
 
     @GetMapping("/tags")
     public ResponseEntity<CommonResponse<PlaceListResponse>> searchTaggedPlace(
-            @RequestBody final List<Long> tagIds
+            @RequestParam final List<Long> tagIds
     ) {
         final List<PlaceDto> placeDtos = placeService.searchPlacesByTags(tagIds);
 
