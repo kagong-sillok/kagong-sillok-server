@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
@@ -42,11 +43,14 @@ public class ReviewService {
 
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException(memberId));
+
+        checkExistImage(reviewCreateCommand.getImageIds());
+
         final Review review = reviewCreateCommand.toEntity(member.getNickname(), reviewTagIds);
 
         final Review savedReview = reviewRepository.save(review);
 
-        return ReviewDto.of(savedReview, member, getImages(review));
+        return ReviewDto.of(savedReview, member, getImages(savedReview));
     }
 
     public ReviewDto getReview(final Long id) {
@@ -93,6 +97,7 @@ public class ReviewService {
                 .orElseThrow(() -> new NotFoundReviewException(id));
         final Map<Long, ReviewTag> updateReviewTags
                 = reviewTagRepository.findByPerId(reviewUpdateCommand.getReviewTagIds());
+        checkExistImage(reviewUpdateCommand.getImageIds());
         final Review target = reviewUpdateCommand.toEntity(updateReviewTags);
         review.update(target);
 
@@ -134,5 +139,11 @@ public class ReviewService {
 
     private List<Image> getImages(final Review review) {
         return imageRepository.findByIdIn(review.getImageIds());
+    }
+
+    private void checkExistImage(final List<Long> imageIds) {
+        if (imageRepository.isExistIdIn(imageIds)) {
+            throw new NotFoundImageException(imageIds);
+        }
     }
 }
