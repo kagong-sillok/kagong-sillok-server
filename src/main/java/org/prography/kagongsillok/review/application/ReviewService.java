@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.domain.Image;
+import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.member.domain.MemberRepository;
@@ -29,6 +31,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewTagRepository reviewTagRepository;
     private final MemberRepository memberRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public ReviewDto createReview(final ReviewCreateCommand reviewCreateCommand) {
@@ -43,7 +46,7 @@ public class ReviewService {
 
         final Review savedReview = reviewRepository.save(review);
 
-        return ReviewDto.of(savedReview, member);
+        return ReviewDto.of(savedReview, member, getImages(review));
     }
 
     public ReviewDto getReview(final Long id) {
@@ -59,7 +62,7 @@ public class ReviewService {
             throw new NotFoundReviewException(memberId);
         }
 
-        return ReviewDto.of(review, member);
+        return ReviewDto.of(review, member, getImages(review));
     }
 
     public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
@@ -69,7 +72,8 @@ public class ReviewService {
         for (Review review : reviews) {
             final Member member = memberRepository.findById(review.getMemberId())
                     .orElseThrow(() -> new NotFoundMemberException(review.getMemberId()));
-            reviewDtos.add(ReviewDto.of(review, member));
+
+            reviewDtos.add(ReviewDto.of(review, member, getImages(review)));
         }
 
         return reviewDtos;
@@ -95,7 +99,7 @@ public class ReviewService {
         final Member member = memberRepository.findById(target.getMemberId())
                 .orElseThrow(() -> new NotFoundMemberException(target.getMemberId()));
 
-        return ReviewDto.of(review, member);
+        return ReviewDto.of(review, member, getImages(review));
     }
 
     @Transactional
@@ -123,8 +127,12 @@ public class ReviewService {
                                 .build();
                     }
 
-                    return ReviewDto.of(review, member);
+                    return ReviewDto.of(review, member, getImages(review));
                 })
                 .collect(Collectors.toList());
+    }
+
+    private List<Image> getImages(final Review review) {
+        return imageRepository.findByIdIn(review.getImageIds());
     }
 }

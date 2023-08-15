@@ -75,6 +75,9 @@ public class Review extends AbstractRootEntity {
     }
 
     public List<Long> getImageIds() {
+        if (imageIds.equals(null)) {
+            return List.of();
+        }
         return CustomStringUtils.splitToList(imageIds, ",", Long::valueOf);
     }
 
