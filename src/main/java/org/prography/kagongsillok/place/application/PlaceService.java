@@ -3,6 +3,8 @@ package org.prography.kagongsillok.place.application;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
+import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
@@ -24,9 +26,11 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final ReviewRepository reviewRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public PlaceDto createPlace(final PlaceCreateCommand placeCreateCommand) {
+        checkExistImage(placeCreateCommand.getImageIds());
         final Place savedPlace = placeRepository.save(placeCreateCommand.toEntity());
 
         return PlaceDto.from(savedPlace);
@@ -73,6 +77,7 @@ public class PlaceService {
     public PlaceDto updatePlace(final Long id, final PlaceUpdateCommand updateCommand) {
         final Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundPlaceException(id));
+        checkExistImage(updateCommand.getImageIds());
 
         final Place target = updateCommand.toEntity();
         place.update(target);
@@ -128,5 +133,11 @@ public class PlaceService {
                         .map(reviewTagMapping -> reviewTagMapping.getReviewTag())
                 )
                 .collect(Collectors.toList());
+    }
+
+    private void checkExistImage(final List<Long> imageIds) {
+        if (imageRepository.isExistIdIn(imageIds)) {
+            throw new NotFoundImageException(imageIds);
+        }
     }
 }
