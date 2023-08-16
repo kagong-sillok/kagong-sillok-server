@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.image.domain.Image;
+import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.DayOfWeek;
@@ -31,11 +33,15 @@ public class StudyRecordServiceTest {
     @Autowired
     private PlaceRepository placeRepository;
 
+    @Autowired
+    private ImageRepository imageRepository;
+
     @Test
     void 공부_기록을_생성한다() {
         final Long memberId = 1L;
         final String placeName = "place1";
-        final Long placeId = createPlaceAndGetPlaceId(placeName);
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
+        final Long placeId = createPlaceAndGetPlaceId(placeName, imageId);
         final StudyRecordCreateCommand studyRecordCreateCommand = StudyRecordCreateCommand
                 .builder()
                 .memberId(memberId)
@@ -45,7 +51,7 @@ public class StudyRecordServiceTest {
                 .studyDay(10)
                 .duration(100)
                 .description("모각코")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
 
         final StudyRecordDto studyRecordDto = studyRecordService.createStudyRecord(studyRecordCreateCommand);
@@ -55,15 +61,16 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDto.getStudyDate()).isEqualTo(LocalDate.of(2023, 7, 10)),
                 () -> assertThat(studyRecordDto.getDuration()).isEqualTo(100),
                 () -> assertThat(studyRecordDto.getDescription()).isEqualTo("모각코"),
-                () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(1L, 2L))
+                () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(imageId))
         );
     }
 
     @Test
     void 멤버_ID로_공부_기록들을_조회한다() {
         final Long memberId = 1L;
-        final Long placeId1 = createPlaceAndGetPlaceId("place1");
-        final Long placeId2 = createPlaceAndGetPlaceId("place2");
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
+        final Long placeId1 = createPlaceAndGetPlaceId("place1", imageId);
+        final Long placeId2 = createPlaceAndGetPlaceId("place2", imageId);
         final StudyRecordCreateCommand studyRecordCreateCommand1 = StudyRecordCreateCommand
                 .builder()
                 .memberId(memberId)
@@ -73,7 +80,7 @@ public class StudyRecordServiceTest {
                 .studyDay(10)
                 .duration(100)
                 .description("모각코")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         final StudyRecordCreateCommand studyRecordCreateCommand2 = StudyRecordCreateCommand
                 .builder()
@@ -84,7 +91,7 @@ public class StudyRecordServiceTest {
                 .studyDay(15)
                 .duration(120)
                 .description("모각코")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         studyRecordService.createStudyRecord(studyRecordCreateCommand1);
         studyRecordService.createStudyRecord(studyRecordCreateCommand2);
@@ -105,8 +112,9 @@ public class StudyRecordServiceTest {
     @Test
     void 멤버_ID와_년도와_월로_공부_기록들을_조회한다() {
         final Long memberId = 1L;
-        final Long placeId1 = createPlaceAndGetPlaceId("place1");
-        final Long placeId2 = createPlaceAndGetPlaceId("place2");
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
+        final Long placeId1 = createPlaceAndGetPlaceId("place1", imageId);
+        final Long placeId2 = createPlaceAndGetPlaceId("place2", imageId);
         final StudyRecordCreateCommand studyRecordCreateCommand1 = StudyRecordCreateCommand
                 .builder()
                 .memberId(memberId)
@@ -116,7 +124,7 @@ public class StudyRecordServiceTest {
                 .studyDay(10)
                 .duration(30)
                 .description("모각코1")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         final StudyRecordCreateCommand studyRecordCreateCommand2 = StudyRecordCreateCommand
                 .builder()
@@ -127,7 +135,7 @@ public class StudyRecordServiceTest {
                 .studyDay(27)
                 .duration(150)
                 .description("모각코2")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         studyRecordService.createStudyRecord(studyRecordCreateCommand1);
         studyRecordService.createStudyRecord(studyRecordCreateCommand2);
@@ -151,9 +159,10 @@ public class StudyRecordServiceTest {
     @Test
     void 멤버_ID로_공부_기록의_장소들을_조회한다() {
         final Long memberId = 1L;
-        final Long placeId1 = createPlaceAndGetPlaceId("place1");
-        final Long placeId2 = createPlaceAndGetPlaceId("place2");
-        final Long placeId3 = createPlaceAndGetPlaceId("place3");
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
+        final Long placeId1 = createPlaceAndGetPlaceId("place1", imageId);
+        final Long placeId2 = createPlaceAndGetPlaceId("place2", imageId);
+        final Long placeId3 = createPlaceAndGetPlaceId("place3", imageId);
         final StudyRecordCreateCommand studyRecordCreateCommand1 = StudyRecordCreateCommand
                 .builder()
                 .memberId(memberId)
@@ -163,7 +172,7 @@ public class StudyRecordServiceTest {
                 .studyDay(10)
                 .duration(111)
                 .description("모각코1")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         final StudyRecordCreateCommand studyRecordCreateCommand2 = StudyRecordCreateCommand
                 .builder()
@@ -174,7 +183,7 @@ public class StudyRecordServiceTest {
                 .studyDay(27)
                 .duration(195)
                 .description("모각코2")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         final StudyRecordCreateCommand studyRecordCreateCommand3 = StudyRecordCreateCommand
                 .builder()
@@ -185,7 +194,7 @@ public class StudyRecordServiceTest {
                 .studyDay(27)
                 .duration(200)
                 .description("모각코3")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         studyRecordService.createStudyRecord(studyRecordCreateCommand1);
         studyRecordService.createStudyRecord(studyRecordCreateCommand2);
@@ -207,7 +216,8 @@ public class StudyRecordServiceTest {
     @Test
     void 공부_기록을_삭제한다() {
         final Long memberId = 1L;
-        final Long placeId1 = createPlaceAndGetPlaceId("place1");
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
+        final Long placeId1 = createPlaceAndGetPlaceId("place1", imageId);
         final StudyRecordCreateCommand studyRecordCreateCommand1 = StudyRecordCreateCommand
                 .builder()
                 .memberId(memberId)
@@ -217,7 +227,7 @@ public class StudyRecordServiceTest {
                 .studyDay(10)
                 .duration(123)
                 .description("모각코1")
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
         final Long createdStudyRecordId = studyRecordService.createStudyRecord(studyRecordCreateCommand1).getId();
 
@@ -229,13 +239,13 @@ public class StudyRecordServiceTest {
         );
     }
 
-    private Long createPlaceAndGetPlaceId(final String placeName) {
+    private Long createPlaceAndGetPlaceId(final String placeName, final Long imageId) {
         final Place place = Place.builder()
                 .name(placeName)
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(123.123)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(List.of(
                         new Link(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
@@ -254,5 +264,15 @@ public class StudyRecordServiceTest {
                 .build();
 
         return placeRepository.save(place).getId();
+    }
+
+    private Long saveImageAndGetImageId(final String imageUrl) {
+        final Image image = Image.builder()
+                .url(imageUrl)
+                .width(100)
+                .height(100)
+                .extension("extension")
+                .build();
+        return imageRepository.save(image).getId();
     }
 }
