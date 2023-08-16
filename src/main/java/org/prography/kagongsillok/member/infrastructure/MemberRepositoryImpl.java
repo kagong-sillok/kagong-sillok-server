@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.member.infrastructure;
 
 import static org.prography.kagongsillok.member.domain.QMember.member;
+import static org.prography.kagongsillok.review.domain.QReviewTag.reviewTag;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

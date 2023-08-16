@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.auth.domain.dto.LoginMemberInfo;
 import org.prography.kagongsillok.auth.infrastructure.JwtAuthTokenProvider;
 import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
-import org.prography.kagongsillok.common.resolver.exception.AccessTokenAuthenticationException;
 import org.prography.kagongsillok.member.domain.Role;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,6 @@ public class AccessTokenArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest httpServletRequest = (HttpServletRequest) webRequest.getNativeRequest();
 
         String accessToken = getAccessToken(httpServletRequest.getHeader("authorization"));
-
         final LoginMemberInfo loginMemberInfo = jwtAuthTokenProvider.getLoginMemberByAccessToken(accessToken);
         final Long memberId = loginMemberInfo.getMemberId();
         final Role role = loginMemberInfo.getRole();
@@ -41,9 +39,6 @@ public class AccessTokenArgumentResolver implements HandlerMethodArgumentResolve
     }
 
     private String getAccessToken(String accessTokenHeader) {
-        if (accessTokenHeader == null) {
-            throw new AccessTokenAuthenticationException();
-        }
         return accessTokenHeader.split(" ")[1];
     }
 }

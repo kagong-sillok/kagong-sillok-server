@@ -6,5 +6,5 @@ import org.prography.kagongsillok.member.domain.Member;
 
 public interface MemberRepositoryCustom {
 
-    Map<Long, Member> findByIdIn(final List<Long> memberIds);
+    Map<Long, Member> findByIdIn(List<Long> memberIds);
 }

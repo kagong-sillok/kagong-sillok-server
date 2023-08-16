@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.image.infrastructure;
 
 import static org.prography.kagongsillok.image.domain.QImage.image;
+import static org.prography.kagongsillok.member.domain.QMember.member;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
