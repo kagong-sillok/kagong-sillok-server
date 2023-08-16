@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.review.infrastructure;
 
-import static org.prography.kagongsillok.record.domain.QStudyRecord.studyRecord;
 import static org.prography.kagongsillok.review.domain.QReview.review;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -63,6 +62,17 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         ))
                         .collect(Collectors.toList())
                         .size() > 0)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Review> findByPlaceIds(final List<Long> placeIds) {
+        return queryFactory.selectFrom(review)
+                .where(
+                        review.placeId.in(placeIds),
+                        isNotDeleted()
+                )
+                .stream()
                 .collect(Collectors.toList());
     }
 

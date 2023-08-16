@@ -3,7 +3,6 @@ package org.prography.kagongsillok.place.application;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
@@ -50,15 +49,8 @@ public class PlaceService {
             throw new NotFoundPlaceException(placeId);
         }
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
-        final List<ReviewTag> reviewTags = reviews.stream()
-                .flatMap(review -> review.getTagMappings()
-                        .getValues()
-                        .stream()
-                        .map(reviewTagMapping -> reviewTagMapping.getReviewTag())
-                )
-                .collect(Collectors.toList());
 
-        return PlaceDto.of(place, reviewTags);
+        return PlaceDto.of(place, getReviewTagsRelatedToPlace(reviews));
     }
 
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
@@ -68,13 +60,13 @@ public class PlaceService {
                 searchCondition.getLongitudeBound()
         );
 
-        return CustomListUtils.mapTo(places, PlaceDto::from);
+        return getPlaceDtos(places);
     }
 
     public List<PlaceDto> searchPlacesByName(final String name) {
         final List<Place> places = placeRepository.findByNameContains(name);
 
-        return CustomListUtils.mapTo(places, PlaceDto::from);
+        return getPlaceDtos(places);
     }
 
     @Transactional
@@ -104,6 +96,35 @@ public class PlaceService {
 
         final List<Place> places = placeRepository.findByIdIn(placeIds);
 
-        return CustomListUtils.mapTo(places, PlaceDto::from);
+        return createPlaceDtos(places, reviews);
+    }
+    private List<PlaceDto> getPlaceDtos(final List<Place> places) {
+        final List<Long> placeIds = places.stream()
+                .map(place -> place.getId())
+                .collect(Collectors.toList());
+        final List<Review> reviews = reviewRepository.findByPlaceIds(placeIds);
+
+        return createPlaceDtos(places, reviews);
+    }
+
+    private List<PlaceDto> createPlaceDtos(final List<Place> places, final List<Review> reviews) {
+        return places.stream()
+                .map(place -> {
+                    List<Review> relatedReviews = reviews.stream()
+                            .filter(review -> review.getPlaceId().equals(place.getId()))
+                            .collect(Collectors.toList());
+                    return PlaceDto.of(place, getReviewTagsRelatedToPlace(relatedReviews));
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<ReviewTag> getReviewTagsRelatedToPlace(final List<Review> reviews) {
+        return reviews.stream()
+                .flatMap(review -> review.getTagMappings()
+                        .getValues()
+                        .stream()
+                        .map(reviewTagMapping -> reviewTagMapping.getReviewTag())
+                )
+                .collect(Collectors.toList());
     }
 }

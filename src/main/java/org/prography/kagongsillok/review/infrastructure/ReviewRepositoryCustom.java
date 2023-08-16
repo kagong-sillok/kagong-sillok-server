@@ -10,4 +10,6 @@ public interface ReviewRepositoryCustom {
     List<Review> findAllByPlaceId(final Long placeId);
 
     List<Review> findByReviewTagIds(final List<Long> reviewTagIds);
+
+    List<Review> findByPlaceIds(final List<Long> placeIds);
 }
