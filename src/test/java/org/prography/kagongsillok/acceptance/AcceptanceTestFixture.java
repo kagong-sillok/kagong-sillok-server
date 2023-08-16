@@ -95,6 +95,49 @@ public class AcceptanceTestFixture {
                 .build();
     }
 
+    public static PlaceCreateRequest 링크_두개_장소_생성_요청_바디(
+            final String name,
+            final Double latitude,
+            final Double longitude,
+            final Long imageId
+    ) {
+        return PlaceCreateRequest.builder()
+                .name(name)
+                .address("테스트특별시 테스트구 테스트로")
+                .latitude(latitude)
+                .longitude(longitude)
+                .imageIds(List.of(imageId))
+                .phone("testPhoneNumber")
+                .links(List.of(
+                        new LinkCreateRequest(LinkType.INSTAGRAM.name(), "InstagramUrl"),
+                        new LinkCreateRequest(LinkType.BLOG.name(), "BlogUrl"),
+                        new LinkCreateRequest(LinkType.WEB.name(), "WebUrl")))
+                .businessHours(List.of(
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.MONDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.TUESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.WEDNESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.THURSDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.FRIDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SATURDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SUNDAY.name(), "10:00:00", "21:00:00"
+                        )
+                ))
+                .build();
+    }
+
     public static PlaceUpdateRequest 장소_수정_요청_바디(
             final Long id,
             final String name,
@@ -144,15 +187,17 @@ public class AcceptanceTestFixture {
     public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
             final Long memberId,
             final String content,
-            final List<Long> tagIds
+            final List<Long> tagIds,
+            final Long imageId,
+            final Long placeId
     ) {
         return ReviewCreateRequest
                 .builder()
                 .rating(5)
                 .memberId(memberId)
-                .placeId(1L)
+                .placeId(placeId)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }
@@ -178,7 +223,8 @@ public class AcceptanceTestFixture {
             final Long memberId,
             final String content,
             final List<Long> tagIds,
-            final Long placeId
+            final Long placeId,
+            final Long imageId
     ) {
         return ReviewCreateRequest
                 .builder()
@@ -186,7 +232,7 @@ public class AcceptanceTestFixture {
                 .memberId(memberId)
                 .placeId(placeId)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }
@@ -195,16 +241,18 @@ public class AcceptanceTestFixture {
             final Long id,
             final int rating,
             final String content,
-            final List<Long> tagIds
+            final List<Long> tagIds,
+            final Long imageId,
+            final Long memberId
     ) {
         return ReviewUpdateRequest
                 .builder()
                 .id(id)
                 .rating(rating)
-                .memberId(2L)
+                .memberId(memberId)
                 .placeId(1L)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }
