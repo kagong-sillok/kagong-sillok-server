@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.member.domain.Member;
-import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewTagMapping;
 import org.prography.kagongsillok.review.domain.ReviewTagMappings;
@@ -21,7 +20,6 @@ public class ReviewDto {
     private Long id;
     private Long memberId;
     private Long placeId;
-    private String placeName;
     private String memberNickName;
     private String memberProfileUrl;
     private int rating;
@@ -35,7 +33,6 @@ public class ReviewDto {
             final Long id,
             final Long memberId,
             final Long placeId,
-            final String placeName,
             final String memberNickName,
             final String memberProfileUrl,
             final int rating,
@@ -47,7 +44,6 @@ public class ReviewDto {
         this.id = id;
         this.memberId = memberId;
         this.placeId = placeId;
-        this.placeName = placeName;
         this.memberNickName = memberNickName;
         this.memberProfileUrl = memberProfileUrl;
         this.rating = rating;
@@ -63,23 +59,6 @@ public class ReviewDto {
                 .id(review.getId())
                 .memberId(review.getMemberId())
                 .placeId(review.getPlaceId())
-                .memberNickName(review.getMemberNickName())
-                .memberProfileUrl(member.getProfileImageUrl())
-                .rating(review.getRating())
-                .content(review.getContent())
-                .images(images)
-                .tagIds(getTagIds(review.getTagMappings()))
-                .writtenAt(review.getWrittenAt())
-                .build();
-    }
-
-    public static ReviewDto of(final Review review, final Member member, final List<Image> images, final Place place) {
-        return ReviewDto
-                .builder()
-                .id(review.getId())
-                .memberId(review.getMemberId())
-                .placeId(review.getPlaceId())
-                .placeName(place.getName())
                 .memberNickName(review.getMemberNickName())
                 .memberProfileUrl(member.getProfileImageUrl())
                 .rating(review.getRating())
