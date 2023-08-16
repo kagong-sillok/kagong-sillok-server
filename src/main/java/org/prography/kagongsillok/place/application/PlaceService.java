@@ -92,7 +92,9 @@ public class PlaceService {
         final List<Review> reviews = reviewRepository.findByReviewTagIds(reviewTagIds);
         final List<Long> placeIds = reviews.stream()
                 .map(review -> review.getPlaceId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet())
+                .stream()
+                .toList();
 
         final List<Place> places = placeRepository.findByIdIn(placeIds);
 
