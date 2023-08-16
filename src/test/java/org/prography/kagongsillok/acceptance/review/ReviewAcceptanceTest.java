@@ -8,7 +8,6 @@ import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.링크_두개_장소_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디;
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_세개_링크_두개_장소_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
 import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
 import org.prography.kagongsillok.image.ui.dto.ImageCreateRequest;
-import org.prography.kagongsillok.image.ui.dto.ImageListResponse;
 import org.prography.kagongsillok.image.ui.dto.ImageResponse;
 import org.prography.kagongsillok.member.ui.dto.MemberResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;

@@ -297,7 +297,7 @@ public class AcceptanceTestFixture {
     }
 
     public static StudyRecordCreateRequest 공부_기록_생성_요청_바디(final Long memberId, final Long placeId,
-            final String description) {
+            final String description, final Long imageId) {
         return StudyRecordCreateRequest.builder()
                 .memberId(memberId)
                 .placeId(placeId)
@@ -306,7 +306,7 @@ public class AcceptanceTestFixture {
                 .studyDay(6)
                 .duration(50)
                 .description(description)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
     }
 }
