@@ -12,6 +12,9 @@ import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.member.domain.MemberRepository;
+import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
+import org.prography.kagongsillok.place.domain.Place;
+import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.prography.kagongsillok.review.application.dto.ReviewCreateCommand;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 import org.prography.kagongsillok.review.application.dto.ReviewImageDto;
@@ -35,6 +38,7 @@ public class ReviewService {
     private final ReviewTagRepository reviewTagRepository;
     private final MemberRepository memberRepository;
     private final ImageRepository imageRepository;
+    private final PlaceRepository placeRepository;
 
     @Transactional
     public ReviewDto createReview(final ReviewCreateCommand reviewCreateCommand) {
@@ -78,7 +82,9 @@ public class ReviewService {
         for (Review review : reviews) {
             final Member member = memberRepository.findById(review.getMemberId())
                     .orElseThrow(() -> new NotFoundMemberException(review.getMemberId()));
-            reviewDtos.add(ReviewDto.of(review, member, getImages(review)));
+            final Place place = placeRepository.findById(review.getPlaceId())
+                    .orElseThrow(() -> new NotFoundPlaceException(review.getPlaceId()));
+            reviewDtos.add(ReviewDto.of(review, member, getImages(review), place));
         }
 
         return reviewDtos;
