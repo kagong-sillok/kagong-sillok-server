@@ -179,7 +179,8 @@ public class StudyRecordAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(생성된_공부_기록_응답.getStudyDate()).isEqualTo(LocalDate.of(2023, 7, 6)),
                 () -> assertThat(생성된_공부_기록_응답.getDuration()).isEqualTo(50),
                 () -> assertThat(생성된_공부_기록_응답.getDescription()).isEqualTo("모각코"),
-                () -> assertThat(생성된_공부_기록_응답.getImageIds()).isEqualTo(List.of(생성된_이미지_id))
+                () -> assertThat(생성된_공부_기록_응답.getImages()).extracting("id")
+                        .isEqualTo(List.of(생성된_이미지_id))
         );
     }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
@@ -16,6 +17,7 @@ import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
 import org.prography.kagongsillok.record.application.exception.NotFoundStudyRecordException;
 import org.prography.kagongsillok.record.domain.StudyRecord;
 import org.prography.kagongsillok.record.domain.StudyRecordRepository;
+import org.prography.kagongsillok.review.domain.Review;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,13 +40,13 @@ public class StudyRecordService {
 
         final StudyRecord savedStudyRecord = studyRecordRepository.save(command.toEntity(place.getName()));
 
-        return StudyRecordDto.from(savedStudyRecord);
+        return StudyRecordDto.of(savedStudyRecord, getImages(savedStudyRecord));
     }
 
     public List<StudyRecordDto> getMemberStudyRecords(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
 
-        return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
+        return getStudyRecordDtos(studyRecords);
     }
 
     public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final int year,
@@ -52,7 +54,7 @@ public class StudyRecordService {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(
                 memberId, year, month);
 
-        return CustomListUtils.mapTo(studyRecords, StudyRecordDto::from);
+        return getStudyRecordDtos(studyRecords);
     }
 
     public List<PlaceDto> getMemberStudyPlaces(final Long memberId) {
@@ -79,5 +81,15 @@ public class StudyRecordService {
         if (imageRepository.isExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
+    }
+
+    private List<Image> getImages(final StudyRecord studyRecord) {
+        return imageRepository.findByIdIn(studyRecord.getImageIds());
+    }
+
+    private List<StudyRecordDto> getStudyRecordDtos(final List<StudyRecord> studyRecords) {
+        return studyRecords.stream()
+                .map(studyRecord -> StudyRecordDto.of(studyRecord, getImages(studyRecord)))
+                .collect(Collectors.toList());
     }
 }

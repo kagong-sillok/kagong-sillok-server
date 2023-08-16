@@ -61,7 +61,8 @@ public class StudyRecordServiceTest {
                 () -> assertThat(studyRecordDto.getStudyDate()).isEqualTo(LocalDate.of(2023, 7, 10)),
                 () -> assertThat(studyRecordDto.getDuration()).isEqualTo(100),
                 () -> assertThat(studyRecordDto.getDescription()).isEqualTo("모각코"),
-                () -> assertThat(studyRecordDto.getImageIds()).isEqualTo(List.of(imageId))
+                () -> assertThat(studyRecordDto.getImages()).extracting("id")
+                        .isEqualTo(List.of(imageId))
         );
     }
 
