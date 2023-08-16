@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.place.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
@@ -11,6 +12,8 @@ import org.prography.kagongsillok.place.application.exception.NotFoundPlaceExcep
 import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
+import org.prography.kagongsillok.review.domain.Review;
+import org.prography.kagongsillok.review.domain.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public PlaceDto createPlace(final PlaceCreateCommand placeCreateCommand) {
@@ -71,5 +75,17 @@ public class PlaceService {
                 .orElseThrow(() -> new NotFoundPlaceException(id));
 
         place.delete();
+    }
+
+    public List<PlaceDto> searchPlacesByTags(final List<Long> reviewTagIds) {
+        final List<Review> reviews = reviewRepository.findByReviewTagIds(reviewTagIds);
+        final List<Long> placeIds = reviews.stream()
+                .map(review -> review.getPlaceId())
+                .collect(Collectors.toList());
+
+        final List<Place> places = placeRepository.findByIdIn(placeIds);
+
+
+        return CustomListUtils.mapTo(places, PlaceDto::from);
     }
 }
