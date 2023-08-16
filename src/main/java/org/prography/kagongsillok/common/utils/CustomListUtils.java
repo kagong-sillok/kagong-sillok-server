@@ -35,6 +35,9 @@ public class CustomListUtils {
     }
 
     public static <T> String joiningToString(final List<T> list, final String delimiter) {
+        if (list.size() < 1) {
+            return null;
+        }
         return list.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(delimiter));

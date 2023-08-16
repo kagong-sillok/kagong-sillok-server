@@ -48,7 +48,7 @@ public class ReviewService {
 
         final Review savedReview = reviewRepository.save(review);
 
-        return ReviewDto.of(savedReview, member);
+        return ReviewDto.of(savedReview, member, getImages(review));
     }
 
     public ReviewDto getReview(final Long id) {
@@ -64,7 +64,7 @@ public class ReviewService {
             throw new NotFoundReviewException(memberId);
         }
 
-        return ReviewDto.of(review, member);
+        return ReviewDto.of(review, member, getImages(review));
     }
 
     public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
@@ -74,7 +74,7 @@ public class ReviewService {
         for (Review review : reviews) {
             final Member member = memberRepository.findById(review.getMemberId())
                     .orElseThrow(() -> new NotFoundMemberException(review.getMemberId()));
-            reviewDtos.add(ReviewDto.of(review, member));
+            reviewDtos.add(ReviewDto.of(review, member, getImages(review)));
         }
 
         return reviewDtos;
@@ -101,7 +101,7 @@ public class ReviewService {
         final Member member = memberRepository.findById(target.getMemberId())
                 .orElseThrow(() -> new NotFoundMemberException(target.getMemberId()));
 
-        return ReviewDto.of(review, member);
+        return ReviewDto.of(review, member, getImages(review));
     }
 
     @Transactional
@@ -197,8 +197,12 @@ public class ReviewService {
                                 .build();
                     }
 
-                    return ReviewDto.of(review, member);
+                    return ReviewDto.of(review, member, getImages(review));
                 })
                 .collect(Collectors.toList());
+    }
+
+    private List<Image> getImages(final Review review) {
+        return imageRepository.findByIdIn(review.getImageIds());
     }
 }
