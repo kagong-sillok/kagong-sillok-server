@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
+import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
+import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
 import org.prography.kagongsillok.place.domain.Place;
@@ -24,12 +26,15 @@ public class StudyRecordService {
 
     private final StudyRecordRepository studyRecordRepository;
     private final PlaceRepository placeRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
     public StudyRecordDto createStudyRecord(final StudyRecordCreateCommand command) {
         final Long placeId = command.getPlaceId();
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
+
+        checkExistImage(command.getImageIds());
 
         final StudyRecord savedStudyRecord = studyRecordRepository.save(command.toEntity(place.getName()));
 
@@ -68,5 +73,11 @@ public class StudyRecordService {
                 .orElseThrow(() -> new NotFoundStudyRecordException(id));
 
         studyRecord.delete();
+    }
+
+    private void checkExistImage(final List<Long> imageIds) {
+        if (imageRepository.isExistIdIn(imageIds)) {
+            throw new NotFoundImageException(imageIds);
+        }
     }
 }
