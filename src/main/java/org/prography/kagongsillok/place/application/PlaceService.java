@@ -14,6 +14,7 @@ import org.prography.kagongsillok.place.domain.Place;
 import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewRepository;
+import org.prography.kagongsillok.review.domain.ReviewTag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,24 @@ public class PlaceService {
         }
 
         return PlaceDto.from(place);
+    }
+
+    public PlaceDto getPlaceWithTags(final Long placeId) {
+        final Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new NotFoundPlaceException(placeId));
+        if (place.getIsDeleted()) {
+            throw new NotFoundPlaceException(placeId);
+        }
+        final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
+        final List<ReviewTag> reviewTags = reviews.stream()
+                .flatMap(review -> review.getTagMappings()
+                        .getValues()
+                        .stream()
+                        .map(reviewTagMapping -> reviewTagMapping.getReviewTag())
+                )
+                .collect(Collectors.toList());
+
+        return PlaceDto.of(place, reviewTags);
     }
 
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
@@ -84,7 +103,6 @@ public class PlaceService {
                 .collect(Collectors.toList());
 
         final List<Place> places = placeRepository.findByIdIn(placeIds);
-
 
         return CustomListUtils.mapTo(places, PlaceDto::from);
     }

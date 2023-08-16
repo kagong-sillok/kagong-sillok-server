@@ -30,6 +30,12 @@ public class PlaceV1Controller {
         return CommonResponse.success(PlaceResponse.from(placeDto));
     }
 
+    @GetMapping("/with-tags/{placeId}")
+    public ResponseEntity<CommonResponse<PlaceResponse>> getPlaceWithTags(@PathVariable("placeId") final Long placeId) {
+        final PlaceDto placeDto = placeService.getPlaceWithTags(placeId);
+        return CommonResponse.success(PlaceResponse.from(placeDto));
+    }
+
     @GetMapping("/around")
     public ResponseEntity<CommonResponse<PlaceListResponse>> searchAroundPlace(
             @ModelAttribute final PlaceLocationAroundSearchRequest request

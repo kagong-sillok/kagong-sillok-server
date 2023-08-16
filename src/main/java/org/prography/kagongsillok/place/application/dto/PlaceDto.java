@@ -10,6 +10,7 @@ import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Place;
+import org.prography.kagongsillok.review.domain.ReviewTag;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,6 +25,7 @@ public class PlaceDto {
     private String phone;
     private List<LinkDto> links;
     private List<BusinessHourDto> businessHours;
+    private List<ReviewTag> reviewTags;
 
     @Builder
     public PlaceDto(
@@ -35,7 +37,8 @@ public class PlaceDto {
             final List<Long> imageIds,
             final String phone,
             final List<LinkDto> links,
-            final List<BusinessHourDto> businessHours
+            final List<BusinessHourDto> businessHours,
+            final List<ReviewTag> reviewTags
     ) {
         this.id = id;
         this.name = name;
@@ -46,6 +49,7 @@ public class PlaceDto {
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
+        this.reviewTags = reviewTags;
     }
 
     public static PlaceDto from(final Place place) {
@@ -59,6 +63,21 @@ public class PlaceDto {
                 .phone(place.getPhone())
                 .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
                 .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
+                .build();
+    }
+
+    public static PlaceDto of(final Place place, final List<ReviewTag> reviewTags) {
+        return PlaceDto.builder()
+                .id(place.getId())
+                .name(place.getName())
+                .address(place.getAddress())
+                .latitude(place.getLatitude())
+                .longitude(place.getLongitude())
+                .imageIds(place.getImageIds())
+                .phone(place.getPhone())
+                .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
+                .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
+                .reviewTags(reviewTags)
                 .build();
     }
 

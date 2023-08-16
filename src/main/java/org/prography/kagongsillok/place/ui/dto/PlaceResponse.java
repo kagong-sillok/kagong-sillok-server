@@ -11,6 +11,7 @@ import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.BusinessHourDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.LinkDto;
+import org.prography.kagongsillok.review.domain.ReviewTag;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,6 +26,7 @@ public class PlaceResponse {
     private String phone;
     private List<LinkResponse> links;
     private List<BusinessHourResponse> businessHours;
+    private List<ReviewTag> reviewTags;
 
     @Builder
     public PlaceResponse(
@@ -36,7 +38,8 @@ public class PlaceResponse {
             final List<Long> imageIds,
             final String phone,
             final List<LinkResponse> links,
-            final List<BusinessHourResponse> businessHours
+            final List<BusinessHourResponse> businessHours,
+            final List<ReviewTag> reviewTags
     ) {
         this.id = id;
         this.name = name;
@@ -47,6 +50,7 @@ public class PlaceResponse {
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
+        this.reviewTags = reviewTags;
     }
 
     public static PlaceResponse from(final PlaceDto placeDto) {
@@ -60,6 +64,7 @@ public class PlaceResponse {
                 .phone(placeDto.getPhone())
                 .links(CustomListUtils.mapTo(placeDto.getLinks(), LinkResponse::from))
                 .businessHours(CustomListUtils.mapTo(placeDto.getBusinessHours(), BusinessHourResponse::from))
+                .reviewTags(placeDto.getReviewTags())
                 .build();
     }
 
