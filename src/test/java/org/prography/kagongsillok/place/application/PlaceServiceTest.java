@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.image.domain.Image;
+import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.BusinessHourCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.LinkCreateCommand;
@@ -28,6 +30,9 @@ class PlaceServiceTest {
 
     @Autowired
     private PlaceService placeService;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     private final List<LinkCreateCommand> linkCreateCommands = List.of(
             new LinkCreateCommand(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
@@ -61,12 +66,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소를_생성한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand = PlaceCreateCommand.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(123.123)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -79,7 +85,7 @@ class PlaceServiceTest {
                 () -> assertThat(createdPlace.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(createdPlace.getLatitude()).isEqualTo(90.0),
                 () -> assertThat(createdPlace.getLongitude()).isEqualTo(123.123),
-                () -> assertThat(createdPlace.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
+                () -> assertThat(createdPlace.getImageIds()).isEqualTo(List.of(imageId)),
                 () -> assertThat(createdPlace.getPhone()).isEqualTo("010-1111-1111"),
                 () -> assertThat(createdPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
@@ -100,12 +106,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소를_조회한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand = PlaceCreateCommand.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(123.123)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -119,7 +126,7 @@ class PlaceServiceTest {
                 () -> assertThat(place.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(place.getLatitude()).isEqualTo(90.0),
                 () -> assertThat(place.getLongitude()).isEqualTo(123.123),
-                () -> assertThat(place.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
+                () -> assertThat(place.getImageIds()).isEqualTo(List.of(imageId)),
                 () -> assertThat(place.getPhone()).isEqualTo("010-1111-1111"),
                 () -> assertThat(place.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
@@ -140,12 +147,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소를_수정한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand = PlaceCreateCommand.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(123.123)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -156,7 +164,7 @@ class PlaceServiceTest {
                 .address("바뀐 테스트특별시 테스트구 테스트로 1004")
                 .latitude(89.0)
                 .longitude(123.12)
-                .imageIds(List.of(4L, 5L, 6L))
+                .imageIds(List.of(imageId))
                 .phone("010-2222-2222")
                 .links(List.of(
                         new LinkUpdateCommand(LinkType.INSTAGRAM.name(), "updateTestInstagramUrl"),
@@ -195,7 +203,7 @@ class PlaceServiceTest {
                 () -> assertThat(updatedPlace.getAddress()).isEqualTo("바뀐 테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(updatedPlace.getLatitude()).isEqualTo(89.0),
                 () -> assertThat(updatedPlace.getLongitude()).isEqualTo(123.12),
-                () -> assertThat(updatedPlace.getImageIds()).isEqualTo(List.of(4L, 5L, 6L)),
+                () -> assertThat(updatedPlace.getImageIds()).isEqualTo(List.of(imageId)),
                 () -> assertThat(updatedPlace.getPhone()).isEqualTo("010-2222-2222"),
                 () -> assertThat(updatedPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
@@ -226,12 +234,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소를_삭제한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand = PlaceCreateCommand.builder()
                 .name("테스트 카페")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(123.123)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -247,12 +256,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소가_존재하도록_범위를_설정하고_위도_경도로_장소를_검색한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
                 .name("테스트 카페1")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(120.129)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -262,7 +272,7 @@ class PlaceServiceTest {
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(67.29)
                 .longitude(60.298)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -292,12 +302,13 @@ class PlaceServiceTest {
 
     @Test
     void 장소가_존재하지_않도록_범위를_설정하고_위도_경도로_장소를_검색한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
                 .name("테스트 카페1")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(120.129)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -307,7 +318,7 @@ class PlaceServiceTest {
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(-80.29)
                 .longitude(-60.298)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -331,13 +342,14 @@ class PlaceServiceTest {
 
     @Test
     void 장소_이름으로_장소를_검색한다() {
+        final Long imageId = saveImageAndGetImageId("imageUrl1");
         final String name1 = "테스트 카페1";
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
                 .name("테스트 카페1")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(90.0)
                 .longitude(120.129)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -347,7 +359,7 @@ class PlaceServiceTest {
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(-80.29)
                 .longitude(-60.298)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -357,7 +369,7 @@ class PlaceServiceTest {
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(-88.29)
                 .longitude(-67.298)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of(imageId))
                 .phone("010-1111-1111")
                 .links(linkCreateCommands)
                 .businessHours(businessHourCreateCommands)
@@ -375,5 +387,15 @@ class PlaceServiceTest {
                 () -> assertThat(searchPlaces1).extracting("longitude")
                         .containsAll(List.of(120.129, -60.298))
         );
+    }
+
+    private Long saveImageAndGetImageId(final String imageUrl) {
+        final Image image = Image.builder()
+                .url(imageUrl)
+                .width(100)
+                .height(100)
+                .extension("extension")
+                .build();
+        return imageRepository.save(image).getId();
     }
 }

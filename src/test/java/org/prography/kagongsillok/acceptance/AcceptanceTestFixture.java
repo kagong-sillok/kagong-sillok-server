@@ -63,7 +63,7 @@ public class AcceptanceTestFixture {
                 .address("테스트특별시 테스트구 테스트로")
                 .latitude(latitude)
                 .longitude(longitude)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of())
                 .phone("testPhoneNumber")
                 .links(List.of(
                         new LinkCreateRequest(LinkType.INSTAGRAM.name(), "InstagramUrl"),
@@ -142,7 +142,8 @@ public class AcceptanceTestFixture {
             final Long id,
             final String name,
             final Double latitude,
-            final Double longitude
+            final Double longitude,
+            final Long imageId
     ) {
         return PlaceUpdateRequest
                 .builder()
@@ -151,7 +152,7 @@ public class AcceptanceTestFixture {
                 .address("새로운 테스트 특별시")
                 .latitude(latitude)
                 .longitude(longitude)
-                .imageIds(List.of(4L, 5L, 6L))
+                .imageIds(List.of(imageId))
                 .phone("newTestPhoneNumber")
                 .links(List.of(
                         new LinkUpdateRequest(LinkType.INSTAGRAM.name(), "newInstagramUrl"),
@@ -206,7 +207,8 @@ public class AcceptanceTestFixture {
             final Long placeId,
             final Long memberId,
             final String content,
-            final List<Long> tagIds
+            final List<Long> tagIds,
+            final Long imageId
     ) {
         return ReviewCreateRequest
                 .builder()
@@ -214,7 +216,7 @@ public class AcceptanceTestFixture {
                 .memberId(memberId)
                 .placeId(placeId)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }

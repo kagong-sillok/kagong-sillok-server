@@ -3,7 +3,8 @@ package org.prography.kagongsillok.acceptance.place;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.기본_닉네임_이메일_가입_요청_바디;
-import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_세개_링크_두개_장소_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.넓이_100_높이_200_jpeg_이미지_생성_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.링크_두개_장소_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.장소_ID로_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.장소_수정_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
@@ -12,6 +13,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
 import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
+import org.prography.kagongsillok.image.ui.dto.ImageCreateRequest;
+import org.prography.kagongsillok.image.ui.dto.ImageResponse;
 import org.prography.kagongsillok.member.ui.dto.MemberResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceListResponse;
@@ -30,21 +33,26 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
     private static final String REVIEW_API_BASE_URL_V1 = "api/v1/reviews";
     private static final String TAG_ADMIN_BASE_URL_V1 = "admin/v1/tags";
     private static final String AUTH_API_BASE_URL_V1 = "/api/v1/auth";
+    private static final String IMAGE_API_BASE_URL_V1 = "/api/v1/images";
 
     @Test
     void 관리자가_장소를_등록한다() {
-        final var 장소_생성_요청_바디 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
 
         final var 생성된_장소_응답 = 장소_생성_요청(장소_생성_요청_바디);
 
-        생성된_장소_검증(생성된_장소_응답);
+        생성된_장소_검증(생성된_장소_응답, 생성된_이미지_ID);
     }
 
     @Test
     void 관리자가_장소_id로_장소_단건_조회를_한다() {
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", 50.0, 110.0);
-        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", 80.0, 80.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace2", 50.0, 110.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디3 = 링크_두개_장소_생성_요청_바디("testPlace3", 80.0, 80.0, 생성된_이미지_ID);
         final var 생성된_장소_id1 = 장소_생성_요청(장소_생성_요청_바디1).getId();
         final var 생성된_장소_id2 = 장소_생성_요청(장소_생성_요청_바디2).getId();
         final var 생성된_장소_id3 = 장소_생성_요청(장소_생성_요청_바디3).getId();
@@ -76,18 +84,22 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 관리자가_장소를_수정_한다() {
-        final var 장소_생성_요청_바디 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
         final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
 
-        final var 장소_수정_요청_바디 = 장소_수정_요청_바디(생성된_장소_id, "newTestPlace", 10.0, -10.0);
+        final var 장소_수정_요청_바디 = 장소_수정_요청_바디(생성된_장소_id, "newTestPlace", 10.0, -10.0, 생성된_이미지_ID);
         final var 수정된_장소_응답 = 장소_수정_요청(장소_수정_요청_바디);
 
-        수정된_장소_검증(수정된_장소_응답);
+        수정된_장소_검증(수정된_장소_응답, 생성된_이미지_ID);
     }
 
     @Test
     void 관리자가_장소를_삭제_한다() {
-        final var 장소_생성_요청_바디 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace", 30.0, 150.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace", 30.0, 150.0, 생성된_이미지_ID);
         final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
 
         final var 장소_삭제_응답 = 장소_삭제_응답_요청(생성된_장소_id);
@@ -98,9 +110,11 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 사용자가_장소_id로_장소_정보를_조회한다() {
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", 50.0, 110.0);
-        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", 80.0, 80.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace2", 50.0, 110.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디3 = 링크_두개_장소_생성_요청_바디("testPlace3", 80.0, 80.0, 생성된_이미지_ID);
         final var 생성된_장소_id1 = 장소_생성_요청(장소_생성_요청_바디1).getId();
         final var 생성된_장소_id2 = 장소_생성_요청(장소_생성_요청_바디2).getId();
         final var 생성된_장소_id3 = 장소_생성_요청(장소_생성_요청_바디3).getId();
@@ -114,9 +128,11 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 사용자가_위도_경도_주변을_검색한다() {
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", 40.0, 50.0);
-        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", -50.0, -50.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace2", 40.0, 50.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디3 = 링크_두개_장소_생성_요청_바디("testPlace3", -50.0, -50.0, 생성된_이미지_ID);
         final var 생성된_장소1 = 장소_생성_요청(장소_생성_요청_바디1);
         final var 생성된_장소2 = 장소_생성_요청(장소_생성_요청_바디2);
         final var 생성된_장소3 = 장소_생성_요청(장소_생성_요청_바디3);
@@ -134,13 +150,15 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 사용자가_장소_이름으로_검색한다() {
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 40.0, 50.0);
-        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0);
-        final var 장소_생성_요청_바디4 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -70.0, 100.0);
-        final var 장소_생성_요청_바디5 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -40.0, 130.0);
-        final var 장소_생성_요청_바디6 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -9.0);
-        final var 장소_생성_요청_바디7 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", 20.0, 28.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace1", 40.0, 50.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디3 = 링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디4 = 링크_두개_장소_생성_요청_바디("testPlace2", -70.0, 100.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디5 = 링크_두개_장소_생성_요청_바디("testPlace2", -40.0, 130.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디6 = 링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -9.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디7 = 링크_두개_장소_생성_요청_바디("testPlace3", 20.0, 28.0, 생성된_이미지_ID);
         final var 생성된_장소1 = 장소_생성_요청(장소_생성_요청_바디1);
         final var 생성된_장소2 = 장소_생성_요청(장소_생성_요청_바디2);
         final var 생성된_장소3 = 장소_생성_요청(장소_생성_요청_바디3);
@@ -158,8 +176,10 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 사용자가_없는_장소_이름으로_검색한다() {
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0);
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0, 생성된_이미지_ID);
         final var 생성된_장소1 = 장소_생성_요청(장소_생성_요청_바디1);
         final var 생성된_장소2 = 장소_생성_요청(장소_생성_요청_바디2);
 
@@ -170,11 +190,13 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 사용자가_태그로_관련된_장소들을_검색한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
-        final var 장소_생성_요청_바디1 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0);
-        final var 장소_생성_요청_바디2 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0);
-        final var 장소_생성_요청_바디3 = 이미지_세개_링크_두개_장소_생성_요청_바디("testPlace3", -10.0, -20.0);
+        final var 장소_생성_요청_바디1 = 링크_두개_장소_생성_요청_바디("testPlace1", 10.0, 10.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디2 = 링크_두개_장소_생성_요청_바디("testPlace2", -50.0, -50.0, 생성된_이미지_ID);
+        final var 장소_생성_요청_바디3 = 링크_두개_장소_생성_요청_바디("testPlace3", -10.0, -20.0, 생성된_이미지_ID);
         final var 생성_장소1_ID = 장소_생성_요청(장소_생성_요청_바디1).getId();
         final var 생성_장소2_ID = 장소_생성_요청(장소_생성_요청_바디2).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -187,8 +209,8 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그4_ID = 태그_생성_요청(태그_생성_요청_바디4).getId();
         final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_ID, 생성된_태그2_ID);
         final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_ID, 생성된_태그4_ID);
-        final var 리뷰_생성_요청_바디1 = 장소_ID로_리뷰_생성_요청_바디(생성_장소1_ID, 생성된_멤버_id, "test review", 입력_태그1);
-        final var 리뷰_생성_요청_바디2 = 장소_ID로_리뷰_생성_요청_바디(생성_장소2_ID, 생성된_멤버_id, "test review", 입력_태그2);
+        final var 리뷰_생성_요청_바디1 = 장소_ID로_리뷰_생성_요청_바디(생성_장소1_ID, 생성된_멤버_id, "test review", 입력_태그1, 생성된_이미지_ID);
+        final var 리뷰_생성_요청_바디2 = 장소_ID로_리뷰_생성_요청_바디(생성_장소2_ID, 생성된_멤버_id, "test review", 입력_태그2, 생성된_이미지_ID);
         리뷰_생성_요청(리뷰_생성_요청_바디1);
         리뷰_생성_요청(리뷰_생성_요청_바디2);
         final var 조회할_태그_ID들 = 조회할_태그_생성(생성된_태그1_ID, 생성된_태그3_ID);
@@ -196,6 +218,10 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         final var 태그_ID로_장소_조회_응답 = 태그_ID로_장소_조회_요청(조회할_태그_ID들);
 
         태그_ID로_장소_조회_검증(태그_ID로_장소_조회_응답);
+    }
+
+    private ImageResponse 이미지_생성_요청(final ImageCreateRequest 이미지_생성_요청_바디) {
+        return 응답_바디_추출(post(IMAGE_API_BASE_URL_V1, 이미지_생성_요청_바디), ImageResponse.class);
     }
 
     private MemberResponse 멤버_생성_요청(final LocalJoinRequest 멤버_생성_요청_바디) {
@@ -325,13 +351,13 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         return delete(PLACE_ADMIN_BASE_URL_V1 + "/" + 생성된_장소_id).statusCode();
     }
 
-    private static void 수정된_장소_검증(final PlaceResponse 수정된_장소_응답) {
+    private static void 수정된_장소_검증(final PlaceResponse 수정된_장소_응답, final Long 생성된_이미지_id) {
         assertAll(
                 () -> assertThat(수정된_장소_응답.getId()).isEqualTo(1L),
                 () -> assertThat(수정된_장소_응답.getName()).isEqualTo("newTestPlace"),
                 () -> assertThat(수정된_장소_응답.getLatitude()).isEqualTo(10.0),
                 () -> assertThat(수정된_장소_응답.getLongitude()).isEqualTo(-10.0),
-                () -> assertThat(수정된_장소_응답.getImageIds()).isEqualTo(List.of(4L, 5L, 6L)),
+                () -> assertThat(수정된_장소_응답.getImageIds()).isEqualTo(List.of(생성된_이미지_id)),
                 () -> assertThat(수정된_장소_응답.getLinks()).extracting("url")
                         .containsAll(List.of("newWebUrl", "newBlogUrl", "newInstagramUrl")),
                 () -> assertThat(수정된_장소_응답.getBusinessHours()).extracting("open")
@@ -358,13 +384,13 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
     }
 
 
-    private static void 생성된_장소_검증(final PlaceResponse 생성된_장소_응답) {
+    private static void 생성된_장소_검증(final PlaceResponse 생성된_장소_응답, final Long 생성된_이미지_id) {
         assertAll(
                 () -> assertThat(생성된_장소_응답.getName()).isEqualTo("testPlace1"),
                 () -> assertThat(생성된_장소_응답.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로"),
                 () -> assertThat(생성된_장소_응답.getLongitude()).isEqualTo(150.0),
                 () -> assertThat(생성된_장소_응답.getLatitude()).isEqualTo(30.0),
-                () -> assertThat(생성된_장소_응답.getImageIds()).isEqualTo(List.of(1L, 2L, 3L)),
+                () -> assertThat(생성된_장소_응답.getImageIds()).isEqualTo(List.of(생성된_이미지_id)),
                 () -> assertThat(생성된_장소_응답.getPhone()).isEqualTo("testPhoneNumber"),
                 () -> assertThat(생성된_장소_응답.getLinks()).extracting("url")
                         .containsAll(List.of("WebUrl", "BlogUrl", "InstagramUrl")),
