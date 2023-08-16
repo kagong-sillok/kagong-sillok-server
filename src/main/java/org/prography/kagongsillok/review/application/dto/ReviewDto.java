@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewTagMapping;
 import org.prography.kagongsillok.review.domain.ReviewTagMappings;
@@ -19,6 +20,7 @@ public class ReviewDto {
     private Long memberId;
     private Long placeId;
     private String memberNickName;
+    private String memberProfileUrl;
     private int rating;
     private String content;
     private List<Long> imageIds;
@@ -31,6 +33,7 @@ public class ReviewDto {
             final Long memberId,
             final Long placeId,
             final String memberNickName,
+            final String memberProfileUrl,
             final int rating,
             final String content,
             final List<Long> imageIds,
@@ -48,13 +51,14 @@ public class ReviewDto {
         this.writtenAt = writtenAt;
     }
 
-    public static ReviewDto from(Review review) {
+    public static ReviewDto of(Review review, final Member member) {
         return ReviewDto
                 .builder()
                 .id(review.getId())
                 .memberId(review.getMemberId())
                 .placeId(review.getPlaceId())
                 .memberNickName(review.getMemberNickName())
+                .memberProfileUrl(member.getProfileImageUrl())
                 .rating(review.getRating())
                 .content(review.getContent())
                 .imageIds(review.getImageIds())
@@ -63,7 +67,7 @@ public class ReviewDto {
                 .build();
     }
 
-    private static List<Long> getTagIds(ReviewTagMappings reviewTags) {
+    private static List<Long> getTagIds(final ReviewTagMappings reviewTags) {
         List<ReviewTagMapping> reviewTagMappings = reviewTags.getValues();
         List<Long> tagIds = new ArrayList<>();
 

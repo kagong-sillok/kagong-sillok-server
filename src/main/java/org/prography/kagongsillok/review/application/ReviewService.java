@@ -48,29 +48,44 @@ public class ReviewService {
 
         final Review savedReview = reviewRepository.save(review);
 
-        return ReviewDto.from(savedReview);
+        return ReviewDto.of(savedReview, member);
     }
 
     public ReviewDto getReview(final Long id) {
         final Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new NotFoundReviewException(id));
+        final Long memberId = review.getMemberId();
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundMemberException(memberId));
         if (review.getIsDeleted()) {
             throw new NotFoundReviewException(id);
         }
+        if (member.getIsDeleted()) {
+            throw new NotFoundReviewException(memberId);
+        }
 
-        return ReviewDto.from(review);
+        return ReviewDto.of(review, member);
     }
 
     public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
         final List<Review> reviews = reviewRepository.findAllByMemberId(memberId);
 
-        return CustomListUtils.mapTo(reviews, ReviewDto::from);
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+        for (Review review : reviews) {
+            final Member member = memberRepository.findById(review.getMemberId())
+                    .orElseThrow(() -> new NotFoundMemberException(review.getMemberId()));
+            reviewDtos.add(ReviewDto.of(review, member));
+        }
+
+        return reviewDtos;
     }
 
     public List<ReviewDto> getAllReviewsByPlaceId(final Long placeId) {
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
+        final List<Long> reviewedMemberIds = getReviewedMemberIds(reviews);
+        final Map<Long, Member> reviewedMembers = memberRepository.findByIdIn(reviewedMemberIds);
 
-        return CustomListUtils.mapTo(reviews, ReviewDto::from);
+        return mappingMemberToReview(reviews, reviewedMembers);
     }
 
     @Transactional
@@ -83,7 +98,10 @@ public class ReviewService {
 
         review.update(target);
 
-        return ReviewDto.from(review);
+        final Member member = memberRepository.findById(target.getMemberId())
+                .orElseThrow(() -> new NotFoundMemberException(target.getMemberId()));
+
+        return ReviewDto.of(review, member);
     }
 
     @Transactional
@@ -161,5 +179,26 @@ public class ReviewService {
         }
 
         return reviewImageDtos;
+    }
+    private List<Long> getReviewedMemberIds(final List<Review> reviews) {
+        return reviews.stream()
+                .map(review -> review.getMemberId())
+                .collect(Collectors.toList());
+    }
+
+    private List<ReviewDto> mappingMemberToReview(final List<Review> reviews, final Map<Long, Member> members) {
+        return reviews.stream()
+                .map(review -> {
+                    Member member = members.get(review.getMemberId());
+                    if (member == null) {
+                        member = Member.builder()
+                                .nickname("알 수 없음")
+                                .email("Unknown@unknown.com")
+                                .build();
+                    }
+
+                    return ReviewDto.of(review, member);
+                })
+                .collect(Collectors.toList());
     }
 }
