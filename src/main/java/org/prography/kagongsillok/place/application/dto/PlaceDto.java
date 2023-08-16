@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Place;
@@ -21,7 +22,7 @@ public class PlaceDto {
     private String address;
     private Double latitude;
     private Double longitude;
-    private List<Long> imageIds;
+    private List<Image> images;
     private String phone;
     private List<LinkDto> links;
     private List<BusinessHourDto> businessHours;
@@ -34,7 +35,7 @@ public class PlaceDto {
             final String address,
             final Double latitude,
             final Double longitude,
-            final List<Long> imageIds,
+            final List<Image> images,
             final String phone,
             final List<LinkDto> links,
             final List<BusinessHourDto> businessHours,
@@ -45,7 +46,7 @@ public class PlaceDto {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.imageIds = imageIds;
+        this.images = images;
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
@@ -59,21 +60,34 @@ public class PlaceDto {
                 .address(place.getAddress())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
-                .imageIds(place.getImageIds())
                 .phone(place.getPhone())
                 .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
                 .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
                 .build();
     }
 
-    public static PlaceDto of(final Place place, final List<ReviewTag> reviewTags) {
+    public static PlaceDto of(final Place place, final List<Image> images) {
         return PlaceDto.builder()
                 .id(place.getId())
                 .name(place.getName())
                 .address(place.getAddress())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
-                .imageIds(place.getImageIds())
+                .images(images)
+                .phone(place.getPhone())
+                .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
+                .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
+                .build();
+    }
+
+    public static PlaceDto of(final Place place,final List<Image> images, final List<ReviewTag> reviewTags) {
+        return PlaceDto.builder()
+                .id(place.getId())
+                .name(place.getName())
+                .address(place.getAddress())
+                .latitude(place.getLatitude())
+                .longitude(place.getLongitude())
+                .images(images)
                 .phone(place.getPhone())
                 .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
                 .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.BusinessHourDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.LinkDto;
@@ -22,7 +23,7 @@ public class PlaceResponse {
     private String address;
     private Double latitude;
     private Double longitude;
-    private List<Long> imageIds;
+    private List<Image> images;
     private String phone;
     private List<LinkResponse> links;
     private List<BusinessHourResponse> businessHours;
@@ -35,7 +36,7 @@ public class PlaceResponse {
             final String address,
             final Double latitude,
             final Double longitude,
-            final List<Long> imageIds,
+            final List<Image> images,
             final String phone,
             final List<LinkResponse> links,
             final List<BusinessHourResponse> businessHours,
@@ -46,7 +47,7 @@ public class PlaceResponse {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.imageIds = imageIds;
+        this.images = images;
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
@@ -60,7 +61,7 @@ public class PlaceResponse {
                 .address(placeDto.getAddress())
                 .latitude(placeDto.getLatitude())
                 .longitude(placeDto.getLongitude())
-                .imageIds(placeDto.getImageIds())
+                .images(placeDto.getImages())
                 .phone(placeDto.getPhone())
                 .links(CustomListUtils.mapTo(placeDto.getLinks(), LinkResponse::from))
                 .businessHours(CustomListUtils.mapTo(placeDto.getBusinessHours(), BusinessHourResponse::from))

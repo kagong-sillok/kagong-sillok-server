@@ -85,7 +85,8 @@ class PlaceServiceTest {
                 () -> assertThat(createdPlace.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(createdPlace.getLatitude()).isEqualTo(90.0),
                 () -> assertThat(createdPlace.getLongitude()).isEqualTo(123.123),
-                () -> assertThat(createdPlace.getImageIds()).isEqualTo(List.of(imageId)),
+                () -> assertThat(createdPlace.getImages()).extracting("id")
+                        .isEqualTo(List.of(imageId)),
                 () -> assertThat(createdPlace.getPhone()).isEqualTo("010-1111-1111"),
                 () -> assertThat(createdPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
@@ -126,7 +127,8 @@ class PlaceServiceTest {
                 () -> assertThat(place.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(place.getLatitude()).isEqualTo(90.0),
                 () -> assertThat(place.getLongitude()).isEqualTo(123.123),
-                () -> assertThat(place.getImageIds()).isEqualTo(List.of(imageId)),
+                () -> assertThat(place.getImages()).extracting("id")
+                        .isEqualTo(List.of(imageId)),
                 () -> assertThat(place.getPhone()).isEqualTo("010-1111-1111"),
                 () -> assertThat(place.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),
@@ -203,7 +205,8 @@ class PlaceServiceTest {
                 () -> assertThat(updatedPlace.getAddress()).isEqualTo("바뀐 테스트특별시 테스트구 테스트로 1004"),
                 () -> assertThat(updatedPlace.getLatitude()).isEqualTo(89.0),
                 () -> assertThat(updatedPlace.getLongitude()).isEqualTo(123.12),
-                () -> assertThat(updatedPlace.getImageIds()).isEqualTo(List.of(imageId)),
+                () -> assertThat(updatedPlace.getImages()).extracting("id")
+                        .isEqualTo(List.of(imageId)),
                 () -> assertThat(updatedPlace.getPhone()).isEqualTo("010-2222-2222"),
                 () -> assertThat(updatedPlace.getLinks()).extracting("linkType")
                         .containsAll(List.of(LinkType.INSTAGRAM.name(), LinkType.BLOG.name(), LinkType.WEB.name())),

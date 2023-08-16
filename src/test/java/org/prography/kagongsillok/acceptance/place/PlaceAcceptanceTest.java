@@ -357,7 +357,8 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(수정된_장소_응답.getName()).isEqualTo("newTestPlace"),
                 () -> assertThat(수정된_장소_응답.getLatitude()).isEqualTo(10.0),
                 () -> assertThat(수정된_장소_응답.getLongitude()).isEqualTo(-10.0),
-                () -> assertThat(수정된_장소_응답.getImageIds()).isEqualTo(List.of(생성된_이미지_id)),
+                () -> assertThat(수정된_장소_응답.getImages()).extracting("id")
+                        .isEqualTo(List.of(생성된_이미지_id)),
                 () -> assertThat(수정된_장소_응답.getLinks()).extracting("url")
                         .containsAll(List.of("newWebUrl", "newBlogUrl", "newInstagramUrl")),
                 () -> assertThat(수정된_장소_응답.getBusinessHours()).extracting("open")
@@ -390,7 +391,8 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(생성된_장소_응답.getAddress()).isEqualTo("테스트특별시 테스트구 테스트로"),
                 () -> assertThat(생성된_장소_응답.getLongitude()).isEqualTo(150.0),
                 () -> assertThat(생성된_장소_응답.getLatitude()).isEqualTo(30.0),
-                () -> assertThat(생성된_장소_응답.getImageIds()).isEqualTo(List.of(생성된_이미지_id)),
+                () -> assertThat(생성된_장소_응답.getImages()).extracting("id")
+                        .isEqualTo(List.of(생성된_이미지_id)),
                 () -> assertThat(생성된_장소_응답.getPhone()).isEqualTo("testPhoneNumber"),
                 () -> assertThat(생성된_장소_응답.getLinks()).extracting("url")
                         .containsAll(List.of("WebUrl", "BlogUrl", "InstagramUrl")),

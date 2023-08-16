@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
@@ -30,10 +31,10 @@ public class PlaceService {
 
     @Transactional
     public PlaceDto createPlace(final PlaceCreateCommand placeCreateCommand) {
-        final Place savedPlace = placeRepository.save(placeCreateCommand.toEntity());
         checkExistImage(placeCreateCommand.getImageIds());
+        final Place savedPlace = placeRepository.save(placeCreateCommand.toEntity());
 
-        return PlaceDto.from(savedPlace);
+        return PlaceDto.of(savedPlace, getImages(savedPlace));
     }
 
     public PlaceDto getPlace(final Long id) {
@@ -43,7 +44,7 @@ public class PlaceService {
             throw new NotFoundPlaceException(id);
         }
 
-        return PlaceDto.from(place);
+        return PlaceDto.of(place, getImages(place));
     }
 
     public PlaceDto getPlaceWithTags(final Long placeId) {
@@ -54,7 +55,7 @@ public class PlaceService {
         }
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
 
-        return PlaceDto.of(place, getReviewTagsRelatedToPlace(reviews));
+        return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(reviews));
     }
 
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
@@ -83,7 +84,7 @@ public class PlaceService {
         final Place target = updateCommand.toEntity();
         place.update(target);
 
-        return PlaceDto.from(place);
+        return PlaceDto.of(place, getImages(place));
     }
 
     @Transactional
@@ -121,7 +122,7 @@ public class PlaceService {
                     List<Review> relatedReviews = reviews.stream()
                             .filter(review -> review.getPlaceId().equals(place.getId()))
                             .collect(Collectors.toList());
-                    return PlaceDto.of(place, getReviewTagsRelatedToPlace(relatedReviews));
+                    return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(relatedReviews));
                 })
                 .collect(Collectors.toList());
     }
@@ -140,5 +141,9 @@ public class PlaceService {
         if (imageRepository.isExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
+    }
+
+    private List<Image> getImages(final Place place) {
+        return imageRepository.findByIdIn(place.getImageIds());
     }
 }
