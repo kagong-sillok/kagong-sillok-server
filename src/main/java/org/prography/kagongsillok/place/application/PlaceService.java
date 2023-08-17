@@ -138,7 +138,7 @@ public class PlaceService {
     }
 
     private void checkExistImage(final List<Long> imageIds) {
-        if (imageRepository.isExistIdIn(imageIds)) {
+        if (imageRepository.isNotExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
     }

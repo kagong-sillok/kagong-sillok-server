@@ -35,7 +35,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom{
     }
 
     @Override
-    public boolean isExistIdIn(final List<Long> imageIds) {
+    public boolean isNotExistIdIn(final List<Long> imageIds) {
         List<Long> existImageIds = queryFactory
                 .selectFrom(image)
                 .where(

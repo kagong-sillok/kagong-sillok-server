@@ -10,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.record.domain.StudyRecord;
 
@@ -22,7 +24,7 @@ public class StudyRecordDto {
     private LocalDate studyDate;
     private String description;
     private int duration;
-    private List<Image> images;
+    private List<ImageDto> images;
     private ZonedDateTime writtenAt;
 
     @Builder
@@ -32,7 +34,7 @@ public class StudyRecordDto {
             final LocalDate studyDate,
             final String description,
             final int duration,
-            final List<Image> images,
+            final List<ImageDto> images,
             final ZonedDateTime writtenAt
     ) {
         this.id = id;
@@ -51,7 +53,7 @@ public class StudyRecordDto {
                 .studyDate(studyRecord.getStudyDate())
                 .duration(studyRecord.getDuration())
                 .description(studyRecord.getDescription())
-                .images(images)
+                .images(CustomListUtils.mapTo(images, ImageDto::from))
                 .writtenAt(studyRecord.getWrittenAt())
                 .build();
     }

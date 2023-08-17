@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
-import org.prography.kagongsillok.common.utils.CustomStringUtils;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
@@ -17,7 +16,6 @@ import org.prography.kagongsillok.record.application.dto.StudyRecordDto;
 import org.prography.kagongsillok.record.application.exception.NotFoundStudyRecordException;
 import org.prography.kagongsillok.record.domain.StudyRecord;
 import org.prography.kagongsillok.record.domain.StudyRecordRepository;
-import org.prography.kagongsillok.review.domain.Review;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,7 +76,7 @@ public class StudyRecordService {
     }
 
     private void checkExistImage(final List<Long> imageIds) {
-        if (imageRepository.isExistIdIn(imageIds)) {
+        if (imageRepository.isNotExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
     }

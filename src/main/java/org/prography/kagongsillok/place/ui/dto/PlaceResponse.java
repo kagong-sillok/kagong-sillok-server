@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.BusinessHourDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.LinkDto;
+import org.prography.kagongsillok.review.application.dto.ReviewTagDto;
 import org.prography.kagongsillok.review.domain.ReviewTag;
 
 @Getter
@@ -23,11 +25,11 @@ public class PlaceResponse {
     private String address;
     private Double latitude;
     private Double longitude;
-    private List<Image> images;
+    private List<ImageDto> images;
     private String phone;
     private List<LinkResponse> links;
     private List<BusinessHourResponse> businessHours;
-    private List<ReviewTag> reviewTags;
+    private List<ReviewTagDto> reviewTags;
 
     @Builder
     public PlaceResponse(
@@ -36,11 +38,11 @@ public class PlaceResponse {
             final String address,
             final Double latitude,
             final Double longitude,
-            final List<Image> images,
+            final List<ImageDto> images,
             final String phone,
             final List<LinkResponse> links,
             final List<BusinessHourResponse> businessHours,
-            final List<ReviewTag> reviewTags
+            final List<ReviewTagDto> reviewTags
     ) {
         this.id = id;
         this.name = name;

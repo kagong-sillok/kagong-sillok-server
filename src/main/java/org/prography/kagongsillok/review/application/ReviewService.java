@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
@@ -55,8 +54,9 @@ public class ReviewService {
         final Review review = reviewCreateCommand.toEntity(member.getNickname(), reviewTagIds);
 
         final Review savedReview = reviewRepository.save(review);
+        final List<Image> images = imageRepository.findByIdIn(review.getImageIds());
 
-        return ReviewDto.of(savedReview, member, getImages(savedReview));
+        return ReviewDto.of(savedReview, member, images);
     }
 
     public ReviewDto getReview(final Long id) {
@@ -68,26 +68,49 @@ public class ReviewService {
         if (review.getIsDeleted()) {
             throw new NotFoundReviewException(id);
         }
-        if (member.getIsDeleted()) {
-            throw new NotFoundReviewException(memberId);
-        }
 
-        return ReviewDto.of(review, member, getImages(review));
+        final List<Image> images = imageRepository.findByIdIn(review.getImageIds());
+
+        return ReviewDto.of(review, member, images);
     }
 
     public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
         final List<Review> reviews = reviewRepository.findAllByMemberId(memberId);
 
-        List<ReviewDto> reviewDtos = new ArrayList<>();
-        for (Review review : reviews) {
-            final Member member = memberRepository.findById(review.getMemberId())
-                    .orElseThrow(() -> new NotFoundMemberException(review.getMemberId()));
-            final Place place = placeRepository.findById(review.getPlaceId())
-                    .orElseThrow(() -> new NotFoundPlaceException(review.getPlaceId()));
-            reviewDtos.add(ReviewDto.of(review, member, getImages(review), place));
+        if (reviews.isEmpty()) {
+            return List.of();
         }
 
-        return reviewDtos;
+        final List<Long> memberIds = reviews.stream()
+                .map(Review::getMemberId)
+                .collect(Collectors.toList());
+
+        final List<Long> placeIds = reviews.stream()
+                .map(Review::getPlaceId)
+                .collect(Collectors.toList());
+
+        final List<Long> imageIds = reviews.stream()
+                .map(Review::getImageIds)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        final Map<Long, Member> memberMap = memberRepository.findByIdIn(memberIds);
+        final Map<Long, Place> placeMap = placeRepository.findByIdInToMap(placeIds);
+        final Map<Long, Image> imageMap = imageRepository.findByIdInToMap(imageIds);
+        final Map<Long, List<Long>> reviewIdImageIdsMap = reviews
+                .stream()
+                .collect(Collectors.toMap(Review::getId, Review::getImageIds));
+
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+
+        return reviews.stream()
+                .map(review -> ReviewDto.of(
+                        review,
+                        memberMap.get(review.getMemberId()),
+                        getMappedImages(reviewIdImageIdsMap.get(review.getId()), imageMap),
+                        placeMap.get(review.getPlaceId())
+                ))
+                .collect(Collectors.toList());
     }
 
     public List<ReviewDto> getAllReviewsByPlaceId(final Long placeId) {
@@ -114,7 +137,9 @@ public class ReviewService {
         final Member member = memberRepository.findById(target.getMemberId())
                 .orElseThrow(() -> new NotFoundMemberException(target.getMemberId()));
 
-        return ReviewDto.of(review, member, getImages(review));
+        final List<Image> images = imageRepository.findByIdIn(review.getImageIds());
+
+        return ReviewDto.of(review, member, images);
     }
 
     @Transactional
@@ -148,7 +173,7 @@ public class ReviewService {
     private List<ReviewImageDto> bindMemberAndImage(final List<Review> reviews, final Map<Long, Member> members,
             final Map<Long, Image> images) {
 
-        List<ReviewImageDto> reviewImageDtos = new ArrayList<>();
+        final List<ReviewImageDto> reviewImageDtos = new ArrayList<>();
 
         for (Review review : reviews) {
             reviewImageDtos.addAll(getReviewImageDtos(review, members, images));
@@ -161,7 +186,6 @@ public class ReviewService {
         Long memberId = review.getMemberId();
 
         if (!members.containsKey(memberId)) {
-            // 가드 로직: 멤버 ID가 멤버 맵에 존재하지 않으면 null 반환 또는 예외 처리 등을 수행할 수 있습니다.
             return Member.builder()
                     .nickname("알 수 없음")
                     .email("Unknown@unknown.com")
@@ -188,11 +212,12 @@ public class ReviewService {
         final List<Image> mappedImages = getMappedImage(review, images);
 
         for (Image mappedImage : mappedImages) {
-            reviewImageDtos.add(ReviewImageDto.of(mappedMember, mappedImage));
+            reviewImageDtos.add(ReviewImageDto.of(review.getId(), mappedMember, mappedImage));
         }
 
         return reviewImageDtos;
     }
+
     private List<Long> getReviewedMemberIds(final List<Review> reviews) {
         return reviews.stream()
                 .map(review -> review.getMemberId())
@@ -202,26 +227,23 @@ public class ReviewService {
     private List<ReviewDto> mappingMemberToReview(final List<Review> reviews, final Map<Long, Member> members) {
         return reviews.stream()
                 .map(review -> {
-                    Member member = members.get(review.getMemberId());
-                    if (member == null) {
-                        member = Member.builder()
-                                .nickname("알 수 없음")
-                                .email("Unknown@unknown.com")
-                                .build();
-                    }
+                    Member member = members.getOrDefault(review.getMemberId(), Member.defaultOf());
+                    List<Image> images = imageRepository.findByIdIn(review.getImageIds());
 
-                    return ReviewDto.of(review, member, getImages(review));
+                    return ReviewDto.of(review, member, images);
                 })
                 .collect(Collectors.toList());
     }
 
-    private List<Image> getImages(final Review review) {
-        return imageRepository.findByIdIn(review.getImageIds());
-    }
-
     private void checkExistImage(final List<Long> imageIds) {
-        if (imageRepository.isExistIdIn(imageIds)) {
+        if (imageRepository.isNotExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
+    }
+
+    private List<Image> getMappedImages(final List<Long> imageIds, final Map<Long, Image> imageMap) {
+        return imageIds.stream()
+                .map(imageId -> imageMap.get(imageId))
+                .collect(Collectors.toList());
     }
 }

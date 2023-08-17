@@ -7,10 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.domain.BusinessHour;
 import org.prography.kagongsillok.place.domain.Link;
 import org.prography.kagongsillok.place.domain.Place;
+import org.prography.kagongsillok.review.application.dto.ReviewTagDto;
 import org.prography.kagongsillok.review.domain.ReviewTag;
 
 @Getter
@@ -22,11 +24,11 @@ public class PlaceDto {
     private String address;
     private Double latitude;
     private Double longitude;
-    private List<Image> images;
+    private List<ImageDto> images;
     private String phone;
     private List<LinkDto> links;
     private List<BusinessHourDto> businessHours;
-    private List<ReviewTag> reviewTags;
+    private List<ReviewTagDto> reviewTags;
 
     @Builder
     public PlaceDto(
@@ -35,11 +37,11 @@ public class PlaceDto {
             final String address,
             final Double latitude,
             final Double longitude,
-            final List<Image> images,
+            final List<ImageDto> images,
             final String phone,
             final List<LinkDto> links,
             final List<BusinessHourDto> businessHours,
-            final List<ReviewTag> reviewTags
+            final List<ReviewTagDto> reviewTags
     ) {
         this.id = id;
         this.name = name;
@@ -73,7 +75,7 @@ public class PlaceDto {
                 .address(place.getAddress())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
-                .images(images)
+                .images(CustomListUtils.mapTo(images, ImageDto::from))
                 .phone(place.getPhone())
                 .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
                 .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
@@ -87,11 +89,11 @@ public class PlaceDto {
                 .address(place.getAddress())
                 .latitude(place.getLatitude())
                 .longitude(place.getLongitude())
-                .images(images)
+                .images(CustomListUtils.mapTo(images, ImageDto::from))
                 .phone(place.getPhone())
                 .links(CustomListUtils.mapTo(place.getLinks().getValues(), LinkDto::from))
                 .businessHours(CustomListUtils.mapTo(place.getBusinessHours().getValues(), BusinessHourDto::from))
-                .reviewTags(reviewTags)
+                .reviewTags(CustomListUtils.mapTo(reviewTags, ReviewTagDto::from))
                 .build();
     }
 

@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
 
@@ -16,7 +17,7 @@ public class ReviewResponse {
     private Long id;
     private int rating;
     private String content;
-    private List<Image> images;
+    private List<ImageDto> images;
     private List<Long> tagIds;
     private Long memberId;
     private Long placeId;
@@ -28,7 +29,7 @@ public class ReviewResponse {
             final Long id,
             final int rating,
             final String content,
-            final List<Image> images,
+            final List<ImageDto> images,
             final List<Long> tagIds,
             final Long memberId,
             final Long placeId,

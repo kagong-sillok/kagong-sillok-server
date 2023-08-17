@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.member.domain.Member;
 import org.prography.kagongsillok.place.domain.Place;
@@ -27,7 +29,7 @@ public class ReviewDto {
     private String memberProfileUrl;
     private int rating;
     private String content;
-    private List<Image> images;
+    private List<ImageDto> images;
     private List<Long> tagIds;
     private ZonedDateTime writtenAt;
 
@@ -41,7 +43,7 @@ public class ReviewDto {
             final String memberProfileUrl,
             final int rating,
             final String content,
-            final List<Image> images,
+            final List<ImageDto> images,
             final List<Long> tagIds,
             final ZonedDateTime writtenAt
     ) {
@@ -68,7 +70,7 @@ public class ReviewDto {
                 .memberProfileUrl(member.getProfileImageUrl())
                 .rating(review.getRating())
                 .content(review.getContent())
-                .images(images)
+                .images(CustomListUtils.mapTo(images, ImageDto::from))
                 .tagIds(getTagIds(review.getTagMappings()))
                 .writtenAt(review.getWrittenAt())
                 .build();
@@ -85,7 +87,7 @@ public class ReviewDto {
                 .memberProfileUrl(member.getProfileImageUrl())
                 .rating(review.getRating())
                 .content(review.getContent())
-                .images(images)
+                .images(CustomListUtils.mapTo(images, ImageDto::from))
                 .tagIds(getTagIds(review.getTagMappings()))
                 .writtenAt(review.getWrittenAt())
                 .build();

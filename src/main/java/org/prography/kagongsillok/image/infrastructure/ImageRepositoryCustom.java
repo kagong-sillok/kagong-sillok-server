@@ -8,6 +8,5 @@ public interface ImageRepositoryCustom {
 
     Map<Long, Image> findByIdInToMap(List<Long> imageIds);
 
-    boolean isExistIdIn(final List<Long> imageIds);
-
+    boolean isNotExistIdIn(final List<Long> imageIds);
 }

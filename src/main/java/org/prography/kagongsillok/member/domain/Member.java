@@ -45,6 +45,13 @@ public class Member extends AbstractRootEntity {
         this.loginHistory = LoginHistory.init();
     }
 
+    public static Member defaultOf() {
+        return Member.builder()
+                .nickname("알 수 없음")
+                .email("Unknown@unknown.com")
+                .build();
+    }
+
     public String getEmail() {
         return email.getValue();
     }
