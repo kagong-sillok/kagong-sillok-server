@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import kotlin.Function;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
@@ -81,36 +82,16 @@ public class ReviewService {
             return List.of();
         }
 
-        final List<Long> memberIds = reviews.stream()
-                .map(Review::getMemberId)
-                .collect(Collectors.toList());
-
-        final List<Long> placeIds = reviews.stream()
-                .map(Review::getPlaceId)
-                .collect(Collectors.toList());
-
-        final List<Long> imageIds = reviews.stream()
-                .map(Review::getImageIds)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        final List<Long> memberIds = extractMemberIds(reviews);
+        final List<Long> placeIds = extractPlaceIds(reviews);
+        final List<Long> imageIds = extractAndFlatIds(reviews);
 
         final Map<Long, Member> memberMap = memberRepository.findByIdIn(memberIds);
         final Map<Long, Place> placeMap = placeRepository.findByIdInToMap(placeIds);
         final Map<Long, Image> imageMap = imageRepository.findByIdInToMap(imageIds);
-        final Map<Long, List<Long>> reviewIdImageIdsMap = reviews
-                .stream()
-                .collect(Collectors.toMap(Review::getId, Review::getImageIds));
+        final Map<Long, List<Long>> reviewIdImageIdsMap = mapReviewIdImageIds(reviews);
 
-        List<ReviewDto> reviewDtos = new ArrayList<>();
-
-        return reviews.stream()
-                .map(review -> ReviewDto.of(
-                        review,
-                        memberMap.get(review.getMemberId()),
-                        getMappedImages(reviewIdImageIdsMap.get(review.getId()), imageMap),
-                        placeMap.get(review.getPlaceId())
-                ))
-                .collect(Collectors.toList());
+        return toReviewDtos(reviews, memberMap, placeMap, imageMap, reviewIdImageIdsMap);
     }
 
     public List<ReviewDto> getAllReviewsByPlaceId(final Long placeId) {
@@ -244,6 +225,48 @@ public class ReviewService {
     private List<Image> getMappedImages(final List<Long> imageIds, final Map<Long, Image> imageMap) {
         return imageIds.stream()
                 .map(imageId -> imageMap.get(imageId))
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> extractMemberIds(final List<Review> reviews) {
+        return reviews.stream()
+                .map(Review::getMemberId)
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> extractPlaceIds(final List<Review> reviews) {
+        return reviews.stream()
+                .map(Review::getPlaceId)
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> extractAndFlatIds(final List<Review> reviews) {
+        return reviews.stream()
+                .map(Review::getImageIds)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    private Map<Long, List<Long>> mapReviewIdImageIds(final List<Review> reviews) {
+        return reviews
+                .stream()
+                .collect(Collectors.toMap(Review::getId, Review::getImageIds));
+    }
+
+    private List<ReviewDto> toReviewDtos(
+            final List<Review> reviews,
+            final Map<Long, Member> memberMap,
+            final Map<Long, Place> placeMap,
+            final Map<Long, Image> imageMap,
+            Map<Long, List<Long>> reviewIdImageIdsMap
+    ) {
+        return reviews.stream()
+                .map(review -> ReviewDto.of(
+                        review,
+                        memberMap.get(review.getMemberId()),
+                        getMappedImages(reviewIdImageIdsMap.get(review.getId()), imageMap),
+                        placeMap.get(review.getPlaceId())
+                ))
                 .collect(Collectors.toList());
     }
 }

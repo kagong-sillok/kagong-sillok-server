@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.record.application;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
@@ -86,8 +87,54 @@ public class StudyRecordService {
     }
 
     private List<StudyRecordDto> getStudyRecordDtos(final List<StudyRecord> studyRecords) {
+        final List<Long> imageIds = getImageIds(studyRecords);
+        final Map<Long, Image> imageMap = getImageMap(imageIds);
+        final Map<Long, List<Image>> studyRecordImageMap = mapStudyRecordAndImage(studyRecords, imageMap);
+
+        return toStudyRecordDtos(studyRecords, studyRecordImageMap);
+    }
+
+    private List<Long> getImageIds(final List<StudyRecord> studyRecords) {
         return studyRecords.stream()
-                .map(studyRecord -> StudyRecordDto.of(studyRecord, getImages(studyRecord)))
+                .map(studyRecord -> studyRecord.getImageIds())
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
+    }
+
+    private Map<Long, Image> getImageMap(final List<Long> imageIds) {
+        return imageRepository.findByIdIn(imageIds)
+                .stream()
+                .collect(Collectors.toMap(Image::getId, image -> image));
+    }
+
+    private Map<Long, List<Image>> mapStudyRecordAndImage(
+            final List<StudyRecord> studyRecords,
+            final Map<Long, Image> imageMap
+    ) {
+        return studyRecords.stream()
+                .collect(Collectors.toMap(
+                                StudyRecord::getId,
+                                studyRecord -> studyRecord.getImageIds()
+                                        .stream()
+                                        .map(imageId -> imageMap.getOrDefault(imageId, createDefaultImage()))
+                                        .collect(Collectors.toList())
+                        )
+                );
+    }
+
+    private List<StudyRecordDto> toStudyRecordDtos(final List<StudyRecord> studyRecords,
+            final Map<Long, List<Image>> studyRecordImageMap) {
+        return studyRecords.stream()
+                .map(studyRecord -> StudyRecordDto.of(
+                        studyRecord,
+                        studyRecordImageMap.getOrDefault(studyRecord.getId(), List.of()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    private Image createDefaultImage() {
+        return Image.builder()
+                .url("알 수 없음")
+                .build();
     }
 }

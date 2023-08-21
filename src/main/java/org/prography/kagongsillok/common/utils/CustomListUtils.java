@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CustomListUtils {
 
-    private static final int minimumImageSize = 1;
+    private static final int MINIMUM_IMAGE_SIZE = 1;
 
     public static <T, R> List<R> mapTo(final List<T> list, final Function<T, R> mappingFunction) {
         if (isEmpty(list)) {
@@ -37,7 +37,7 @@ public class CustomListUtils {
     }
 
     public static <T> String joiningToString(final List<T> list, final String delimiter) {
-        if (list.size() < minimumImageSize) {
+        if (list.size() < MINIMUM_IMAGE_SIZE) {
             return "";
         }
         return list.stream()
