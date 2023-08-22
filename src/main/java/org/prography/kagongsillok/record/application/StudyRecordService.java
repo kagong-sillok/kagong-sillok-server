@@ -88,7 +88,7 @@ public class StudyRecordService {
 
     private List<StudyRecordDto> getStudyRecordDtos(final List<StudyRecord> studyRecords) {
         final List<Long> imageIds = getImageIds(studyRecords);
-        final Map<Long, Image> imageMap = getImageMap(imageIds);
+        final Map<Long, Image> imageMap = imageRepository.getImageMap(imageIds);
         final Map<Long, List<Image>> studyRecordImageMap = mapStudyRecordAndImage(studyRecords, imageMap);
 
         return toStudyRecordDtos(studyRecords, studyRecordImageMap);
@@ -96,15 +96,9 @@ public class StudyRecordService {
 
     private List<Long> getImageIds(final List<StudyRecord> studyRecords) {
         return studyRecords.stream()
-                .map(studyRecord -> studyRecord.getImageIds())
+                .map(StudyRecord::getImageIds)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
-    }
-
-    private Map<Long, Image> getImageMap(final List<Long> imageIds) {
-        return imageRepository.findByIdIn(imageIds)
-                .stream()
-                .collect(Collectors.toMap(Image::getId, image -> image));
     }
 
     private Map<Long, List<Image>> mapStudyRecordAndImage(

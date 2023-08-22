@@ -52,6 +52,19 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom{
                 .contains(Boolean.FALSE);
     }
 
+    @Override
+    public Map<Long, Image> getImageMap(final List<Long> imageIds) {
+        return queryFactory
+                .selectFrom(image)
+                .where(
+                        idIn(imageIds),
+                        isNotDeleted()
+                )
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(Image::getId, Function.identity()));
+    }
+
     private BooleanExpression idIn(final List<Long> ids) {
         return image.id.in(ids);
     }
