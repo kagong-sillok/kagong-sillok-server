@@ -49,3 +49,6 @@ oauth:
     clientSecret: localClientSecret
     authorizationServerHost: https://kauth.kakao.com
     resourceServerHost: https://kapi.kakao.com
+
+server:
+  host: 'http://localhost:8080'
