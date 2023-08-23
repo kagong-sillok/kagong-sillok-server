@@ -2,8 +2,12 @@ package org.prography.kagongsillok.common.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +18,16 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${server.host}")
+    private String serverHost;
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        Server server = new Server();
+        server.setUrl(serverHost);
+        return new OpenAPI().servers(List.of(server));
+    }
 
     @Bean
     public GroupedOpenApi openApi() {
