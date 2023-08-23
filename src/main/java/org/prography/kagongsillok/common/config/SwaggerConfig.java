@@ -28,13 +28,6 @@ public class SwaggerConfig {
     private String serverHost;
 
     @Bean
-    public OpenAPI customOpenAPI() {
-        Server server = new Server();
-        server.setUrl(serverHost);
-        return new OpenAPI().servers(List.of(server));
-    }
-
-    @Bean
     public GroupedOpenApi openApi() {
         String[] paths = {"/api/**"};
 
@@ -61,8 +54,11 @@ public class SwaggerConfig {
                 .in(SecurityScheme.In.HEADER).name("Authorization");
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("Authorization");
 
+        Server server = new Server();
+        server.setUrl(serverHost);
         return new OpenAPI()
+                .servers(List.of(server))
                 .components(new Components().addSecuritySchemes("Authorization", securityScheme))
-                .security(Arrays.asList(securityRequirement));
+                .security(List.of(securityRequirement));
     }
 }
