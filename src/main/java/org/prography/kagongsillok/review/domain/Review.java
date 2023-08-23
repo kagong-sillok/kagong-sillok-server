@@ -33,6 +33,8 @@ public class Review extends AbstractRootEntity {
 
     private Long placeId;
 
+    private String memberNickName;
+
     @Embedded
     private ReviewRating rating;
 
@@ -50,12 +52,14 @@ public class Review extends AbstractRootEntity {
     public Review(
             final Long memberId,
             final Long placeId,
+            final String memberNickName,
             final int rating,
             final String content,
             final List<Long> imageIds,
             final List<ReviewTagMapping> tagMappings) {
         this.memberId = memberId;
         this.placeId = placeId;
+        this.memberNickName = memberNickName;
         this.rating = ReviewRating.from(rating);
         this.content = ReviewContent.from(content);
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");

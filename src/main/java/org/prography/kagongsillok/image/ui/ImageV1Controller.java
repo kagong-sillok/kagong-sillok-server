@@ -2,6 +2,7 @@ package org.prography.kagongsillok.image.ui;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.image.application.ImageService;
 import org.prography.kagongsillok.image.application.dto.ImageCreateCommand;
@@ -33,10 +34,23 @@ public class ImageV1Controller {
         return CommonResponse.success(ImageResponse.from(imageDto));
     }
 
+    @PostMapping("/images")
+    public ResponseEntity<CommonResponse<ImageListResponse>> createImages(
+            @RequestBody final List<ImageCreateRequest> imageCreateRequests) {
+        final List<ImageCreateCommand> createCommands = toCommands(imageCreateRequests);
+        final List<ImageDto> imageDtos = imageService.createImages(createCommands);
+
+        return CommonResponse.success(ImageListResponse.of(imageDtos));
+    }
+
     @GetMapping
     public ResponseEntity<CommonResponse<ImageListResponse>> getImages(@RequestParam final List<Long> imageIds) {
         final List<ImageDto> imageDtos = imageService.getImages(imageIds);
 
         return CommonResponse.success(ImageListResponse.of(imageDtos));
+    }
+
+    private List<ImageCreateCommand> toCommands(final List<ImageCreateRequest> requests) {
+        return CustomListUtils.mapTo(requests, ImageCreateRequest::toCommand);
     }
 }

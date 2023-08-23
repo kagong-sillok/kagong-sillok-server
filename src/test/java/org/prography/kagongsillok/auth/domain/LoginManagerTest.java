@@ -31,7 +31,11 @@ class LoginManagerTest {
 
     @Test
     void 로그인하면_액세스_토큰과_리프레시_토큰을_반환한다() {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Member savedMember = memberRepository.save(member);
 
         final LoginResultDto loginResultDto = loginManager.loginMember(savedMember);
@@ -48,7 +52,11 @@ class LoginManagerTest {
 
     @Test
     void 리프레시_토큰을_사용하여_토큰을_갱신한다() throws InterruptedException {
-        final Member member = new Member("닉네임", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("닉네임")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final Member savedMember = memberRepository.save(member);
         final LoginResultDto loginResultDto = loginManager.loginMember(savedMember);
         Thread.sleep(1000);

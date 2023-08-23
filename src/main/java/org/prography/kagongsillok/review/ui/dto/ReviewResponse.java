@@ -19,7 +19,7 @@ public class ReviewResponse {
     private List<Long> tagIds;
     private Long memberId;
     private Long placeId;
-    private String userNickName;
+    private String memberNickName;
     private ZonedDateTime writtenAt;
 
     @Builder
@@ -31,7 +31,7 @@ public class ReviewResponse {
             final List<Long> tagIds,
             final Long memberId,
             final Long placeId,
-            final String userNickName,
+            final String memberNickName,
             final ZonedDateTime writtenAt
     ) {
         this.id = id;
@@ -41,7 +41,7 @@ public class ReviewResponse {
         this.tagIds = tagIds;
         this.memberId = memberId;
         this.placeId = placeId;
-        this.userNickName = userNickName;
+        this.memberNickName = memberNickName;
         this.writtenAt = writtenAt;
     }
 
@@ -55,7 +55,7 @@ public class ReviewResponse {
                 .placeId(reviewDto.getPlaceId())
                 .imageIds(reviewDto.getImageIds())
                 .tagIds(reviewDto.getTagIds())
-                .userNickName("임시 닉네임")
+                .memberNickName(reviewDto.getMemberNickName())
                 .writtenAt(reviewDto.getWrittenAt())
                 .build();
     }

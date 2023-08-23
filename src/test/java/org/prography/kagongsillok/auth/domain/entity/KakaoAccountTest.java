@@ -11,7 +11,11 @@ class KakaoAccountTest {
 
     @Test
     void 카카오_계정을_생성한다() {
-        final Member member = new Member("테스트", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("테스트")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
 
         final KakaoAccount kakaoAccount = new KakaoAccount(999_999L, member);
 
@@ -26,7 +30,11 @@ class KakaoAccountTest {
 
     @Test
     void 카카오_계정을_삭제한다() {
-        final Member member = new Member("테스트", "test@test.com", Role.MEMBER);
+        final Member member = Member.builder()
+                .nickname("테스트")
+                .email("test@test.com")
+                .role(Role.MEMBER)
+                .build();
         final KakaoAccount kakaoAccount = new KakaoAccount(999_999L, member);
 
         kakaoAccount.delete();

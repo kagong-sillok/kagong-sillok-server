@@ -24,14 +24,6 @@ public class TagV1Controller {
 
     private final ReviewTagService reviewTagService;
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<ReviewTagResponse>> createTag(
-            @RequestBody final ReviewTagCreateRequest reviewTagCreateRequest
-    ) {
-        final ReviewTagDto createdTag = reviewTagService.createTag(reviewTagCreateRequest.toCommand());
-        return CommonResponse.success(ReviewTagResponse.from(createdTag));
-    }
-
     @GetMapping("/{ids}")
     public ResponseEntity<CommonResponse<ReviewTagListResponse>> getTags(
             @PathVariable("ids") final List<Long> ids
@@ -44,11 +36,5 @@ public class TagV1Controller {
     public ResponseEntity<CommonResponse<ReviewTagListResponse>> getAllTags() {
         final List<ReviewTagDto> reviewTagDtos = reviewTagService.getAllTags();
         return CommonResponse.success(ReviewTagListResponse.from(reviewTagDtos));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTag(@PathVariable("id") final Long id) {
-        reviewTagService.deleteTag(id);
-        return ResponseEntity.ok().build();
     }
 }

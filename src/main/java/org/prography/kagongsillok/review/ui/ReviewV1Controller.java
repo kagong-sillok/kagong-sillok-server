@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.review.application.ReviewService;
 import org.prography.kagongsillok.review.application.dto.ReviewDto;
+import org.prography.kagongsillok.review.application.dto.ReviewImageListDto;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
+import org.prography.kagongsillok.review.ui.dto.ReviewImagesInfoResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewUpdateRequest;
@@ -34,9 +36,9 @@ public class ReviewV1Controller {
         return CommonResponse.success(ReviewResponse.from(createdReview));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{reviewId}")
     public ResponseEntity<CommonResponse<ReviewResponse>> getReview(
-            @PathVariable("id") Long id
+            @PathVariable("reviewId") Long id
     ) {
         final ReviewDto reviewDto = reviewService.getReview(id);
         return CommonResponse.success(ReviewResponse.from(reviewDto));
@@ -47,6 +49,14 @@ public class ReviewV1Controller {
             @PathVariable("memberId") Long memberId
     ) {
         final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByMemberId(memberId);
+        return CommonResponse.success(ReviewListResponse.of(reviewDtos));
+    }
+
+    @GetMapping("/place/{placeId}")
+    public ResponseEntity<CommonResponse<ReviewListResponse>> getAllPlaceReviews(
+            @PathVariable("placeId") Long placeId
+    ) {
+        final List<ReviewDto> reviewDtos = reviewService.getAllReviewsByPlaceId(placeId);
         return CommonResponse.success(ReviewListResponse.of(reviewDtos));
     }
 
@@ -61,9 +71,17 @@ public class ReviewV1Controller {
         return CommonResponse.success(ReviewResponse.from(updatedReview));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable("id") final Long id) {
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable("reviewId") final Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/images/{placeId}")
+    public ResponseEntity<CommonResponse<ReviewImagesInfoResponse>> getPlaceReviewImages(
+            @PathVariable("placeId") Long placeId
+    ) {
+        final ReviewImageListDto reviewImageListDto = reviewService.getPlaceReviewImages(placeId);
+        return CommonResponse.success(ReviewImagesInfoResponse.from(reviewImageListDto));
     }
 }

@@ -16,7 +16,7 @@ import redis.embedded.RedisServer;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@Profile(value = "local | test")
+@Profile(value = "local | test | develop")
 public class EmbeddedRedisConfig {
 
     @Value("${spring.redis.host}")
