@@ -2,6 +2,9 @@ package org.prography.kagongsillok.common.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -9,6 +12,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +23,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
+
+    @Value("${server.host}")
+    private String serverHost;
 
     @Bean
     public GroupedOpenApi openApi() {
@@ -47,8 +54,11 @@ public class SwaggerConfig {
                 .in(SecurityScheme.In.HEADER).name("Authorization");
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("Authorization");
 
+        Server server = new Server();
+        server.setUrl(serverHost);
         return new OpenAPI()
+                .servers(List.of(server))
                 .components(new Components().addSecuritySchemes("Authorization", securityScheme))
-                .security(Arrays.asList(securityRequirement));
+                .security(List.of(securityRequirement));
     }
 }

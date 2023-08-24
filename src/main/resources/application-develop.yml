@@ -46,3 +46,6 @@ oauth:
     clientSecret: ${OAUTH_KAKAO_CLENT_SECRET}
     authorizationServerHost: https://kauth.kakao.com
     resourceServerHost: https://kapi.kakao.com
+
+server:
+  host: ${SERVER_HOST}
