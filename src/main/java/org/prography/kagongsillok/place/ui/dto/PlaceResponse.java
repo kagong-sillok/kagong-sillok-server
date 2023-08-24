@@ -8,9 +8,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
+import org.prography.kagongsillok.image.application.dto.ImageDto;
+import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.BusinessHourDto;
 import org.prography.kagongsillok.place.application.dto.PlaceDto.LinkDto;
+import org.prography.kagongsillok.review.application.dto.ReviewTagDto;
+import org.prography.kagongsillok.review.domain.ReviewTag;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,10 +25,11 @@ public class PlaceResponse {
     private String address;
     private Double latitude;
     private Double longitude;
-    private List<Long> imageIds;
+    private List<ImageDto> images;
     private String phone;
     private List<LinkResponse> links;
     private List<BusinessHourResponse> businessHours;
+    private List<ReviewTagDto> reviewTags;
 
     @Builder
     public PlaceResponse(
@@ -33,20 +38,22 @@ public class PlaceResponse {
             final String address,
             final Double latitude,
             final Double longitude,
-            final List<Long> imageIds,
+            final List<ImageDto> images,
             final String phone,
             final List<LinkResponse> links,
-            final List<BusinessHourResponse> businessHours
+            final List<BusinessHourResponse> businessHours,
+            final List<ReviewTagDto> reviewTags
     ) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.imageIds = imageIds;
+        this.images = images;
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
+        this.reviewTags = reviewTags;
     }
 
     public static PlaceResponse from(final PlaceDto placeDto) {
@@ -56,10 +63,11 @@ public class PlaceResponse {
                 .address(placeDto.getAddress())
                 .latitude(placeDto.getLatitude())
                 .longitude(placeDto.getLongitude())
-                .imageIds(placeDto.getImageIds())
+                .images(placeDto.getImages())
                 .phone(placeDto.getPhone())
                 .links(CustomListUtils.mapTo(placeDto.getLinks(), LinkResponse::from))
                 .businessHours(CustomListUtils.mapTo(placeDto.getBusinessHours(), BusinessHourResponse::from))
+                .reviewTags(placeDto.getReviewTags())
                 .build();
     }
 

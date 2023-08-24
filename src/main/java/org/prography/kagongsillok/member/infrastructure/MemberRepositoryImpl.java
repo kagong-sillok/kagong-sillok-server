@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.member.domain.Member;
@@ -19,17 +20,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public Map<Long, Member> findByIdIn(final List<Long> memberIds) {
-        final List<Member> members = queryFactory
+        return queryFactory
                 .selectFrom(member)
                 .where(
                         idIn(memberIds),
                         isNotDeleted()
                 )
-                .fetch();
-
-        return members
                 .stream()
-                .collect(Collectors.toMap(Member::getId, m -> m));
+                .collect(Collectors.toMap(Member::getId, Function.identity()));
     }
 
     private BooleanExpression idIn(final List<Long> ids) {

@@ -3,7 +3,9 @@ package org.prography.kagongsillok.acceptance.review;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.기본_닉네임_이메일_가입_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.넓이_100_높이_200_jpeg_이미지_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.리뷰_수정_요청_바디;
+import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.링크_두개_장소_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디;
 import static org.prography.kagongsillok.acceptance.AcceptanceTestFixture.태그_생성_요청_바디;
@@ -12,7 +14,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.acceptance.AcceptanceTest;
 import org.prography.kagongsillok.auth.ui.dto.LocalJoinRequest;
+import org.prography.kagongsillok.image.ui.dto.ImageCreateRequest;
+import org.prography.kagongsillok.image.ui.dto.ImageResponse;
 import org.prography.kagongsillok.member.ui.dto.MemberResponse;
+import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
+import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewListResponse;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
@@ -25,9 +31,15 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
     private static final String REVIEW_API_BASE_URL_V1 = "/api/v1/reviews";
     private static final String TAG_ADMIN_BASE_URL_V1 = "/admin/v1/tags";
     private static final String AUTH_API_BASE_URL_V1 = "/api/v1/auth";
+    private static final String IMAGE_API_BASE_URL_V1 = "/api/v1/images";
+    private static final String PLACE_ADMIN_BASE_URL_V1 = "/admin/v1/places";
 
     @Test
     void 리뷰를_생성한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -35,7 +47,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
         final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
         final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
-        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그);
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그, 생성된_이미지_ID, 생성된_장소_id);
 
         final var 생성된_리뷰_응답 = 리뷰_생성_요청(리뷰_생성_요청_바디);
 
@@ -44,6 +56,10 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰_id로_리뷰를_조회한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -51,7 +67,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
         final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
         final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
-        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그);
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그, 생성된_이미지_ID, 생성된_장소_id);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
         final var 조회된_리뷰 = 리뷰_조회(생성된_리뷰_id);
@@ -61,6 +77,10 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰를_수정한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -71,10 +91,10 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그3_id = 태그_생성_요청(태그_생성_요청_바디3).getId();
         final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 수정_입력_태그 = 입력_태그_두개_생성(생성된_태그2_id, 생성된_태그3_id);
-        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그);
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그, 생성된_이미지_ID, 생성된_장소_id);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
-        final var 리뷰_수정_요청_바디 = 리뷰_수정_요청_바디(생성된_리뷰_id, 2, "updated test review", 수정_입력_태그);
+        final var 리뷰_수정_요청_바디 = 리뷰_수정_요청_바디(생성된_리뷰_id, 2, "updated test review", 수정_입력_태그, 생성된_이미지_ID, 생성된_멤버_id);
         final var 수정된_리뷰_응답 = 리뷰_수정_요청(리뷰_수정_요청_바디);
 
         수정된_리뷰_검증(생성된_멤버_id, 수정된_리뷰_응답, 수정_입력_태그);
@@ -82,6 +102,10 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 리뷰를_삭제한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -89,7 +113,7 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 생성된_태그1_id = 태그_생성_요청(태그_생성_요청_바디1).getId();
         final var 생성된_태그2_id = 태그_생성_요청(태그_생성_요청_바디2).getId();
         final var 입력_태그 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
-        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그);
+        final var 리뷰_생성_요청_바디 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review", 입력_태그, 생성된_이미지_ID, 생성된_장소_id);
         final var 생성된_리뷰_id = 리뷰_생성_요청(리뷰_생성_요청_바디).getId();
 
         final var 리뷰_삭제_응답 = 리뷰_삭제_응답_요청(생성된_리뷰_id);
@@ -100,6 +124,10 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
 
     @Test
     void 멤버_id로_생성한_리뷰들을_조회한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
+        final var 장소_생성_요청_바디 = 링크_두개_장소_생성_요청_바디("testPlace1", 30.0, 150.0, 생성된_이미지_ID);
+        final var 생성된_장소_id = 장소_생성_요청(장소_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -112,18 +140,20 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final Long 생성된_태그4_id = 태그_생성_요청(태그_생성_요청_바디4).getId();
         final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_id, 생성된_태그4_id);
-        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1);
-        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2);
+        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1, 생성된_이미지_ID, 생성된_장소_id);
+        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2, 생성된_이미지_ID, 생성된_장소_id);
         리뷰_생성_요청(리뷰_생성_요청_바디1);
         리뷰_생성_요청(리뷰_생성_요청_바디2);
 
         final var 멤버_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(생성된_멤버_id);
 
-        멤버_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2);
+        멤버_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 멤버_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2, 생성된_이미지_ID);
     }
 
     @Test
     void 장소_id로_생성한_리뷰들을_조회한다() {
+        final var 이미지_생성_요청_바디 = 넓이_100_높이_200_jpeg_이미지_생성_요청_바디("testImageUrl");
+        final var 생성된_이미지_ID = 이미지_생성_요청(이미지_생성_요청_바디).getId();
         final var 멤버_생성_요청_바디 = 기본_닉네임_이메일_가입_요청_바디("닉네임", "test@test.com");
         final var 생성된_멤버_id = 멤버_생성_요청(멤버_생성_요청_바디).getId();
         final var 태그_생성_요청_바디1 = 태그_생성_요청_바디("#tag1", "test tag1");
@@ -137,14 +167,22 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
         final var 입력_태그1 = 입력_태그_두개_생성(생성된_태그1_id, 생성된_태그2_id);
         final var 입력_태그2 = 입력_태그_두개_생성(생성된_태그3_id, 생성된_태그4_id);
         final var 장소_id = 1L;
-        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1, 장소_id);
-        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2, 장소_id);
+        final var 리뷰_생성_요청_바디1 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review1", 입력_태그1, 장소_id, 생성된_이미지_ID);
+        final var 리뷰_생성_요청_바디2 = 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(생성된_멤버_id, "test review2", 입력_태그2, 장소_id, 생성된_이미지_ID);
         리뷰_생성_요청(리뷰_생성_요청_바디1);
         리뷰_생성_요청(리뷰_생성_요청_바디2);
 
-        final var 장소_id로_리뷰_조회_응답 = 멤버_id로_리뷰_조회_요청(장소_id);
+        final var 장소_id로_리뷰_조회_응답 = 장소_id로_리뷰_조회_요청(장소_id);
 
-        장소_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 장소_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2, 장소_id);
+        장소_id로_생성한_리뷰_조회_검증(생성된_멤버_id, 장소_id로_리뷰_조회_응답, 입력_태그1, 입력_태그2, 장소_id, 생성된_이미지_ID);
+    }
+
+    private PlaceResponse 장소_생성_요청(final PlaceCreateRequest 장소_생성_요청_바디) {
+        return 응답_바디_추출(post(PLACE_ADMIN_BASE_URL_V1, 장소_생성_요청_바디), PlaceResponse.class);
+    }
+
+    private ImageResponse 이미지_생성_요청(final ImageCreateRequest 이미지_생성_요청_바디) {
+        return 응답_바디_추출(post(IMAGE_API_BASE_URL_V1, 이미지_생성_요청_바디), ImageResponse.class);
     }
 
     private MemberResponse 멤버_생성_요청(final LocalJoinRequest 멤버_생성_요청_바디) {
@@ -159,7 +197,8 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
             final Long memberId,
             final ReviewListResponse 멤버_id로_리뷰_조회_응답,
             final List<Long> 입력_태그1,
-            final List<Long> 입력_태그2
+            final List<Long> 입력_태그2,
+            final Long 이미지_id
     ) {
         assertAll(
                 () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews().size()).isEqualTo(2),
@@ -169,6 +208,8 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
                         .containsAll(List.of("test review1", "test review2")),
                 () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("tagIds")
                         .containsAll(List.of(입력_태그1, 입력_태그2)),
+                () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("images")
+                        .size().isEqualTo(2),
                 () -> assertThat(멤버_id로_리뷰_조회_응답.getReviews()).extracting("memberNickName")
                         .containsAll(List.of("닉네임", "닉네임"))
         );
@@ -179,7 +220,8 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
             final ReviewListResponse 장소_id로_리뷰_조회_요청,
             final List<Long> 입력_태그1,
             final List<Long> 입력_태그2,
-            final Long 장소_id
+            final Long 장소_id,
+            final Long 이미지_id
     ) {
         assertAll(
                 () -> assertThat(장소_id로_리뷰_조회_요청.getReviews().size()).isEqualTo(2),
@@ -191,6 +233,8 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
                         .containsAll(List.of(입력_태그1, 입력_태그2)),
                 () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("memberNickName")
                         .containsAll(List.of("닉네임", "닉네임")),
+                () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("images")
+                        .size().isEqualTo(2),
                 () -> assertThat(장소_id로_리뷰_조회_요청.getReviews()).extracting("placeId")
                         .containsAll(List.of(장소_id, 장소_id))
         );
@@ -225,7 +269,6 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(수정된_리뷰_응답.getMemberId()).isEqualTo(생성된_멤버_id),
                 () -> assertThat(수정된_리뷰_응답.getRating()).isEqualTo(2),
                 () -> assertThat(수정된_리뷰_응답.getContent()).isEqualTo("updated test review"),
-                () -> assertThat(수정된_리뷰_응답.getImageIds()).containsAll(List.of(1L, 2L)),
                 () -> assertThat(수정된_리뷰_응답.getTagIds()).containsAll(수정_입력_태그),
                 () -> assertThat(수정된_리뷰_응답.getMemberNickName()).isEqualTo("닉네임")
         );
@@ -241,7 +284,6 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(조회된_리뷰.getMemberId()).isEqualTo(생성된_멤버_id),
                 () -> assertThat(조회된_리뷰.getRating()).isEqualTo(5),
                 () -> assertThat(조회된_리뷰.getContent()).isEqualTo("test review"),
-                () -> assertThat(조회된_리뷰.getImageIds()).containsAll(List.of(1L, 2L)),
                 () -> assertThat(조회된_리뷰.getTagIds()).containsAll(입력_태그),
                 () -> assertThat(조회된_리뷰.getMemberNickName()).isEqualTo("닉네임")
         );
@@ -260,7 +302,6 @@ public class ReviewAcceptanceTest extends AcceptanceTest {
                 () -> assertThat(생성된_리뷰_응답.getMemberId()).isEqualTo(생성된_멤버_id),
                 () -> assertThat(생성된_리뷰_응답.getRating()).isEqualTo(5),
                 () -> assertThat(생성된_리뷰_응답.getContent()).isEqualTo("test review"),
-                () -> assertThat(생성된_리뷰_응답.getImageIds()).containsAll(List.of(1L, 2L)),
                 () -> assertThat(생성된_리뷰_응답.getTagIds()).containsAll(입력_태그),
                 () -> assertThat(생성된_리뷰_응답.getMemberNickName()).isEqualTo("닉네임")
         );

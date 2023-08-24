@@ -34,6 +34,37 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom{
                 .collect(Collectors.toMap(Image::getId, Function.identity()));
     }
 
+    @Override
+    public boolean isNotExistIdIn(final List<Long> imageIds) {
+        List<Long> existImageIds = queryFactory
+                .selectFrom(image)
+                .where(
+                        isNotDeleted()
+                )
+                .fetch()
+                .stream()
+                .map(i -> i.getId())
+                .collect(Collectors.toList());
+
+        return imageIds.stream()
+                .map(imageId -> existImageIds.contains(imageId))
+                .collect(Collectors.toList())
+                .contains(Boolean.FALSE);
+    }
+
+    @Override
+    public Map<Long, Image> getImageMap(final List<Long> imageIds) {
+        return queryFactory
+                .selectFrom(image)
+                .where(
+                        idIn(imageIds),
+                        isNotDeleted()
+                )
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(Image::getId, Function.identity()));
+    }
+
     private BooleanExpression idIn(final List<Long> ids) {
         return image.id.in(ids);
     }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,12 @@ public class PlaceV1Controller {
         return CommonResponse.success(PlaceResponse.from(placeDto));
     }
 
+    @GetMapping("/with-tags/{placeId}")
+    public ResponseEntity<CommonResponse<PlaceResponse>> getPlaceWithTags(@PathVariable("placeId") final Long placeId) {
+        final PlaceDto placeDto = placeService.getPlaceWithTags(placeId);
+        return CommonResponse.success(PlaceResponse.from(placeDto));
+    }
+
     @GetMapping("/around")
     public ResponseEntity<CommonResponse<PlaceListResponse>> searchAroundPlace(
             @ModelAttribute final PlaceLocationAroundSearchRequest request
@@ -41,6 +48,15 @@ public class PlaceV1Controller {
     @GetMapping
     public ResponseEntity<CommonResponse<PlaceListResponse>> searchTitle(@RequestParam final String title) {
         final List<PlaceDto> placeDtos = placeService.searchPlacesByName(title);
+
+        return CommonResponse.success(PlaceListResponse.of(placeDtos));
+    }
+
+    @GetMapping("/tags")
+    public ResponseEntity<CommonResponse<PlaceListResponse>> searchTaggedPlace(
+            @RequestParam final List<Long> tagIds
+    ) {
+        final List<PlaceDto> placeDtos = placeService.searchPlacesByTags(tagIds);
 
         return CommonResponse.success(PlaceListResponse.of(placeDtos));
     }

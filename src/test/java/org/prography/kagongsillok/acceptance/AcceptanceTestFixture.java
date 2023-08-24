@@ -63,7 +63,50 @@ public class AcceptanceTestFixture {
                 .address("테스트특별시 테스트구 테스트로")
                 .latitude(latitude)
                 .longitude(longitude)
-                .imageIds(List.of(1L, 2L, 3L))
+                .imageIds(List.of())
+                .phone("testPhoneNumber")
+                .links(List.of(
+                        new LinkCreateRequest(LinkType.INSTAGRAM.name(), "InstagramUrl"),
+                        new LinkCreateRequest(LinkType.BLOG.name(), "BlogUrl"),
+                        new LinkCreateRequest(LinkType.WEB.name(), "WebUrl")))
+                .businessHours(List.of(
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.MONDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.TUESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.WEDNESDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.THURSDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.FRIDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SATURDAY.name(), "10:00:00", "21:00:00"
+                        ),
+                        new BusinessHourCreateRequest(
+                                DayOfWeek.SUNDAY.name(), "10:00:00", "21:00:00"
+                        )
+                ))
+                .build();
+    }
+
+    public static PlaceCreateRequest 링크_두개_장소_생성_요청_바디(
+            final String name,
+            final Double latitude,
+            final Double longitude,
+            final Long imageId
+    ) {
+        return PlaceCreateRequest.builder()
+                .name(name)
+                .address("테스트특별시 테스트구 테스트로")
+                .latitude(latitude)
+                .longitude(longitude)
+                .imageIds(List.of(imageId))
                 .phone("testPhoneNumber")
                 .links(List.of(
                         new LinkCreateRequest(LinkType.INSTAGRAM.name(), "InstagramUrl"),
@@ -99,7 +142,8 @@ public class AcceptanceTestFixture {
             final Long id,
             final String name,
             final Double latitude,
-            final Double longitude
+            final Double longitude,
+            final Long imageId
     ) {
         return PlaceUpdateRequest
                 .builder()
@@ -108,7 +152,7 @@ public class AcceptanceTestFixture {
                 .address("새로운 테스트 특별시")
                 .latitude(latitude)
                 .longitude(longitude)
-                .imageIds(List.of(4L, 5L, 6L))
+                .imageIds(List.of(imageId))
                 .phone("newTestPhoneNumber")
                 .links(List.of(
                         new LinkUpdateRequest(LinkType.INSTAGRAM.name(), "newInstagramUrl"),
@@ -144,23 +188,8 @@ public class AcceptanceTestFixture {
     public static ReviewCreateRequest 이미지_두개_태그_두개_리뷰_생성_요청_바디(
             final Long memberId,
             final String content,
-            final List<Long> tagIds
-    ) {
-        return ReviewCreateRequest
-                .builder()
-                .rating(5)
-                .memberId(memberId)
-                .placeId(1L)
-                .content(content)
-                .imageIds(List.of(1L, 2L))
-                .reviewTagIds(tagIds)
-                .build();
-    }
-
-    public static ReviewCreateRequest 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(
-            final Long memberId,
-            final String content,
             final List<Long> tagIds,
+            final Long imageId,
             final Long placeId
     ) {
         return ReviewCreateRequest
@@ -169,7 +198,43 @@ public class AcceptanceTestFixture {
                 .memberId(memberId)
                 .placeId(placeId)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
+                .reviewTagIds(tagIds)
+                .build();
+    }
+
+    public static ReviewCreateRequest 장소_ID로_리뷰_생성_요청_바디(
+            final Long placeId,
+            final Long memberId,
+            final String content,
+            final List<Long> tagIds,
+            final Long imageId
+    ) {
+        return ReviewCreateRequest
+                .builder()
+                .rating(5)
+                .memberId(memberId)
+                .placeId(placeId)
+                .content(content)
+                .imageIds(List.of(imageId))
+                .reviewTagIds(tagIds)
+                .build();
+    }
+
+    public static ReviewCreateRequest 이미지_두개_태그_두개_장소_ID로_리뷰_생성_요청_바디(
+            final Long memberId,
+            final String content,
+            final List<Long> tagIds,
+            final Long placeId,
+            final Long imageId
+    ) {
+        return ReviewCreateRequest
+                .builder()
+                .rating(5)
+                .memberId(memberId)
+                .placeId(placeId)
+                .content(content)
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }
@@ -178,16 +243,18 @@ public class AcceptanceTestFixture {
             final Long id,
             final int rating,
             final String content,
-            final List<Long> tagIds
+            final List<Long> tagIds,
+            final Long imageId,
+            final Long memberId
     ) {
         return ReviewUpdateRequest
                 .builder()
                 .id(id)
                 .rating(rating)
-                .memberId(2L)
+                .memberId(memberId)
                 .placeId(1L)
                 .content(content)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .reviewTagIds(tagIds)
                 .build();
     }
@@ -230,7 +297,7 @@ public class AcceptanceTestFixture {
     }
 
     public static StudyRecordCreateRequest 공부_기록_생성_요청_바디(final Long memberId, final Long placeId,
-            final String description) {
+            final String description, final Long imageId) {
         return StudyRecordCreateRequest.builder()
                 .memberId(memberId)
                 .placeId(placeId)
@@ -239,7 +306,7 @@ public class AcceptanceTestFixture {
                 .studyDay(6)
                 .duration(50)
                 .description(description)
-                .imageIds(List.of(1L, 2L))
+                .imageIds(List.of(imageId))
                 .build();
     }
 }

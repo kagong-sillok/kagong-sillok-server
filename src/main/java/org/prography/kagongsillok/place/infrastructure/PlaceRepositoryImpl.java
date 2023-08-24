@@ -5,7 +5,10 @@ import static org.prography.kagongsillok.place.domain.QPlace.place;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
@@ -64,6 +67,18 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         isNotDeleted()
                 )
                 .fetch();
+    }
+
+    @Override
+    public Map<Long, Place> findByIdInToMap(final List<Long> placeIds) {
+        return queryFactory
+                .selectFrom(place)
+                .where(
+                        idIn(placeIds),
+                        isNotDeleted()
+                )
+                .stream()
+                .collect(Collectors.toMap(Place::getId, Function.identity()));
     }
 
     private BooleanExpression nameContains(final String name) {
