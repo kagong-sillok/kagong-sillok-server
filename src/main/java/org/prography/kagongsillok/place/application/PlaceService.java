@@ -1,6 +1,8 @@
 package org.prography.kagongsillok.place.application;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -109,32 +111,37 @@ public class PlaceService {
                 .stream()
                 .toList();
 
+        final Map<Long, List<Review>> placeIdReviewsMap = reviews.stream()
+                .collect(Collectors.groupingBy(Review::getPlaceId));
+
         final List<Place> places = placeRepository.findByIdIn(placeIds);
 
-        return createPlaceDtos(places, reviews);
+        return createPlaceDtos(places, placeIdReviewsMap);
     }
 
     private List<PlaceDto> getPlaceDtos(final List<Place> places) {
         final List<Long> placeIds = places.stream()
                 .map(place -> place.getId())
                 .collect(Collectors.toList());
+
         final List<Review> reviews = reviewRepository.findByPlaceIds(placeIds);
 
-        return createPlaceDtos(places, reviews);
+        final Map<Long, List<Review>> placeIdReviewsMap = reviews.stream()
+                .collect(Collectors.groupingBy(Review::getPlaceId));
+
+        return createPlaceDtos(places, placeIdReviewsMap);
     }
 
-    private List<PlaceDto> createPlaceDtos(final List<Place> places, final List<Review> reviews) {
+    private List<PlaceDto> createPlaceDtos(final List<Place> places, final Map<Long, List<Review>> reviewsMap) {
         return places.stream()
                 .map(place -> {
-                    List<Review> relatedReviews = reviews.stream()
-                            .filter(review -> review.getPlaceId().equals(place.getId()))
-                            .collect(Collectors.toList());
+                    List<Review> relatedReviews = reviewsMap.getOrDefault(place.getId(), List.of());
 
                     return PlaceDto.of(
                             place,
                             getImages(place),
                             getReviewTagsRelatedToPlace(relatedReviews),
-                            calculateRatingAvg(reviews)
+                            calculateRatingAvg(relatedReviews)
                     );
                 })
                 .collect(Collectors.toList());
