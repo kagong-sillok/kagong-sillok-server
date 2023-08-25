@@ -2,6 +2,7 @@ package org.prography.kagongsillok.place.application;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
@@ -55,7 +56,12 @@ public class PlaceService {
         }
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
 
-        return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(reviews));
+        return PlaceDto.of(
+                place,
+                getImages(place),
+                getReviewTagsRelatedToPlace(reviews),
+                calculateRatingAvg(reviews)
+        );
     }
 
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
@@ -107,6 +113,7 @@ public class PlaceService {
 
         return createPlaceDtos(places, reviews);
     }
+
     private List<PlaceDto> getPlaceDtos(final List<Place> places) {
         final List<Long> placeIds = places.stream()
                 .map(place -> place.getId())
@@ -122,7 +129,13 @@ public class PlaceService {
                     List<Review> relatedReviews = reviews.stream()
                             .filter(review -> review.getPlaceId().equals(place.getId()))
                             .collect(Collectors.toList());
-                    return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(relatedReviews));
+
+                    return PlaceDto.of(
+                            place,
+                            getImages(place),
+                            getReviewTagsRelatedToPlace(relatedReviews),
+                            calculateRatingAvg(reviews)
+                    );
                 })
                 .collect(Collectors.toList());
     }
@@ -141,6 +154,12 @@ public class PlaceService {
         if (imageRepository.isNotExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
+    }
+
+    private Double calculateRatingAvg(final List<Review> reviews) {
+        return reviews.stream()
+                .mapToDouble(Review::getRating)
+                .sum() / reviews.size();
     }
 
     private List<Image> getImages(final Place place) {

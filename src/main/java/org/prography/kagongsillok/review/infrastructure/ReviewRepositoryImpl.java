@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.review.infrastructure;
 
+import static org.prography.kagongsillok.image.domain.QImage.image;
 import static org.prography.kagongsillok.review.domain.QReview.review;
 import static org.prography.kagongsillok.review.domain.QReviewTag.reviewTag;
 import static org.prography.kagongsillok.review.domain.QReviewTagMapping.reviewTagMapping;
@@ -83,11 +84,15 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .leftJoin(reviewTagMapping.reviewTag, reviewTag)
                 .fetchJoin()
                 .where(
-                        review.placeId.in(placeIds),
+                        idIn(placeIds),
                         isNotDeleted()
                 )
                 .stream()
                 .collect(Collectors.toList());
+    }
+
+    private BooleanExpression idIn(final List<Long> ids) {
+        return review.id.in(ids);
     }
 
     private BooleanExpression isNotDeleted() {
