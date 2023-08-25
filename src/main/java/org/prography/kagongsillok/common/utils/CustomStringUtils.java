@@ -14,6 +14,10 @@ public class CustomStringUtils {
             final String delimiter,
             final Function<String, T> mappingFunction
     ) {
+        if (target.equals("")) {
+            return List.of();
+        }
+
         return Arrays.stream(target.split(delimiter))
                 .map(mappingFunction)
                 .collect(Collectors.toList());
