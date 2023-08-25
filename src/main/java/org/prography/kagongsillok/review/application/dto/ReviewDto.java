@@ -23,7 +23,6 @@ public class ReviewDto {
     private Long id;
     private Long memberId;
     private Long placeId;
-
     private String placeName;
     private String memberNickName;
     private String memberProfileUrl;
