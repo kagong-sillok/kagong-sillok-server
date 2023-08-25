@@ -21,6 +21,7 @@ public class ReviewResponse {
     private List<Long> tagIds;
     private Long memberId;
     private Long placeId;
+    private String placeName;
     private String memberNickName;
     private String memberProfileUrl;
     private ZonedDateTime writtenAt;
@@ -34,6 +35,7 @@ public class ReviewResponse {
             final List<Long> tagIds,
             final Long memberId,
             final Long placeId,
+            final String placeName,
             final String memberNickName,
             final String memberProfileUrl,
             final ZonedDateTime writtenAt
@@ -45,6 +47,7 @@ public class ReviewResponse {
         this.tagIds = tagIds;
         this.memberId = memberId;
         this.placeId = placeId;
+        this.placeName = placeName;
         this.memberNickName = memberNickName;
         this.memberProfileUrl = memberProfileUrl;
         this.writtenAt = writtenAt;
@@ -58,6 +61,7 @@ public class ReviewResponse {
                 .content(reviewDto.getContent())
                 .memberId(reviewDto.getMemberId())
                 .placeId(reviewDto.getPlaceId())
+                .placeName(reviewDto.getPlaceName())
                 .images(reviewDto.getImages())
                 .tagIds(reviewDto.getTagIds())
                 .memberNickName(reviewDto.getMemberNickName())
