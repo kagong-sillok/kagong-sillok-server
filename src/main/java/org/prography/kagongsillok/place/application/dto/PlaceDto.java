@@ -2,6 +2,7 @@ package org.prography.kagongsillok.place.application.dto;
 
 import java.time.LocalTime;
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class PlaceDto {
     private Double longitude;
     private List<ImageDto> images;
     private String phone;
+    private Double ratingAverage;
     private List<LinkDto> links;
     private List<BusinessHourDto> businessHours;
     private List<ReviewTagDto> reviewTags;
@@ -38,6 +40,7 @@ public class PlaceDto {
             final Double latitude,
             final Double longitude,
             final List<ImageDto> images,
+            final Double ratingAverage,
             final String phone,
             final List<LinkDto> links,
             final List<BusinessHourDto> businessHours,
@@ -49,6 +52,7 @@ public class PlaceDto {
         this.latitude = latitude;
         this.longitude = longitude;
         this.images = images;
+        this.ratingAverage = ratingAverage;
         this.phone = phone;
         this.links = links;
         this.businessHours = businessHours;
@@ -82,7 +86,12 @@ public class PlaceDto {
                 .build();
     }
 
-    public static PlaceDto of(final Place place,final List<Image> images, final List<ReviewTag> reviewTags) {
+    public static PlaceDto of(
+            final Place place,
+            final List<Image> images,
+            final List<ReviewTag> reviewTags,
+            final Double ratingAvg
+    ) {
         return PlaceDto.builder()
                 .id(place.getId())
                 .name(place.getName())

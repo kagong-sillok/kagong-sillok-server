@@ -1,7 +1,10 @@
 package org.prography.kagongsillok.place.application;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
@@ -55,7 +58,12 @@ public class PlaceService {
         }
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
 
-        return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(reviews));
+        return PlaceDto.of(
+                place,
+                getImages(place),
+                getReviewTagsRelatedToPlace(reviews),
+                calculateRatingAvg(reviews)
+        );
     }
 
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
@@ -103,26 +111,38 @@ public class PlaceService {
                 .stream()
                 .toList();
 
+        final Map<Long, List<Review>> placeIdReviewsMap = reviews.stream()
+                .collect(Collectors.groupingBy(Review::getPlaceId));
+
         final List<Place> places = placeRepository.findByIdIn(placeIds);
 
-        return createPlaceDtos(places, reviews);
+        return createPlaceDtos(places, placeIdReviewsMap);
     }
+
     private List<PlaceDto> getPlaceDtos(final List<Place> places) {
         final List<Long> placeIds = places.stream()
                 .map(place -> place.getId())
                 .collect(Collectors.toList());
+
         final List<Review> reviews = reviewRepository.findByPlaceIds(placeIds);
 
-        return createPlaceDtos(places, reviews);
+        final Map<Long, List<Review>> placeIdReviewsMap = reviews.stream()
+                .collect(Collectors.groupingBy(Review::getPlaceId));
+
+        return createPlaceDtos(places, placeIdReviewsMap);
     }
 
-    private List<PlaceDto> createPlaceDtos(final List<Place> places, final List<Review> reviews) {
+    private List<PlaceDto> createPlaceDtos(final List<Place> places, final Map<Long, List<Review>> reviewsMap) {
         return places.stream()
                 .map(place -> {
-                    List<Review> relatedReviews = reviews.stream()
-                            .filter(review -> review.getPlaceId().equals(place.getId()))
-                            .collect(Collectors.toList());
-                    return PlaceDto.of(place, getImages(place), getReviewTagsRelatedToPlace(relatedReviews));
+                    List<Review> relatedReviews = reviewsMap.getOrDefault(place.getId(), List.of());
+
+                    return PlaceDto.of(
+                            place,
+                            getImages(place),
+                            getReviewTagsRelatedToPlace(relatedReviews),
+                            calculateRatingAvg(relatedReviews)
+                    );
                 })
                 .collect(Collectors.toList());
     }
@@ -141,6 +161,12 @@ public class PlaceService {
         if (imageRepository.isNotExistIdIn(imageIds)) {
             throw new NotFoundImageException(imageIds);
         }
+    }
+
+    private Double calculateRatingAvg(final List<Review> reviews) {
+        return reviews.stream()
+                .mapToDouble(Review::getRating)
+                .sum() / reviews.size();
     }
 
     private List<Image> getImages(final Place place) {

@@ -27,6 +27,7 @@ public class PlaceResponse {
     private Double longitude;
     private List<ImageDto> images;
     private String phone;
+    private Double ratingAverage;
     private List<LinkResponse> links;
     private List<BusinessHourResponse> businessHours;
     private List<ReviewTagDto> reviewTags;
@@ -40,6 +41,7 @@ public class PlaceResponse {
             final Double longitude,
             final List<ImageDto> images,
             final String phone,
+            final Double ratingAverage,
             final List<LinkResponse> links,
             final List<BusinessHourResponse> businessHours,
             final List<ReviewTagDto> reviewTags
@@ -51,6 +53,7 @@ public class PlaceResponse {
         this.longitude = longitude;
         this.images = images;
         this.phone = phone;
+        this.ratingAverage = ratingAverage;
         this.links = links;
         this.businessHours = businessHours;
         this.reviewTags = reviewTags;
@@ -65,6 +68,7 @@ public class PlaceResponse {
                 .longitude(placeDto.getLongitude())
                 .images(placeDto.getImages())
                 .phone(placeDto.getPhone())
+                .ratingAverage(placeDto.getRatingAverage())
                 .links(CustomListUtils.mapTo(placeDto.getLinks(), LinkResponse::from))
                 .businessHours(CustomListUtils.mapTo(placeDto.getBusinessHours(), BusinessHourResponse::from))
                 .reviewTags(placeDto.getReviewTags())
