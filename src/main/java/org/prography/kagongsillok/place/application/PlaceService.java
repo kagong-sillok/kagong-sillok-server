@@ -121,7 +121,7 @@ public class PlaceService {
 
     private List<PlaceDto> getPlaceDtos(final List<Place> places) {
         final List<Long> placeIds = places.stream()
-                .map(place -> place.getId())
+                .map(Place::getId)
                 .collect(Collectors.toList());
 
         final List<Review> reviews = reviewRepository.findByPlaceIds(placeIds);

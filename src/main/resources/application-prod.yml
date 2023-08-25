@@ -49,3 +49,5 @@ oauth:
 
 server:
   host: ${SERVER_HOST}
+  tomcat:
+    connection-timeout: 10000
