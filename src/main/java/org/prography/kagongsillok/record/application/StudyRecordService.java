@@ -32,7 +32,7 @@ public class StudyRecordService {
     private final PlaceRepository placeRepository;
     private final ImageRepository imageRepository;
 
-    @Counted("counter.user.studyRecord")
+    @Counted("counter.studyRecord")
     @Transactional
     public StudyRecordDto createStudyRecord(final StudyRecordCreateCommand command) {
         final Long placeId = command.getPlaceId();
@@ -46,14 +46,14 @@ public class StudyRecordService {
         return StudyRecordDto.of(savedStudyRecord, getImages(savedStudyRecord));
     }
 
-    @Counted("counter.user.studyRecord")
+    @Counted("counter.studyRecord")
     public List<StudyRecordDto> getMemberStudyRecords(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
 
         return getStudyRecordDtos(studyRecords);
     }
 
-    @Counted("counter.user.studyRecord")
+    @Counted("counter.studyRecord")
     public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final int year,
             final int month) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(
@@ -62,7 +62,7 @@ public class StudyRecordService {
         return getStudyRecordDtos(studyRecords);
     }
 
-    @Counted("counter.user.studyRecord")
+    @Counted("counter.studyRecord")
     public List<PlaceDto> getMemberStudyPlaces(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
         final List<Long> placeIds = studyRecords

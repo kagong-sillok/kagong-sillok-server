@@ -44,7 +44,7 @@ public class PlaceService {
         return PlaceDto.of(savedPlace, getImages(savedPlace));
     }
 
-    @Counted("counter.user.place")
+    @Counted("counter.place")
     public PlaceDto getPlace(final Long id) {
         final Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundPlaceException(id));
@@ -55,7 +55,7 @@ public class PlaceService {
         return PlaceDto.of(place, getImages(place));
     }
 
-    @Counted("counter.user.place")
+    @Counted("counter.place")
     public PlaceDto getPlaceWithTags(final Long placeId) {
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
@@ -72,7 +72,7 @@ public class PlaceService {
         );
     }
 
-    @Counted("counter.user.place")
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
         final List<Place> places = placeRepository.findByLocationAround(
                 Location.of(searchCondition.getLatitude(), searchCondition.getLongitude()),
@@ -83,7 +83,7 @@ public class PlaceService {
         return getPlaceDtos(places);
     }
 
-    @Counted("counter.user.place")
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesByName(final String name) {
         final List<Place> places = placeRepository.findByNameContains(name);
 
@@ -111,7 +111,7 @@ public class PlaceService {
         place.delete();
     }
 
-    @Counted("counter.user.place")
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesByTags(final List<Long> reviewTagIds) {
         final List<Review> reviews = reviewRepository.findByReviewTagIds(reviewTagIds);
         final List<Long> placeIds = reviews.stream()
