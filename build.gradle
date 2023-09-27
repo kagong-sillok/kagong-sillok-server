@@ -53,6 +53,9 @@ dependencies {
 	implementation('com.slack.api:bolt-servlet:1.28.0')
 	implementation('com.slack.api:bolt-jetty:1.28.0')
 
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testCompileOnly 'org.projectlombok:lombok'

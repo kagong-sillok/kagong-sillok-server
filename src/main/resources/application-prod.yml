@@ -51,3 +51,21 @@ server:
   host: ${SERVER_HOST}
   tomcat:
     connection-timeout: 10000
+    mbeanregistry:
+      enabled: true
+
+management:
+  server:
+    port: 9292
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoint:
+    health:
+      show-components: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"
