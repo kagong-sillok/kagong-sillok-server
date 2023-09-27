@@ -1,5 +1,6 @@
 package org.prography.kagongsillok.review.application;
 
+import io.micrometer.core.annotation.Timed;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
@@ -11,6 +12,7 @@ import org.prography.kagongsillok.review.domain.ReviewTagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Timed("timer.reviewTag")
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

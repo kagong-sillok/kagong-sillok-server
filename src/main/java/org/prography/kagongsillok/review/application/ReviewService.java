@@ -1,5 +1,7 @@
 package org.prography.kagongsillok.review.application;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ import org.prography.kagongsillok.review.domain.ReviewTagRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Timed("timer.review")
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class ReviewService {
     private final ImageRepository imageRepository;
     private final PlaceRepository placeRepository;
 
+    @Counted("counter.review")
     @Transactional
     public ReviewDto createReview(final ReviewCreateCommand reviewCreateCommand) {
         final Map<Long, ReviewTag> reviewTagIds
@@ -73,6 +76,7 @@ public class ReviewService {
         return ReviewDto.of(review, member, images);
     }
 
+    @Counted("counter.review")
     public List<ReviewDto> getAllReviewsByMemberId(final Long memberId) {
         final List<Review> reviews = reviewRepository.findAllByMemberId(memberId);
 
@@ -92,6 +96,7 @@ public class ReviewService {
         return toReviewDtos(reviews, memberMap, placeMap, imageMap, reviewIdImageIdsMap);
     }
 
+    @Counted("counter.review")
     public List<ReviewDto> getAllReviewsByPlaceId(final Long placeId) {
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
         final List<Long> reviewedMemberIds = getReviewedMemberIds(reviews);

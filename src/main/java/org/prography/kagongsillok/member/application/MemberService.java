@@ -1,7 +1,6 @@
 package org.prography.kagongsillok.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.prography.kagongsillok.auth.infrastructure.JwtAuthTokenProvider;
 import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
 import org.prography.kagongsillok.member.application.dto.MemberDto;
 import org.prography.kagongsillok.member.application.exception.NotFoundMemberException;

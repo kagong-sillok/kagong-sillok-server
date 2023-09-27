@@ -1,5 +1,7 @@
 package org.prography.kagongsillok.place.application;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +22,11 @@ import org.prography.kagongsillok.place.domain.PlaceRepository;
 import org.prography.kagongsillok.review.domain.Review;
 import org.prography.kagongsillok.review.domain.ReviewRepository;
 import org.prography.kagongsillok.review.domain.ReviewTag;
+import org.prography.kagongsillok.review.domain.ReviewTagMapping;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Timed("timer.place")
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -40,6 +44,7 @@ public class PlaceService {
         return PlaceDto.of(savedPlace, getImages(savedPlace));
     }
 
+    @Counted("counter.place")
     public PlaceDto getPlace(final Long id) {
         final Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundPlaceException(id));
@@ -50,6 +55,7 @@ public class PlaceService {
         return PlaceDto.of(place, getImages(place));
     }
 
+    @Counted("counter.place")
     public PlaceDto getPlaceWithTags(final Long placeId) {
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
@@ -66,6 +72,7 @@ public class PlaceService {
         );
     }
 
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesLocationAround(final PlaceLocationAroundSearchCondition searchCondition) {
         final List<Place> places = placeRepository.findByLocationAround(
                 Location.of(searchCondition.getLatitude(), searchCondition.getLongitude()),
@@ -76,6 +83,7 @@ public class PlaceService {
         return getPlaceDtos(places);
     }
 
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesByName(final String name) {
         final List<Place> places = placeRepository.findByNameContains(name);
 
@@ -103,12 +111,11 @@ public class PlaceService {
         place.delete();
     }
 
+    @Counted("counter.place")
     public List<PlaceDto> searchPlacesByTags(final List<Long> reviewTagIds) {
         final List<Review> reviews = reviewRepository.findByReviewTagIds(reviewTagIds);
         final List<Long> placeIds = reviews.stream()
-                .map(review -> review.getPlaceId())
-                .collect(Collectors.toSet())
-                .stream()
+                .map(Review::getPlaceId)
                 .toList();
 
         final Map<Long, List<Review>> placeIdReviewsMap = reviews.stream()
@@ -152,7 +159,7 @@ public class PlaceService {
                 .flatMap(review -> review.getTagMappings()
                         .getValues()
                         .stream()
-                        .map(reviewTagMapping -> reviewTagMapping.getReviewTag())
+                        .map(ReviewTagMapping::getReviewTag)
                 )
                 .collect(Collectors.toList());
     }

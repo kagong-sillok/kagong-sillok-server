@@ -1,5 +1,7 @@
 package org.prography.kagongsillok.record.application;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import org.prography.kagongsillok.record.domain.StudyRecordRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Timed("timer.studyRecord")
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class StudyRecordService {
     private final PlaceRepository placeRepository;
     private final ImageRepository imageRepository;
 
+    @Counted("counter.studyRecord")
     @Transactional
     public StudyRecordDto createStudyRecord(final StudyRecordCreateCommand command) {
         final Long placeId = command.getPlaceId();
@@ -42,12 +46,14 @@ public class StudyRecordService {
         return StudyRecordDto.of(savedStudyRecord, getImages(savedStudyRecord));
     }
 
+    @Counted("counter.studyRecord")
     public List<StudyRecordDto> getMemberStudyRecords(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
 
         return getStudyRecordDtos(studyRecords);
     }
 
+    @Counted("counter.studyRecord")
     public List<StudyRecordDto> getMemberStudyRecordsByYearMonth(final Long memberId, final int year,
             final int month) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberIdAndYearMonth(
@@ -56,6 +62,7 @@ public class StudyRecordService {
         return getStudyRecordDtos(studyRecords);
     }
 
+    @Counted("counter.studyRecord")
     public List<PlaceDto> getMemberStudyPlaces(final Long memberId) {
         final List<StudyRecord> studyRecords = studyRecordRepository.findMemberRecordByMemberId(memberId);
         final List<Long> placeIds = studyRecords
