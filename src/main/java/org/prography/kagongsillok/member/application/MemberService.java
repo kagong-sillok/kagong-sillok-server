@@ -20,9 +20,6 @@ public class MemberService {
         final Long memberId = loginMemberDto.getMemberId();
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException(memberId));
-        if (member.getIsDeleted()) {
-            throw new NotFoundMemberException(memberId);
-        }
 
         return MemberDto.from(member);
     }

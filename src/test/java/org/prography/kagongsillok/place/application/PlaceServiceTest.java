@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalTime;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
@@ -33,6 +34,9 @@ class PlaceServiceTest {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private EntityManager em;
 
     private final List<LinkCreateCommand> linkCreateCommands = List.of(
             new LinkCreateCommand(LinkType.INSTAGRAM.name(), "testInstagramUrl"),
@@ -251,6 +255,8 @@ class PlaceServiceTest {
         final Long placeId = placeService.createPlace(placeCreateCommand).getId();
 
         placeService.deletePlace(placeId);
+        em.flush();
+        em.clear();
 
         assertThatThrownBy(() -> placeService.getPlace(placeId))
                 .isInstanceOf(NotFoundPlaceException.class)

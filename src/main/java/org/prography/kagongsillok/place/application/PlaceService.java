@@ -48,9 +48,6 @@ public class PlaceService {
     public PlaceDto getPlace(final Long id) {
         final Place place = placeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundPlaceException(id));
-        if (place.getIsDeleted()) {
-            throw new NotFoundPlaceException(id);
-        }
 
         return PlaceDto.of(place, getImages(place));
     }
@@ -59,9 +56,7 @@ public class PlaceService {
     public PlaceDto getPlaceWithTags(final Long placeId) {
         final Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new NotFoundPlaceException(placeId));
-        if (place.getIsDeleted()) {
-            throw new NotFoundPlaceException(placeId);
-        }
+
         final List<Review> reviews = reviewRepository.findAllByPlaceId(placeId);
 
         return PlaceDto.of(

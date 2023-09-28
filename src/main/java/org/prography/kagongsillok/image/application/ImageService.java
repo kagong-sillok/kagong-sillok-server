@@ -1,6 +1,5 @@
 package org.prography.kagongsillok.image.application;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +42,11 @@ public class ImageService {
 
     private List<Image> toImages(List<ImageCreateCommand> commands) {
         return commands.stream()
-                .map(command -> command.toEntity())
+                .map(ImageCreateCommand::toEntity)
                 .collect(Collectors.toList());
     }
 
-    private List<Image> saveImages(List<Image> images) {
+    private List<Image> saveImages(List<Image> images) { // todo: 개선포인트 bulkInsert 필요
         return images.stream()
                 .map(imageRepository::save)
                 .collect(Collectors.toList());
