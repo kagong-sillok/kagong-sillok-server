@@ -11,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
@@ -18,6 +20,8 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 @Getter
 @Entity
 @Table(name = "place")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "update place set is_deleted = true, updated_at = now() where id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place extends AbstractRootEntity {
 

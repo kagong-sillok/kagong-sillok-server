@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.time.LocalTime;
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
@@ -47,6 +48,9 @@ public class ReviewServiceTest {
 
     @Autowired
     private PlaceRepository placeRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     void 리뷰를_생성한다() {
@@ -147,6 +151,8 @@ public class ReviewServiceTest {
                 .build();
         final Long createdReviewId = reviewService.createReview(reviewCreateCommand).getId();
         reviewService.deleteReview(createdReviewId);
+        em.flush();
+        em.clear();
 
         assertThatThrownBy(() -> reviewService.getReview(createdReviewId))
                 .isInstanceOf(NotFoundReviewException.class)

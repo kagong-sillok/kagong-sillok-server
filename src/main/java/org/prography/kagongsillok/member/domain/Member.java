@@ -12,11 +12,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
 
 @Getter
 @Entity
 @Table(name = "member")
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "update member set is_deleted = true, updated_at = now() where id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AbstractRootEntity {
 

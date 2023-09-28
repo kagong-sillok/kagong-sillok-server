@@ -67,9 +67,6 @@ public class ReviewService {
         final Long memberId = review.getMemberId();
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException(memberId));
-        if (review.getIsDeleted()) {
-            throw new NotFoundReviewException(id);
-        }
 
         final List<Image> images = imageRepository.findByIdIn(review.getImageIds());
 
@@ -183,7 +180,7 @@ public class ReviewService {
         return review
                 .getImageIds()
                 .stream()
-                .filter(imageId -> images.containsKey(imageId))
+                .filter(images::containsKey)
                 .map(images::get)
                 .collect(Collectors.toList());
     }
@@ -204,7 +201,7 @@ public class ReviewService {
 
     private List<Long> getReviewedMemberIds(final List<Review> reviews) {
         return reviews.stream()
-                .map(review -> review.getMemberId())
+                .map(Review::getMemberId)
                 .collect(Collectors.toList());
     }
 
@@ -227,7 +224,7 @@ public class ReviewService {
 
     private List<Image> getMappedImages(final List<Long> imageIds, final Map<Long, Image> imageMap) {
         return imageIds.stream()
-                .map(imageId -> imageMap.get(imageId))
+                .map(imageMap::get)
                 .collect(Collectors.toList());
     }
 
