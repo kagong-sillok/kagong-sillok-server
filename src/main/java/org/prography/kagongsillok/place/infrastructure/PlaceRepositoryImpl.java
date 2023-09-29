@@ -2,6 +2,7 @@ package org.prography.kagongsillok.place.infrastructure;
 
 import static org.prography.kagongsillok.place.domain.QPlace.place;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.member.domain.dto.PlaceSurfaceInfo;
 import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
 import org.springframework.stereotype.Repository;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
-    private static final int DEFAULT_SEARCH_RESULT_SIZE = 50;
+    private static final int DEFAULT_SEARCH_RESULT_SIZE = 500;
 
     private final JPAQueryFactory queryFactory;
 
@@ -43,7 +45,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
     }
 
     @Override
-    public List<Place> searchPlace(
+    public List<PlaceSurfaceInfo> searchPlace(
             final String name,
             final Location location,
             final Double latitudeBound,
@@ -54,7 +56,19 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
         }
 
         return queryFactory
-                .selectFrom(place)
+                .select(
+                        Projections.constructor(
+                                PlaceSurfaceInfo.class,
+                                place.id,
+                                place.name,
+                                place.address,
+                                place.location.latitude,
+                                place.location.longitude,
+                                place.phone,
+                                place.thumbnailImageUrl
+                        )
+                )
+                .from(place)
                 .where(
                         latitudeBetween(location, latitudeBound),
                         longitudeBetween(location, longitudeBound),

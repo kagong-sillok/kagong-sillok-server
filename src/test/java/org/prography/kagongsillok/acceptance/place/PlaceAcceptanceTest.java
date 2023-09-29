@@ -20,6 +20,7 @@ import org.prography.kagongsillok.place.ui.dto.PlaceCreateRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceListResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceLocationAroundSearchRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
+import org.prography.kagongsillok.place.ui.dto.PlaceSearchResultResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceUpdateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewCreateRequest;
 import org.prography.kagongsillok.review.ui.dto.ReviewResponse;
@@ -263,14 +264,14 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         return 응답_바디_추출(post(TAG_ADMIN_BASE_URL_V1, 태그_생성_요청_바디), ReviewTagResponse.class);
     }
 
-    private static void 없는_장소_이름으로_검색_검증(final PlaceListResponse 장소_이름으로_검색_응답1) {
+    private static void 없는_장소_이름으로_검색_검증(final PlaceSearchResultResponse 장소_이름으로_검색_응답1) {
         assertAll(
                 () -> assertThat(장소_이름으로_검색_응답1.getPlaces().size()).isEqualTo(0)
         );
     }
 
-    private static void 장소_이름으로_검색_검증(final PlaceListResponse 장소_이름으로_검색_응답1, final PlaceListResponse 장소_이름으로_검색_응답2,
-            final PlaceListResponse 장소_이름으로_검색_응답3) {
+    private static void 장소_이름으로_검색_검증(final PlaceSearchResultResponse 장소_이름으로_검색_응답1, final PlaceSearchResultResponse 장소_이름으로_검색_응답2,
+            final PlaceSearchResultResponse 장소_이름으로_검색_응답3) {
         assertAll(
                 () -> assertThat(장소_이름으로_검색_응답1.getPlaces().size()).isEqualTo(2),
                 () -> assertThat(장소_이름으로_검색_응답1.getPlaces()).extracting("name")
@@ -296,10 +297,10 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private PlaceListResponse 장소_이름으로_검색_요청(
+    private PlaceSearchResultResponse 장소_이름으로_검색_요청(
             final String name
     ) {
-        return 응답_바디_추출(get(PLACE_API_BASE_URL_V1 + "?name=" + name), PlaceListResponse.class);
+        return 응답_바디_추출(get(PLACE_API_BASE_URL_V1 + "?name=" + name), PlaceSearchResultResponse.class);
     }
 
     private static PlaceLocationAroundSearchRequest 탐색할_위도_경도_범위_생성(

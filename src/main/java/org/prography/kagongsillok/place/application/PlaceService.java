@@ -7,13 +7,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.image.application.exception.NotFoundImageException;
 import org.prography.kagongsillok.image.domain.Image;
 import org.prography.kagongsillok.image.domain.ImageRepository;
+import org.prography.kagongsillok.member.domain.dto.PlaceSurfaceInfo;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
 import org.prography.kagongsillok.place.application.dto.PlaceSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSurfaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
 import org.prography.kagongsillok.place.domain.Location;
@@ -79,15 +82,15 @@ public class PlaceService {
     }
 
     @Counted("counter.place")
-    public List<PlaceDto> searchPlaces(final PlaceSearchCondition searchCondition) {
-        final List<Place> places = placeRepository.searchPlace(
+    public List<PlaceSurfaceDto> searchPlaces(final PlaceSearchCondition searchCondition) {
+        final List<PlaceSurfaceInfo> places = placeRepository.searchPlace(
                 searchCondition.getName(),
                 Location.of(searchCondition.getLatitude(), searchCondition.getLongitude()),
                 searchCondition.getLatitudeBound(),
                 searchCondition.getLongitudeBound()
         );
 
-        return getPlaceDtos(places);
+        return CustomListUtils.mapTo(places, PlaceSurfaceDto::from);
     }
 
     @Transactional

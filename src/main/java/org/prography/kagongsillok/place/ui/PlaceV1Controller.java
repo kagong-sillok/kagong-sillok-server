@@ -6,9 +6,11 @@ import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.place.application.PlaceService;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSurfaceDto;
 import org.prography.kagongsillok.place.ui.dto.PlaceListResponse;
 import org.prography.kagongsillok.place.ui.dto.PlaceLocationAroundSearchRequest;
 import org.prography.kagongsillok.place.ui.dto.PlaceResponse;
+import org.prography.kagongsillok.place.ui.dto.PlaceSearchResultResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,7 +48,7 @@ public class PlaceV1Controller {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<PlaceListResponse>> searchTitle(
+    public ResponseEntity<CommonResponse<PlaceSearchResultResponse>> searchTitle(
             @RequestParam(defaultValue = "0.0") final Double latitude,
             @RequestParam(defaultValue = "0.0") final Double longitude,
             @RequestParam(defaultValue = "240.0") final Double latitudeBound,
@@ -60,9 +62,9 @@ public class PlaceV1Controller {
                 .longitudeBound(longitudeBound)
                 .name(name)
                 .build();
-        final List<PlaceDto> placeDtos = placeService.searchPlaces(searchCondition);
+        final List<PlaceSurfaceDto> placeDtos = placeService.searchPlaces(searchCondition);
 
-        return CommonResponse.success(PlaceListResponse.of(placeDtos));
+        return CommonResponse.success(PlaceSearchResultResponse.of(placeDtos));
     }
 
     @GetMapping("/tags")

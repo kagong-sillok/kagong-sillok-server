@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.prography.kagongsillok.member.domain.dto.PlaceSurfaceInfo;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.BusinessHourCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.LinkCreateCommand;
@@ -171,7 +172,7 @@ public class PlaceRepositoryImplTest {
         placeRepository.save(placeCreateCommand3.toEntity());
         final String name1 = "테스트 장소2";
 
-        List<Place> places1 = placeRepositoryImpl.searchPlace(
+        List<PlaceSurfaceInfo> places1 = placeRepositoryImpl.searchPlace(
                 name1,
                 Location.of(49.66, 129.22),
                 5.0,
@@ -224,7 +225,7 @@ public class PlaceRepositoryImplTest {
         placeRepository.save(placeCreateCommand2.toEntity());
         placeRepository.save(placeCreateCommand3.toEntity());
 
-        List<Place> places1 = placeRepositoryImpl.searchPlace(
+        List<PlaceSurfaceInfo> places1 = placeRepositoryImpl.searchPlace(
                 "테스트 장소",
                 Location.of(49.66, 129.22),
                 5.0,

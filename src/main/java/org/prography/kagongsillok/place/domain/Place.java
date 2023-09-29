@@ -33,7 +33,7 @@ public class Place extends AbstractRootEntity {
 
     @Embedded
     private Location location;
-
+    private String thumbnailImageUrl;
     private String imageIds; // 반정규화 컬럼 ex) 1,2,3
     private String phone;
 
@@ -49,6 +49,7 @@ public class Place extends AbstractRootEntity {
             final String address,
             final Double latitude,
             final Double longitude,
+            final String thumbnailImageUrl,
             final List<Long> imageIds,
             final String phone,
             final List<Link> links,
@@ -57,6 +58,7 @@ public class Place extends AbstractRootEntity {
         this.name = name;
         this.address = address;
         this.location = Location.of(latitude, longitude);
+        this.thumbnailImageUrl = thumbnailImageUrl;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.phone = phone;
         this.links = Links.of(links);
@@ -68,6 +70,7 @@ public class Place extends AbstractRootEntity {
         this.address = target.address;
         this.location = target.location;
         this.imageIds = target.imageIds;
+        this.thumbnailImageUrl = target.thumbnailImageUrl;
         this.phone = target.phone;
         this.links.update(target.links);
         this.businessHours.update(target.businessHours);

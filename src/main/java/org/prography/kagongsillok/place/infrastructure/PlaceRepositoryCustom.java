@@ -2,6 +2,7 @@ package org.prography.kagongsillok.place.infrastructure;
 
 import java.util.List;
 import java.util.Map;
+import org.prography.kagongsillok.member.domain.dto.PlaceSurfaceInfo;
 import org.prography.kagongsillok.place.domain.Location;
 import org.prography.kagongsillok.place.domain.Place;
 
@@ -13,7 +14,7 @@ public interface PlaceRepositoryCustom {
             final Double longitudeBound
     );
 
-    List<Place> searchPlace(
+    List<PlaceSurfaceInfo> searchPlace(
             final String name,
             final Location location,
             final Double latitudeBound,

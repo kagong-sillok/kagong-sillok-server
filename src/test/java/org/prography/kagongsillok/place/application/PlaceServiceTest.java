@@ -16,6 +16,7 @@ import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.LinkC
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
 import org.prography.kagongsillok.place.application.dto.PlaceSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSurfaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand.BusinessHourUpdateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand.LinkUpdateCommand;
@@ -394,7 +395,7 @@ class PlaceServiceTest {
                 .latitudeBound(10.0)
                 .longitudeBound(10.0)
                 .build();
-        List<PlaceDto> searchPlaces1 = placeService.searchPlaces(searchCondition);
+        List<PlaceSurfaceDto> searchPlaces1 = placeService.searchPlaces(searchCondition);
 
         assertAll(
                 () -> assertThat(searchPlaces1.size()).isEqualTo(2),
