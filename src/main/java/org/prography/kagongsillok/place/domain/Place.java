@@ -21,7 +21,7 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 @Getter
 @Entity
 @Table(name = "place", indexes = {
-        @Index(name = "ix__place__for_search", columnList = "latitude, longitude, name, phone, address, thumbnail_image_url") // 커버링 인덱스
+        @Index(name = "ix__place__for_search", columnList = "latitude, longitude, name, phone, address, thumbnailImageUrl") // 커버링 인덱스
         //@Index(name = "ix__place__for_search2", columnList = "latitude, longitude, name") // index condition pushdown 위해 name 포함
 })
 @Where(clause = "is_deleted = false")
