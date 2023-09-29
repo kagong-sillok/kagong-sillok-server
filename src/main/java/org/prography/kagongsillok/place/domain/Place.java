@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,7 +20,10 @@ import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
 @Getter
 @Entity
-@Table(name = "place")
+@Table(name = "place", indexes = {
+        @Index(name = "ix__place__for_search", columnList = "latitude, longitude, name, phone, address, thumbnailImageUrl") // 커버링 인덱스
+        //@Index(name = "ix__place__for_search2", columnList = "latitude, longitude, name") // index condition pushdown 위해 name 포함
+})
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "update place set is_deleted = true, updated_at = now() where id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,7 +37,7 @@ public class Place extends AbstractRootEntity {
 
     @Embedded
     private Location location;
-
+    private String thumbnailImageUrl;
     private String imageIds; // 반정규화 컬럼 ex) 1,2,3
     private String phone;
 
@@ -49,6 +53,7 @@ public class Place extends AbstractRootEntity {
             final String address,
             final Double latitude,
             final Double longitude,
+            final String thumbnailImageUrl,
             final List<Long> imageIds,
             final String phone,
             final List<Link> links,
@@ -57,6 +62,7 @@ public class Place extends AbstractRootEntity {
         this.name = name;
         this.address = address;
         this.location = Location.of(latitude, longitude);
+        this.thumbnailImageUrl = thumbnailImageUrl;
         this.imageIds = CustomListUtils.joiningToString(imageIds, ",");
         this.phone = phone;
         this.links = Links.of(links);
@@ -68,6 +74,7 @@ public class Place extends AbstractRootEntity {
         this.address = target.address;
         this.location = target.location;
         this.imageIds = target.imageIds;
+        this.thumbnailImageUrl = target.thumbnailImageUrl;
         this.phone = target.phone;
         this.links.update(target.links);
         this.businessHours.update(target.businessHours);

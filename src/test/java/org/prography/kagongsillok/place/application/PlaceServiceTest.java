@@ -15,6 +15,8 @@ import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.Busin
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand.LinkCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSurfaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand.BusinessHourUpdateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand.LinkUpdateCommand;
@@ -352,7 +354,6 @@ class PlaceServiceTest {
     @Test
     void 장소_이름으로_장소를_검색한다() {
         final Long imageId = saveImageAndGetImageId("imageUrl1");
-        final String name1 = "테스트 카페1";
         final PlaceCreateCommand placeCreateCommand1 = PlaceCreateCommand.builder()
                 .name("테스트 카페1")
                 .address("테스트특별시 테스트구 테스트로 1004")
@@ -364,7 +365,7 @@ class PlaceServiceTest {
                 .businessHours(businessHourCreateCommands)
                 .build();
         final PlaceCreateCommand placeCreateCommand2 = PlaceCreateCommand.builder()
-                .name("테스트 카페1")
+                .name("테스트 카페2")
                 .address("테스트특별시 테스트구 테스트로 1004")
                 .latitude(-80.29)
                 .longitude(-60.298)
@@ -387,14 +388,18 @@ class PlaceServiceTest {
         placeService.createPlace(placeCreateCommand2);
         placeService.createPlace(placeCreateCommand3);
 
-        List<PlaceDto> searchPlaces1 = placeService.searchPlacesByName(name1);
+        final PlaceSearchCondition searchCondition = PlaceSearchCondition.builder()
+                .name("테스트 카페")
+                .latitude(-80.0)
+                .longitude(-60.0)
+                .latitudeBound(10.0)
+                .longitudeBound(10.0)
+                .build();
+        List<PlaceSurfaceDto> searchPlaces1 = placeService.searchPlaces(searchCondition);
 
         assertAll(
                 () -> assertThat(searchPlaces1.size()).isEqualTo(2),
-                () -> assertThat(searchPlaces1).extracting("latitude")
-                        .containsAll(List.of(90.0, -80.29)),
-                () -> assertThat(searchPlaces1).extracting("longitude")
-                        .containsAll(List.of(120.129, -60.298))
+                () -> assertThat(searchPlaces1).extracting("name").contains("테스트 카페2", "테스트 카페3")
         );
     }
 
