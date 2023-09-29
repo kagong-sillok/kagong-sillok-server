@@ -296,8 +296,10 @@ public class PlaceAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    private PlaceListResponse 장소_이름으로_검색_요청(final String title) {
-        return 응답_바디_추출(get(PLACE_API_BASE_URL_V1 + "?title=" + title), PlaceListResponse.class);
+    private PlaceListResponse 장소_이름으로_검색_요청(
+            final String name
+    ) {
+        return 응답_바디_추출(get(PLACE_API_BASE_URL_V1 + "?name=" + name), PlaceListResponse.class);
     }
 
     private static PlaceLocationAroundSearchRequest 탐색할_위도_경도_범위_생성(

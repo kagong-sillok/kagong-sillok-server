@@ -43,7 +43,12 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
     }
 
     @Override
-    public List<Place> findByNameContains(final String name) {
+    public List<Place> searchPlace(
+            final String name,
+            final Location location,
+            final Double latitudeBound,
+            final Double longitudeBound
+    ) {
         if (Objects.isNull(name)) {
             return List.of();
         }
@@ -51,6 +56,8 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
         return queryFactory
                 .selectFrom(place)
                 .where(
+                        latitudeBetween(location, latitudeBound),
+                        longitudeBetween(location, longitudeBound),
                         nameContains(name),
                         isNotDeleted()
                 )

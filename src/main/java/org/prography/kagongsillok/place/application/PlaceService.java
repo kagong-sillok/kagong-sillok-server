@@ -2,7 +2,6 @@ package org.prography.kagongsillok.place.application;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +13,7 @@ import org.prography.kagongsillok.image.domain.ImageRepository;
 import org.prography.kagongsillok.place.application.dto.PlaceCreateCommand;
 import org.prography.kagongsillok.place.application.dto.PlaceDto;
 import org.prography.kagongsillok.place.application.dto.PlaceLocationAroundSearchCondition;
+import org.prography.kagongsillok.place.application.dto.PlaceSearchCondition;
 import org.prography.kagongsillok.place.application.dto.PlaceUpdateCommand;
 import org.prography.kagongsillok.place.application.exception.NotFoundPlaceException;
 import org.prography.kagongsillok.place.domain.Location;
@@ -79,8 +79,13 @@ public class PlaceService {
     }
 
     @Counted("counter.place")
-    public List<PlaceDto> searchPlacesByName(final String name) {
-        final List<Place> places = placeRepository.findByNameContains(name);
+    public List<PlaceDto> searchPlaces(final PlaceSearchCondition searchCondition) {
+        final List<Place> places = placeRepository.searchPlace(
+                searchCondition.getName(),
+                Location.of(searchCondition.getLatitude(), searchCondition.getLongitude()),
+                searchCondition.getLatitudeBound(),
+                searchCondition.getLongitudeBound()
+        );
 
         return getPlaceDtos(places);
     }

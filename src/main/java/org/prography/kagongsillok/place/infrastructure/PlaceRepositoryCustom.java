@@ -13,7 +13,12 @@ public interface PlaceRepositoryCustom {
             final Double longitudeBound
     );
 
-    List<Place> findByNameContains(final String name);
+    List<Place> searchPlace(
+            final String name,
+            final Location location,
+            final Double latitudeBound,
+            final Double longitudeBound
+    );
 
     List<Place> findByIdIn(final List<Long> placeIds);
 
