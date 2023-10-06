@@ -3,6 +3,7 @@ package org.prography.kagongsillok.common.web;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.prography.kagongsillok.auth.application.exception.AuthenticationException;
+import org.prography.kagongsillok.common.exception.CanNotProceedException;
 import org.prography.kagongsillok.common.exception.CommonSecurityException;
 import org.prography.kagongsillok.common.exception.InvalidParamException;
 import org.prography.kagongsillok.common.exception.NotFoundException;
@@ -41,9 +42,16 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CommonResponse.error(e.getMessage()));
     }
 
+    @ExceptionHandler(CanNotProceedException.class)
+    public ResponseEntity<CommonResponse<Void>> handleCanNotProceed(final CanNotProceedException e) {
+        log.warn(e.getMessage());
+        return ResponseEntity.badRequest().body(CommonResponse.error(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonResponse<Void>> unhandledException(final Exception e) {
+        log.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(CommonResponse.error(e.getMessage()));
+                .body(CommonResponse.error("알 수 없는 예외 발생"));
     }
 }

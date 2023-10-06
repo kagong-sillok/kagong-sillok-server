@@ -31,5 +31,7 @@ public class BookmarkToggleSwitch {
     private void bookmark(final Long placeId, final Long memberId) {
         final Bookmark bookmark = new Bookmark(placeId, memberId);
         bookmarkRepository.save(bookmark);
+        placeRepository.findById(bookmark.getPlaceId())
+                .ifPresent(Place::increaseBookmarkCount);
     }
 }
