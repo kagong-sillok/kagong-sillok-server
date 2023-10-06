@@ -1,6 +1,7 @@
 package org.prography.kagongsillok.member.ui;
 
 import lombok.RequiredArgsConstructor;
+import org.prography.kagongsillok.common.resolver.LoginMember;
 import org.prography.kagongsillok.common.resolver.dto.LoginMemberDto;
 import org.prography.kagongsillok.common.web.dto.CommonResponse;
 import org.prography.kagongsillok.member.application.MemberService;
@@ -19,7 +20,7 @@ public class MemberV1Controller {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<CommonResponse<MemberResponse>> getMember(LoginMemberDto loginMemberDto) {
+    public ResponseEntity<CommonResponse<MemberResponse>> getMember(@LoginMember LoginMemberDto loginMemberDto) {
         final MemberDto memberDto = memberService.getMember(loginMemberDto);
         return CommonResponse.success(MemberResponse.from(memberDto));
     }

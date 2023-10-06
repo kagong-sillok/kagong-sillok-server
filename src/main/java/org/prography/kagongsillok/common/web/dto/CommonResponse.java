@@ -22,6 +22,10 @@ public class CommonResponse<T> {
         return ResponseEntity.ok(new CommonResponse<>(SUCCESS_MESSAGE, null, data));
     }
 
+    public static ResponseEntity<CommonResponse<Void>> success() {
+        return ResponseEntity.ok(new CommonResponse<>(SUCCESS_MESSAGE, null, null));
+    }
+
     public static CommonResponse<Void> error(final String message) {
         return new CommonResponse<>(ERROR_MESSAGE, message, null);
     }

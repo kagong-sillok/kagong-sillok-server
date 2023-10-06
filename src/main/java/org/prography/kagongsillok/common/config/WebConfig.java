@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final long MAX_AGE = 3600;
+    private static final long MAX_AGE = 3600L;
 
     private final AccessTokenArgumentResolver accessTokenArgumentResolver;
 

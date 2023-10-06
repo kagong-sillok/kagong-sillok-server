@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.prography.kagongsillok.common.entity.AbstractRootEntity;
+import org.prography.kagongsillok.common.exception.CanNotProceedException;
 import org.prography.kagongsillok.common.utils.CustomListUtils;
 import org.prography.kagongsillok.common.utils.CustomStringUtils;
 
@@ -47,6 +48,8 @@ public class Place extends AbstractRootEntity {
     @Embedded
     private BusinessHours businessHours;
 
+    private Integer bookmarkCount;
+
     @Builder
     public Place(
             final String name,
@@ -67,6 +70,7 @@ public class Place extends AbstractRootEntity {
         this.phone = phone;
         this.links = Links.of(links);
         this.businessHours = BusinessHours.of(businessHours);
+        this.bookmarkCount = 0;
     }
 
     public void update(final Place target) {
@@ -78,6 +82,17 @@ public class Place extends AbstractRootEntity {
         this.phone = target.phone;
         this.links.update(target.links);
         this.businessHours.update(target.businessHours);
+    }
+
+    public void increaseBookmarkCount() {
+        bookmarkCount++;
+    }
+
+    public void decreaseBookmarkCount() {
+        if (bookmarkCount == 0) {
+            throw new CanNotProceedException("북마크 수가 0보다 낮을 수 없습니다.");
+        }
+        bookmarkCount--;
     }
 
     public List<Long> getImageIds() {
