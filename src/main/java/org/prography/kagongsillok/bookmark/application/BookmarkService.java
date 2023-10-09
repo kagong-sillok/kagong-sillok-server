@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookmarkService {
 
-    public static final String BOOKMARK_LOCK_FORMAT = "lockBookmark::placeId=%d::memberId=%d";
+    public static final String BOOKMARK_LOCK_FORMAT = "lockBookmarkToggle::placeId=%d";
     private final BookmarkToggleSwitch bookmarkToggleSwitch;
     private final RedissonClient redissonClient;
 
     public void toggle(final Long placeId, final Long memberId) {
-        final RLock lock = redissonClient.getLock(String.format(BOOKMARK_LOCK_FORMAT, placeId, memberId));
+        final RLock lock = redissonClient.getLock(String.format(BOOKMARK_LOCK_FORMAT, placeId));
 
         try {
             final boolean available = lock.tryLock(15, 1, TimeUnit.SECONDS);
